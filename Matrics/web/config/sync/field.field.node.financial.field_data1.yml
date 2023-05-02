@@ -1,0 +1,21 @@
+uuid: 1e08c434-706f-4269-b817-d3c714716cc2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_data1
+    - node.type.financial
+  module:
+    - options
+id: node.financial.field_data1
+field_name: field_data1
+entity_type: node
+bundle: financial
+label: Data
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

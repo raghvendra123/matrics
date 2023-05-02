@@ -1,0 +1,37 @@
+uuid: 7304641f-1ea6-4d59-b195-d4e6774780b7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.feedback.body
+    - field.field.node.feedback.field_customer
+    - node.type.feedback
+  module:
+    - text
+    - user
+id: node.feedback.default
+targetEntityType: node
+bundle: feedback
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_customer:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

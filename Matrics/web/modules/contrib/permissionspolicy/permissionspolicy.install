@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Installation and update hooks for Permissions Policy module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function permissionspolicy_requirements($phase): array {
+  if ($phase == 'install') {
+    if (!class_exists('\gapple\StructuredFields\Serializer')) {
+      return [
+        'permissionspolicy_composer' => [
+          'description' => t('External dependencies for Permissions Policy are not available. Composer must be used to install required library.'),
+          'severity' => REQUIREMENT_ERROR,
+        ],
+      ];
+    }
+  }
+
+  return [];
+}
+
+/**
+ * Remove interest-cohort feature.
+ */
+function permissionspolicy_update_10000() {
+  \Drupal::configFactory()->getEditable('permissionspolicy.settings')
+    ->clear('enforce.features.interest-cohort')
+    ->save();
+}

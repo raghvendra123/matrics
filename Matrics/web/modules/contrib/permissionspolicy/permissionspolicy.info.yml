@@ -1,0 +1,10 @@
+name: Permissions Policy
+type: module
+description: Provide Permissions-Policy header
+core_version_requirement: ^9 || ^10
+configure: permissionspolicy.settings
+
+# Information added by Drupal.org packaging script on 2023-02-10
+version: '1.1.2'
+project: 'permissionspolicy'
+datestamp: 1676017789

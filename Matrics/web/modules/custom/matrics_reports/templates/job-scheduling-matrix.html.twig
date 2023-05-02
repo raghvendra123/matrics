@@ -1,0 +1,37 @@
+{% for key1,value1 in items %}
+  <table class="tableNew table training_table">
+    {% if value1['user'] is not empty %}
+      <thead>
+        <th>Name</th>
+        <th>Job Title </th>
+        {% set count =0 %}
+        {% for key2,value2 in value1['certificate'] %}
+          {% set count =loop.index %}
+        {% endfor %}
+        <th colspan={{ count }}> Compliance Status  </th>
+        <th>Compliance Score</th>
+        <th>Location</th>            
+      </thead>
+      <tbody>
+        {% for key3,value3 in value1['user']['user_data'] %}
+          <tr>
+            {% for key4,value4 in value3 %}
+              {% if key4 == '0' %}
+                <th>{{ value4 }}</th>
+                <th>{{ value1['job_title'] }} </th>
+              {% else %}
+                {% if value4['date'] == 0 %}
+                  <th style="border-right:1px solid #fff; background-color:{{ value4['color'] }} !important;" title = {{ value4['cname'] }}> </th>
+                {% else %}
+                  <th style="border-right:1px solid #fff;background-color:{{ value4['color'] }} !important;" title = {{ value4['cname'] }}> </th>
+                {% endif %}
+              {% endif %}             
+            {% endfor %}
+            <th>{{ value1['user']['user_score'][key3] }}</th>
+            <th>{{ value1['user']['user_location'][key3] }} </th>
+          </tr>
+        {% endfor %}
+      </tbody>
+    {% endif %}
+  </table>
+{% endfor %}

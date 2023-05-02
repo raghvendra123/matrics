@@ -1,0 +1,14 @@
+uuid: 9b7674e2-5ea2-4166-92b4-ae0f485cf335
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.scheduler
+  module:
+    - user
+id: user_add_role_action.scheduler
+label: 'Add the Scheduler role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: scheduler

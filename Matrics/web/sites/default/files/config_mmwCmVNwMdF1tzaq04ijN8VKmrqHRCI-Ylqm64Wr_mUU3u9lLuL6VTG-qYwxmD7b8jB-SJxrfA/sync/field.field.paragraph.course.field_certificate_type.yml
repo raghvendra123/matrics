@@ -1,0 +1,29 @@
+uuid: f2caef22-af63-4f0e-8000-4905aa1ac8a8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_certificate_type
+    - node.type.certificate
+    - paragraphs.paragraphs_type.course
+id: paragraph.course.field_certificate_type
+field_name: field_certificate_type
+entity_type: paragraph
+bundle: course
+label: 'Certificate Type'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      certificate: certificate
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

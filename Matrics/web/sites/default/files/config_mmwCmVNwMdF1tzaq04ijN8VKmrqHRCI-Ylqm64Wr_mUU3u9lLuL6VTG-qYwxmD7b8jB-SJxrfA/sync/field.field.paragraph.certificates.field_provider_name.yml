@@ -1,0 +1,29 @@
+uuid: b0df4bf2-4513-4d07-8c40-dcf8608019f9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_provider_name
+    - node.type.vendor
+    - paragraphs.paragraphs_type.certificates
+id: paragraph.certificates.field_provider_name
+field_name: field_provider_name
+entity_type: paragraph
+bundle: certificates
+label: 'Provider Name'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      vendor: vendor
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

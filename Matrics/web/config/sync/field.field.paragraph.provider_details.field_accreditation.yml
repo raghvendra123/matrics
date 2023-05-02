@@ -1,0 +1,21 @@
+uuid: 4c550f3c-6ab9-464d-a596-81d3c744ad32
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_accreditation
+    - paragraphs.paragraphs_type.provider_details
+  module:
+    - options
+id: paragraph.provider_details.field_accreditation
+field_name: field_accreditation
+entity_type: paragraph
+bundle: provider_details
+label: Accreditation
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

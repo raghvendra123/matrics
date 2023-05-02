@@ -1,0 +1,21 @@
+uuid: 69fadc8f-04f0-43bf-85c2-151fe2381003
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_cancelled_by
+    - paragraphs.paragraphs_type.course
+  module:
+    - options
+id: paragraph.course.field_cancelled_by
+field_name: field_cancelled_by
+entity_type: paragraph
+bundle: course
+label: 'Cancelled by'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

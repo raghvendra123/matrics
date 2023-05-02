@@ -1,0 +1,70 @@
+training_management.tmg:
+  path: '/training-managements'
+  defaults:
+    _controller: 'Drupal\training_management\Controller\TrainingManagement::manage'
+    _title: 'Training Management'
+  requirements:
+    _permission: 'access content' 
+training_management.training_mnagage_form:
+  path: '/training-management'
+  defaults:
+    _title: 'Training Management'
+    _form: '\Drupal\training_management\Form\TrainingManageForm'
+  requirements:
+    _role: 'administrator+mnager'
+    
+training_management.upload_certificate_form:
+  path: '/upload_certificate'
+  defaults:
+    _title: 'Upload Certificate'
+    _form: '\Drupal\training_management\Form\UploadCertificateForm'
+  requirements:
+    _role: 'administrator+mnager'
+    
+training_management.book_course_form:
+  path: '/book_course'
+  defaults:
+    _title: 'Book Course'
+    _form: '\Drupal\training_management\Form\BookCourseForm'
+  requirements:
+    _role: 'administrator+mnager'
+
+training_management.courseupdated:
+  path: '/courseupdated/{pid}/{uid}/{cid}/{status}'
+  defaults:
+    _form: '\Drupal\training_management\Form\CourseUpdatedForm'
+    _title: 'Course update'
+  requirements:
+    _permission: 'site_setting form_permission'
+  options:
+    _admin_route: TRUE
+training_management.suggested_course:
+  path: '/suggested-course/{id}'
+  defaults:
+    _controller: 'Drupal\training_management\Controller\SuggestedCourse::suggested'
+    _title: 'Suggested Course'
+  requirements:
+    _permission: 'access content'
+training_management.suggested_course_booked:
+  path: '/suggested_course_booked/{id}'
+  defaults:
+    _controller: 'Drupal\training_management\Controller\SuggestedCourse::suggestedCourseBooked'
+    _title: 'Suggested Course Booked'
+  requirements:
+    _permission: 'access content'
+    
+training_management.close_booking:
+  path: '/close-booking/{id}/{uid}/{cid}/{status}'
+  defaults:
+    _controller: 'Drupal\training_management\Controller\CloseBooking::content'
+    _title: 'Close Booking'
+  requirements:
+    _role: 'administrator+mnager'
+    
+training_management.close_booking_delete:
+  path: '/close-booking-delete/{id}'
+  defaults:
+    _controller: 'Drupal\training_management\Controller\CloseBooking::contentDelete'
+    _title: 'Close Booking'
+  requirements:
+    _role: 'administrator+mnager'

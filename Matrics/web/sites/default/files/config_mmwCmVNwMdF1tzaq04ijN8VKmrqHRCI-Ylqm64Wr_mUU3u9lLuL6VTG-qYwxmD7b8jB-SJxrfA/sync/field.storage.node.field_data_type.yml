@@ -1,0 +1,55 @@
+uuid: 140df119-2578-41b6-b58e-1785ef3c47fa
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - node
+    - options
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: node.field_data_type
+field_name: field_data_type
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: Asset
+      label: Asset
+    -
+      value: Certificates
+      label: Certificates
+    -
+      value: 'Employee Name'
+      label: 'Employee Name'
+    -
+      value: 'Job title'
+      label: 'Job title'
+    -
+      value: 'Training gap count'
+      label: 'Training gap count'
+    -
+      value: 'Training gap score'
+      label: 'Training gap score'
+    -
+      value: 'Date range'
+      label: 'Date range'
+    -
+      value: Course
+      label: Course
+    -
+      value: 'Training request number'
+      label: 'Training request number'
+    -
+      value: 'Training provider'
+      label: 'Training provider'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

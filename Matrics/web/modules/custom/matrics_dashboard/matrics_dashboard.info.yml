@@ -1,0 +1,8 @@
+name: 'matrics dashboard'
+type: module
+description: 'matrics dashboard'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: 'matrics'
+
+configure: matrics_dashboard.settings

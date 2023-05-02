@@ -1,0 +1,7 @@
+
+.toggle{
+    display: flex;
+}
+.toggle span{
+    margin-right: 10px;
+}

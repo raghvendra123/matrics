@@ -1,0 +1,21 @@
+uuid: e7b07e17-c47d-402e-80dc-a8b9c654e897
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_course_availability
+    - node.type.courses
+  module:
+    - options
+id: node.courses.field_course_availability
+field_name: field_course_availability
+entity_type: node
+bundle: courses
+label: 'Course availability'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,14 @@
+uuid: b7f029e3-3aab-4f2a-9c57-aaf3f5323a3c
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.cts_admin
+  module:
+    - user
+id: user_remove_role_action.cts_admin
+label: 'Remove the CTS admin role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: cts_admin

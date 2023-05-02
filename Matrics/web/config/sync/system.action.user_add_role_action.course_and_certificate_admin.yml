@@ -1,0 +1,14 @@
+uuid: a1fbf1ed-b97f-40e3-929a-ef631643e7df
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.course_and_certificate_admin
+  module:
+    - user
+id: user_add_role_action.course_and_certificate_admin
+label: 'Add the Course and certificate admin role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: course_and_certificate_admin

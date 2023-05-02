@@ -1,0 +1,14 @@
+uuid: 59379090-3a79-481a-af47-5222a1f1da75
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.course_and_certificate_admin
+  module:
+    - user
+id: user_remove_role_action.course_and_certificate_admin
+label: 'Remove the Course and certificate admin role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: course_and_certificate_admin

@@ -1,0 +1,29 @@
+uuid: 1af6cfa2-2664-4447-981f-f6bf1c4e7d46
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_customer
+    - node.type.reports
+    - taxonomy.vocabulary.customer
+id: node.reports.field_customer
+field_name: field_customer
+entity_type: node
+bundle: reports
+label: Customer
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      customer: customer
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

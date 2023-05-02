@@ -1,0 +1,12 @@
+uuid: a6e78c55-1e57-4bcb-ad38-a48f158e7a99
+langcode: en
+status: true
+dependencies: {  }
+id: contact_us
+label: 'Contact us'
+recipients:
+  - ryan.patidar@agile451.com
+reply: 'Thank you for your message. We will review and get back to you soon!.'
+weight: 0
+message: 'Thank you for your message. We will review and get back to you soon!.'
+redirect: /

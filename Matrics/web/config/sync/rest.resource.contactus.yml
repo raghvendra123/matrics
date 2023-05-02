@@ -1,0 +1,18 @@
+uuid: 34a9b686-7866-4f29-baf6-9af9df750a36
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: contactus
+plugin_id: contactus
+granularity: resource
+configuration:
+  methods:
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

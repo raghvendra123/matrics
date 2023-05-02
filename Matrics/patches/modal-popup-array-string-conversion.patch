@@ -1,0 +1,17 @@
+diff --git a/core/lib/Drupal/Core/Render/MainContent/ModalRenderer.php b/core/lib/Drupal/Core/Render/MainContent/ModalRenderer.php
+index d903acf88d..080458598f 100644
+--- a/core/lib/Drupal/Core/Render/MainContent/ModalRenderer.php
++++ b/core/lib/Drupal/Core/Render/MainContent/ModalRenderer.php
+@@ -27,8 +27,10 @@ public function renderResponse(array $main_content, Request $request, RouteMatch
+     $response->setAttachments($main_content['#attached']);
+ 
+     // If the main content doesn't provide a title, use the title resolver.
+-    $title = $main_content['#title'] ?? $this->titleResolver->getTitle($request, $route_match->getRouteObject());
+-
++    $title = $main_content['#title'] ?? $this->titleResolver->getTitle($request, $route_match->getRouteObject());    
++    if (is_array($title)){
++      $title = \Drupal::service('renderer')->renderRoot($title);
++    }
+     // Determine the title: use the title provided by the main content if any,
+     // otherwise get it from the routing information.
+     $options = $request->request->get('dialogOptions', []);

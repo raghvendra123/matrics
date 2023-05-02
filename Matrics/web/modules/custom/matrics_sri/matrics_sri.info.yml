@@ -1,0 +1,6 @@
+name: 'Matrics Subresource Integrity'
+type: module
+description: 'Provides a possibility to specify additional attributes to the libraries as required by Subresource Integrity rules'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: 'matrics'

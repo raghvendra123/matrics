@@ -1,0 +1,19 @@
+uuid: df2a61c9-3729-48ca-8b21-5072215a44a8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_mobile
+    - node.type.vendor
+id: node.vendor.field_mobile
+field_name: field_mobile
+entity_type: node
+bundle: vendor
+label: Mobile
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

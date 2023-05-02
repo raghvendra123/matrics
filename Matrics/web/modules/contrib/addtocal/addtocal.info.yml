@@ -1,0 +1,12 @@
+name: 'Add to Cal'
+description: 'Drupal field formatter providing Add to Calendar links.'
+core: 8.x
+core_version_requirement: ^8 || ^9
+type: module
+dependencies:
+  - drupal:datetime
+
+# Information added by Drupal.org packaging script on 2022-03-31
+version: '8.x-2.0-beta4'
+project: 'addtocal'
+datestamp: 1648740641

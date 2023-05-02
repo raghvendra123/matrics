@@ -1,0 +1,12 @@
+uuid: a6e78c55-1e57-4bcb-ad38-a48f158e7a99
+langcode: en
+status: true
+dependencies: {  }
+id: contact_us
+label: 'Contact us'
+recipients:
+  - danielle.hallett@gmail.com
+reply: ''
+weight: 0
+message: ''
+redirect: /

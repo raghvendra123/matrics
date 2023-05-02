@@ -1,0 +1,10 @@
+uuid: ac50c0e8-2a8f-433a-9bd8-648890db2f1d
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: zEjpodc0J4-u0XDq61QxDn90AKWta1A_6dT-smi3Gng
+id: og_sm_admin_menu
+label: 'Site Administration menu'
+description: 'Menu to manage Site configuration.'
+locked: true

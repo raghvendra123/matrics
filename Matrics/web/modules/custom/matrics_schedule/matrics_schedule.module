@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Functions to support the matrics schedule module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function matrics_schedule_theme() {
+  return [
+    'schedule_current' => [
+      'variables' => ['items' => NULL, 'blocks' => NULL],
+      'template' => 'schedule-current',
+    ],
+    'schedule_forcast' => [
+      'variables' => ['items' => NULL, 'blocks' => NULL],
+      'template' => 'schedule-forcast',
+    ],
+    'schedule_job' => [
+      'variables' => ['items' => NULL, 'blocks' => NULL],
+      'template' => 'schedule-job',
+    ],
+  ];
+}

@@ -1,0 +1,45 @@
+uuid: b1c2cc8f-7e8c-4d83-a0a4-6964a05c9c9f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.swap_records.field_super_user
+    - field.field.paragraph.swap_records.field_swap_
+    - field.field.paragraph.swap_records.field_swap_job_title
+    - paragraphs.paragraphs_type.swap_records
+  module:
+    - datetime
+id: paragraph.swap_records.default
+targetEntityType: paragraph
+bundle: swap_records
+mode: default
+content:
+  field_super_user:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_swap_:
+    type: datetime_default
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_swap_job_title:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

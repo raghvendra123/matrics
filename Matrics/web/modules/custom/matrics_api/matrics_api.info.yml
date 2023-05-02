@@ -1,0 +1,7 @@
+name: 'Matrics API'
+type: module
+description: 'API for matrics project'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: 'matrics'
+

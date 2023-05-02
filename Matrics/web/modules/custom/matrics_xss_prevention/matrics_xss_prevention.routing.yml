@@ -1,0 +1,9 @@
+matrics_xss_prevention.matrcis_xss_prevention_config_form:
+  path: '/admin/config/system/matrics_xss_prevention'
+  defaults:
+    _form: '\Drupal\matrics_xss_prevention\Form\MatricsXssPreventionConfigForm'
+    _title: 'Matrics Xss Prevention Settings'
+  requirements:
+    _permission: 'manage matrics xss prevention'
+  options:
+    _admin_route: TRUE

@@ -1,0 +1,8 @@
+services:
+  permissionspolicy.response_subscriber:
+    class: Drupal\permissionspolicy\EventSubscriber\ResponseSubscriber
+    arguments:
+      - '@config.factory'
+      - '@event_dispatcher'
+    tags:
+      - { name: event_subscriber }

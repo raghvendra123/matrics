@@ -1,0 +1,524 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the matrics theme.
+ */
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Template\Attribute;
+use Drupal\views\Form\ViewsForm;
+use Drupal\file\Entity\File;
+use Drupal\views\ViewExecutable;
+use Drupal\user\Entity\User;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\views\Views;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_preprocess_HOOK() for HTML document templates.
+ *
+ * Adds body classes if certain regions have content.
+ */
+function matrics_preprocess_html(&$variables) {
+  
+  if (isset($_COOKIE['content'])) {
+    $variables['attributes']['class'][] = $_COOKIE['content'];
+  }
+  // Add information about the number of sidebars.
+  if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
+    $variables['attributes']['class'][] = 'layout-two-sidebars';
+  }
+  elseif (!empty($variables['page']['sidebar_first'])) {
+    $variables['attributes']['class'][] = 'layout-one-sidebar';
+    $variables['attributes']['class'][] = 'layout-sidebar-first';
+  }
+  elseif (!empty($variables['page']['sidebar_second'])) {
+    $variables['attributes']['class'][] = 'layout-one-sidebar';
+    $variables['attributes']['class'][] = 'layout-sidebar-second';
+  }
+  else {
+    $variables['attributes']['class'][] = 'layout-no-sidebars';
+  }
+
+  if (!empty($variables['page']['featured_top'])) {
+    $variables['attributes']['class'][] = 'has-featured-top';
+  }
+
+  $current_user = \Drupal::currentUser();
+  $roles = $current_user->getRoles();
+  if (!empty($roles)) {
+    foreach ($roles as $role) {
+      $variables['attributes']['class'][] = $role;
+    }
+  }
+
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if (is_object($node)) {
+    $variables['attributes']['class'][] = 'node-' . $node->id();
+  }
+
+  $route = \Drupal::routeMatch()->getRouteName();
+
+  switch ($route) {
+    case 'entity.user.canonical':
+      $variables['attributes']['class'][] = 'user-view';
+      break;
+
+    case 'entity.user.edit_form':
+      $variables['attributes']['class'][] = 'user-edit';
+      break;
+
+    case 'user.pass':
+      $variables['attributes']['class'][] = 'user-pass';
+      break;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for HTML document templates.
+ *
+ * Adds body classes if certain regions have content.
+ */
+function matrics_preprocess_page(&$variables) {
+  $account = User::load(\Drupal::currentUser()->id());
+  $name = "";
+  $mail = "";
+  $image = "";
+  if (!empty($account)) {
+    $field_customer_name = '';
+    if (!empty($account->get('field_employee_name')->getValue())) {
+      $lastname = $account->get('field_last_name')->getValue() ? $account->get('field_last_name')->getValue()[0]['value'] : '';
+      $name = $account->get('field_employee_name')->getValue()[0]['value'] . " " . $lastname;
+    }
+    if (!empty($account->get('mail')->getValue())) {
+      $mail = $account->get('mail')->getValue()[0]['value'];
+    }
+    if (!empty($account->get('field_customer_name')->getValue())) {
+      $field_customer_name = $account->get('field_customer_name')->getValue()[0]['value'];
+    }
+
+    $current_user = \Drupal::currentUser();
+    $roles = $current_user->getRoles();
+    if (!empty($roles)) {
+      $file = '';
+      if (!empty($account->get('user_picture')->getValue())) {
+        $picture = !empty($account->get('user_picture')->getValue()[0]['target_id']) ? $account->get('user_picture')->getValue()[0]['target_id'] : 0;
+        $file = !empty($picture) ? File::load($picture) : '';
+      }
+      if (!empty($file)) {
+        $uri = \Drupal::service('file_system')->realpath($file->getFileUri());
+        $image = $file->createFileUrl(TRUE);
+      }
+      else {
+        $image = '/themes/custom/matrics/img/user_sidebar.png';
+      }
+    }
+    $suggested_count = 0;
+    $suggested_count1 = 0;
+    $suggested = 0;
+    $suggested1 = 0;
+    $output = [];
+    $query = \Drupal::database()->select('notify_course', 'n')
+      ->fields('n')->condition('n.user_id', \Drupal::currentUser()->id())->orderBy('id', 'DESC')->range(0, 10);
+    $result = $query->countQuery()->execute()->fetchField();
+
+    if ($result != 0) {
+      $query1 = \Drupal::database()->select('notify_course', 'n')
+        ->fields('n')->condition('n.status', 0)->range(0, 10);
+      $query1->condition('n.user_id', \Drupal::currentUser()->id());
+      $result1 = $query1->countQuery()->execute()->fetchField();
+      $resultAll = $query->execute()->fetchAll();
+      $suggested_count = $result1;
+      $suggested = $result;
+
+      $query2 = \Drupal::database()->select('booked_course', 'b');
+      $query2->fields('b');
+      $query2->condition('b.uid', \Drupal::currentUser()->id())->range(0, 10);
+      $result2 = $query2->countQuery()->execute()->fetchField();
+      foreach ($resultAll as $result) {
+        if ($result2 == 0) {
+          $width = "{&quot;width&quot;:1400}";
+        }
+        else {
+          $width = "{&quot;width&quot;:400}";
+        }
+        if ($result->type == 'booked_course') {
+          $p = Paragraph::load($result->pid);
+          $title = \Drupal::database()->select('node_field_data', 'n')->fields('n', ['title'])->condition('n.nid', $p->get('field_course_')->getValue()[0]['target_id'])->execute()->fetchObject();
+          $output[$result->id] = "<a href='/booked-course-detail/" . $result->user_id . "/" . $p->get('field_course_')->getValue()[0]['target_id'] . "' class='use-ajax' data-dialog-options='{&quot;width&quot;:500}' data-dialog-type='modal'> Your course " . $title->title . " for accreditation " . $result->accreditation . " has been booked and will take place on " . $p->get('field_start_date')->getValue()[0]['value'] . " at " . $p->get('field_location')->getValue()[0]['locality'] . ". Joining instructions will be provided via joining instruction</a>";
+        }
+        elseif ($result->type == 'suggested_course') {
+          $output[$result->id] = "<a href='/suggested-course/" . $result->id . "' class='use-ajax' data-dialog-options='" . $width . "' data-dialog-type='modal'>Your " . $result->accreditation . " will expire on " . $result->expiry . " please select a course to renew your accreditation. </a>";
+        }
+        elseif ($result->type == 'reminder_course') {
+          $output[$result->id] = "<a href='/user/" . $result->user_id . "'>Your course will start after 7 days.</a>";
+        }
+      }
+    }
+    if (in_array("mnager", $roles)) {
+      $query = \Drupal::database()->select('notification', 'n')
+        ->fields('n')->orderBy('id', 'DESC');
+      $result = $query->countQuery()->execute()->fetchField();
+      if ($result != 0) {
+        $query1 = \Drupal::database()->select('notification', 'n')
+          ->fields('n')->condition('n.status', 0);
+        $result1 = $query1->countQuery()->execute()->fetchField();
+        $resultAll = $query->execute()->fetchAll();
+        $suggested_count1 = $result1;
+        $suggested1 = $result;
+
+        foreach ($resultAll as $result) {
+          $user = User::load($result->uid);
+          if (!empty($user)) {
+            $output[$result->id] = "<a href='/tasks'>Book " . $result->course_name . " for " . $user->getDisplayName() . "</a>";
+          }
+        }
+      }
+    }
+    $variables['suggested_count'] = $suggested_count + $suggested_count1;
+    $variables['suggested'] = $suggested + $suggested1;
+    $variables['suggested_msg'] = $output;
+    $notification = $account->get('field_notification_status')->getValue() ? $account->get('field_notification_status')->getValue()[0]['value'] : 0;
+    $variables['notification_status'] = $notification;
+  }
+
+  if (!empty($roles)) {
+    foreach ($roles as $role) {
+      if ($role == 'mnager') {
+        $variables['role'] = 'TMS Manager';
+      }
+      elseif ($role == 'tms_admins_') {
+        $variables['role'] = 'TMS coordinator';
+      }
+      elseif ($role == 'individual_employee') {
+        $variables['role'] = 'Individual Employee';
+      }
+      elseif ($role != 'authenticated') {
+        $variables['role'] = str_replace('_', ' ', $role);
+      }
+    }
+  }
+  $variables['name'] = $name;
+  $variables['mail'] = $mail;
+  $variables['customer_position'] = $field_customer_name;
+  $variables['user_image'] = $image;
+  $current_user = \Drupal::currentUser();
+  $current_id = $current_user->id();
+  $variables['uid'] = $current_id;
+  $roles = $current_user->getRoles();
+  $user = \Drupal::routeMatch()->getParameter('user');
+
+  if (!empty($user) && in_array("individual_employee", $roles)) {
+    $uid = $user->id();
+    if ($uid != $current_id) {
+      $url = Url::fromRoute('system.403');
+      $response = new RedirectResponse($url->toString());
+      $response->send();
+    }
+  }
+  $variables['#cache']['max-age'] = 0;
+
+  $config = \Drupal::config('matrics_dashboard.settings');
+  $variables['version'] = $config->get('version');
+  $variables['cus_session'] = '';
+  $session = \Drupal::request()->getSession();
+  $tid = $session->get('tid');
+  if ($tid != NULL) {
+    $term_name = Term::load($tid)->get('name')->value;
+    $variables['cus_session'] = $term_name;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page title templates.
+ */
+function matrics_preprocess_page_title(&$variables) {
+  // Since the title and the shortcut link are both block level elements,
+  // positioning them next to each other is much simpler with a wrapper div.
+  if (!empty($variables['title_suffix']['add_or_remove_shortcut']) && $variables['title']) {
+    // Add a wrapper div using the title_prefix and title_suffix render
+    // elements.
+    $variables['title_prefix']['shortcut_wrapper'] = [
+      '#markup' => '<div class="shortcut-wrapper clearfix">',
+      '#weight' => 100,
+    ];
+    $variables['title_suffix']['shortcut_wrapper'] = [
+      '#markup' => '</div>',
+      '#weight' => -99,
+    ];
+    // Make sure the shortcut link is the first item in title_suffix.
+    $variables['title_suffix']['add_or_remove_shortcut']['#weight'] = -100;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for maintenance-page.html.twig.
+ */
+function matrics_preprocess_maintenance_page(&$variables) {
+  // By default, site_name is set to Drupal if no db connection is available
+  // or during site installation. Setting site_name to an empty string makes
+  // the site and update pages look cleaner.
+  // @see template_preprocess_maintenance_page
+  if (!$variables['db_is_active']) {
+    $variables['site_name'] = '';
+  }
+
+  // Matrics has custom styling for the maintenance page.
+  $variables['#attached']['library'][] = 'matrics/maintenance_page';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node.html.twig.
+ */
+function matrics_preprocess_node(&$variables) {
+  // Remove the "Add new comment" link on teasers or when the comment form is
+  // displayed on the page.
+  if ($variables['teaser'] || !empty($variables['content']['comments']['comment_form'])) {
+    unset($variables['content']['links']['comment']['#links']['comment-add']);
+  }
+  $view = Views::getView('feedback_submissions');
+  $view->setDisplay('block_3');
+  $view->execute();
+  $total_counts = $view->result[0]->sid;
+
+  $node = \Drupal::routeMatch()->getParameter('node');
+  $nid = $node->id();
+
+  $query = \Drupal::database()->select('node_field_data', 'n')
+    ->fields('n', ['nid'])->condition('n.type', 'courses');
+  $query->join('node__field_provider_details', 'p', 'n.nid = p.entity_id');
+  $query->join('paragraph__field_provider_name', 'pn', 'pn.entity_id = p.field_provider_details_target_id');
+  $query->fields('pn', ['field_provider_name_target_id']);
+  $query->condition('pn.field_provider_name_target_id', $nid);
+  $query->join('node__field_feedback_form', 'f', 'n.nid = f.entity_id');
+  $query->fields('f', ['field_feedback_form_target_id']);
+  $resultAll = $query->execute()->fetchAll();
+  $provider_counts = 0;
+
+  foreach ($resultAll as $result) {
+    $query = \Drupal::entityQuery('webform_submission')
+      ->condition('webform_id', $result->field_feedback_form_target_id);
+    $result1 = $query->execute();
+    $counts = count($result1);
+    $provider_counts += $counts;
+  }
+  $average = 0;
+  if ($total_counts != 0) {
+    $average = ($provider_counts * 100) / $total_counts;
+  }
+  if (is_float($average)) {
+    $average = number_format($average, 2, '.', '');
+  }
+  $variables['average'] = $average;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for block.html.twig.
+ */
+function matrics_preprocess_block(&$variables) {
+  // Add a clearfix class to system branding blocks.
+  if ($variables['plugin_id'] == 'system_branding_block') {
+    $variables['attributes']['class'][] = 'clearfix';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for menu.html.twig.
+ */
+function matrics_preprocess_menu(&$variables) {
+  $variables['attributes']['class'][] = 'clearfix';
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for form templates.
+ */
+function matrics_theme_suggestions_form_alter(array &$suggestions, array $variables) {
+  if ($variables['element']['#form_id'] == 'search_block_form') {
+    $suggestions[] = 'form__search_block_form';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for form templates.
+ */
+function matrics_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+  if ($hook == 'form' & !empty($variables['element']['#id'])) {
+    $suggestions[] = 'form__' . str_replace('-', '_', $variables['element']['#id']);
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function matrics_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Add classes to the search form.
+  if (in_array($form_id, ['search_block_form', 'search_form'])) {
+    $key = ($form_id == 'search_block_form') ? 'actions' : 'basic';
+    if (!isset($form[$key]['submit']['#attributes'])) {
+      $form[$key]['submit']['#attributes'] = new Attribute();
+    }
+    $form[$key]['submit']['#attributes']->addClass('search-form__submit');
+  }
+
+  $form_object = $form_state->getFormObject();
+
+  // Add class to the Media Library views form.
+  if ($form_object instanceof ViewsForm && strpos($form_object->getBaseFormId(), 'views_form_media_library') === 0) {
+    // The conditional below exists because the media-library-views-form class
+    // is currently added by Classy, but Umami will eventually not use Classy as
+    // a base theme.
+    // @todo remove conditional, keep class addition in
+    //   https://drupal.org/node/3110137
+    // @see https://www.drupal.org/node/3109287
+    // @see classy_form_alter()
+    if (!isset($form['#attributes']['class']) || !in_array('media-library-views-form', $form['#attributes']['class'])) {
+      $form['#attributes']['class'][] = 'media-library-views-form';
+    }
+  }
+
+  if ($form_id == 'node_vendor_form' || $form_id == 'node_vendor_edit_form') {
+    $form['field_mobile']['#element_validate'] = ['validator_mobile'];
+  }
+
+  if ($form_id == 'node_courses_form' || $form_id == 'node_courses_edit_form') {
+    $form['field_no_bookings']['#element_validate'] = ['validator_number'];
+  }
+
+  if ($form_id == 'views_exposed_form') {
+    if (isset($form['field_type_value'])) {
+      $options = $form['field_type_value']['#options'];
+      $block_id = $form_state->getStorage()['display']['id'];
+      foreach ($options as $key => $val) {
+        $query1 = \Drupal::database()->select('node_field_data', 'n')
+          ->fields('n')->condition('n.type', 'tasks');
+        $query1->join('node__field_assigned_to', 'a', 'n.nid = a.entity_id');
+        $query1->condition('a.field_assigned_to_target_id', \Drupal::currentUser()->id());
+        $query1->join('node__field_task_status', 's', 'n.nid = s.entity_id');
+        if ($block_id == 'block_1') {
+          $query1->condition('s.field_task_status_value', 'completed');
+        }
+        elseif ($block_id == 'block_2') {
+          $query1->condition('s.field_task_status_value', 'outstanding');
+        }
+        if ($val != 'All') {
+          $query1->join('node__field_type', 't', 'n.nid = t.entity_id');
+          $query1->condition('t.field_type_value', $val);
+        }
+        $result = $query1->countQuery()->execute()->fetchField();
+        $form['field_type_value']['#options'][$key] = $val . ' (' . $result . ')';
+      }
+    }
+  }
+}
+
+/**
+ * This is the function used to validate the mobile field.
+ */
+function validator_number($form, &$form_state) {
+  $values = $form_state->getValues();
+  $string = $values['field_no_bookings'][0]['value'];
+  if (!empty($string)) {
+    if (!preg_match('/^[0-9]*$/', $string)) {
+      $form_state->setErrorByName('field_mobile', t('No. of booking field accepts Only numeric values'));
+    }
+  }
+}
+
+/**
+ * This is the function used to validate the mobile field.
+ */
+function validator_mobile($form, &$form_state) {
+  $values = $form_state->getValues();
+  $string = $values['field_mobile'][0]['value'];
+  if (!empty($string)) {
+    if (!preg_match('/^[1-9][0-9]{9}$/', $string)) {
+      $form_state->setErrorByName('field_mobile', t('Mobile field accepts Only numeric values and add only 10 digits'));
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_links__media_library_menu().
+ *
+ * This targets the menu of available media types in the media library's modal
+ * dialog.
+ *
+ * @todo Do this in the relevant template once
+ *   https://www.drupal.org/project/drupal/issues/3088856 is resolved.
+ */
+function matrics_preprocess_links__media_library_menu(array &$variables) {
+  foreach ($variables['links'] as &$link) {
+    // This conditional exists because the media-library-menu__link class is
+    // currently added by Classy, but matrics will eventually not use Classy as a
+    // base theme.
+    // @todo remove conditional, keep class addition in
+    //   https://drupal.org/node/3110137
+    // @see https://www.drupal.org/node/3109287
+    // @see classy_preprocess_links__media_library_menu()
+    if (!isset($link['link']['#options']['attributes']['class']) || !in_array('media-library-menu__link', $link['link']['#options']['attributes']['class'])) {
+      $link['link']['#options']['attributes']['class'][] = 'media-library-menu__link';
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_image_widget().
+ *
+ * @todo Revisit in https://drupal.org/node/3117430
+ */
+function matrics_preprocess_image_widget(&$variables) {
+  if (!empty($variables['element']['fids']['#value'])) {
+    $file = reset($variables['element']['#files']);
+    $variables['data']["file_{$file->id()}"]['filename']['#suffix'] = ' <span class="file-size">(' . format_size($file->getSize()) . ')</span> ';
+  }
+}
+
+/**
+ * Implements template_preprocess_links().
+ *
+ * This makes it so array keys of #links items are added as a class. This
+ * functionality was removed in Drupal 8.1, but still necessary in some
+ * instances.
+ *
+ * @todo remove in https://drupal.org/node/3120962
+ */
+function matrics_preprocess_links(&$variables) {
+  if (!empty($variables['links'])) {
+    foreach ($variables['links'] as $key => $value) {
+      if (!is_numeric($key)) {
+        $class = Html::getClass($key);
+        $variables['links'][$key]['attributes']->addClass($class);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function matrics_views_pre_render(ViewExecutable $view) {
+  if ($view->id() === 'employee_overview' && $view->current_display === 'page_1') {
+    // echo "tset";
+    // $user = User::load(\Drupal::currentUser()->id());
+    // dump($user->getUsername()); die;
+    // $result = $view->result;
+    // foreach ($view->result as $key => $value) {
+    //   $parent_id = $value->_entity->get('field_event_parent_ref')->target_id;
+    //   $event_node = \Drupal::entityTypeManager()->getStorage('node')->load($parent_id);
+    //   if ($event_node->get('field_event_space_ref')->target_id !== $node->id()) {
+    //   unset($view->result[$key]);
+    //   }
+    // }
+  }
+}
+
+/**
+ * Implements hook_preprocess_breadcrumb().
+ */
+function matrics_preprocess_breadcrumb(&$variables) {
+  $variables['#cache']['max-age'] = 0;
+}

@@ -1,0 +1,189 @@
+{% if blocks == 'expired' %}
+    <h3>Expired</h3>
+{% elseif blocks == 'one_month' %}
+    <h3>Within 1 month</h3>
+{% elseif blocks == 'three_to_one' %}
+    <h3>3 to 1 Month Expiries</h3>
+{% elseif blocks == 'six_to_one' %}
+    <h3>Within 6 to 1 month</h3>
+{% elseif blocks == 'six_plus' %}
+    <h3>More than 6 Months Expiries</h3>
+{% endif %}
+{% set roles = user.getroles(TRUE) %}
+<style>
+  /*#myTable thead tr th {*/
+  /*    display: inline-flex;*/
+  /*}*/
+  #myTable thead tr th img {
+    width: 15px;
+    min-width: 15px;
+    height: fit-content;
+    float: right;
+  }
+  .sr-only{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+  }
+</style>
+{{ attach_library('views_expandable_table/expandable_table') }}
+<div class="dashboardform-inner">
+  <div class="table-design">
+    <div class="table-responsive">
+      <table class="table views-expandable-table" id="myTable">
+        <thead>
+          <tr class="parent-row">
+            <th>Id</th>
+            <th onclick="sortTable(1)">First Name <img src="modules/custom/training_management/img/sort.png" alt="" /></th>
+            <th onclick="sortTable(2)">Last Name <img src="modules/custom/training_management/img/sort.png" alt="" /></th>
+            {#<th onclick="sortTable(3)">Asset <img src="modules/custom/training_management/img/sort.png" alt="" /></th>#}
+            {#<th onclick="sortTable(4)">Job Title <img src="modules/custom/training_management/img/sort.png" alt="" /></th>#}
+            <th onclick="sortTable(3)">Course Name <img src="modules/custom/training_management/img/sort.png" alt="" /></th>
+            {#<th onclick="sortTable(6)">Training Provider <img src="modules/custom/training_management/img/sort.png" alt="" /></th>#}
+            {#<th>Certificate name</th>#}
+            {#<th onclick="sortTable(7)">Start <img src="modules/custom/training_management/img/sort.png" alt="" /></th>#}
+            <th onclick="sortTable(4)">Expiry Date<img src="modules/custom/training_management/img/sort.png" alt="" /></th>
+            <th onclick="sortTable(5)">Accreditation <img src="modules/custom/training_management/img/sort.png" alt="" /></th>
+            {% if roles[0] == 'administrator' or  roles[0] == 'mnager' %}
+              <th>Suggest Courses</th>
+              <th>Book Course</th>
+              <th onclick="sortTable(8)">Course Booking Status <img src="modules/custom/training_management/img/sort.png" alt="" /></th>
+              {#<th>Upload Certificate</th>#}
+            {% endif %}                                        
+          </tr>
+        </thead>
+        {% if items %}
+          <tbody>
+            {% for key,value in items %}
+              {% for key1,value2 in value %}                                        
+                <tr class="views-expandable-table-trigger parent-row" id="{{ value2['cid'] }}" data-views-expandable-table-trigger="{{ value2['cid'] }}">
+                  <td>{{ value2['cid'] }}</td>
+                  <td><p style="display:none;">{{ value2['name'] }}</p><a href="/user/{{ value2['uid'] }}/?destination=training-management"> {{ value2['name'] }}</a></td>
+                  <td>{{ value2['last_name'] }}</td>
+                  {#<td>  {{ value2['asset'] }}</td>#}
+                  {#<td>{{ value2['job_title'] }}</td>#}
+                  <td>{{ value2['course_name'] }}</td>
+                  {#<td>{{ value2['provider_name'] }}</td>#}
+                  {#<td>{{ value2['cert'] }}</td>#}
+                  {#<td>{{ value2['field_start_date']|date('d-m-Y') }}</td>#}
+                  <td><p style="display:none;">{{ value2['date_str'] }}</p>{{ value2['date']|date('d-m-Y') }}{{ value2['counts'] }}</td>
+                  <td>{{ value2['accreditation'] }}</td>                                                 
+                  {% if roles[0] == 'administrator' or  roles[0] == 'mnager' %}
+                    <td><a href="/course-list?uid={{ value2['uid'] }}&certificate={{ value2['cert'] }}&accr={{ value2['course_name'] }}&exp={{ value2['date']|date('d-m-Y') }}&destination=training-management" class='use-ajax suggest-courses' data-dialog-options='{&quot;width&quot;:800}' data-dialog-type='modal'>Suggest Courses</a></td>
+                    <td><a href="/book_course?uid={{ value2['uid'] }}&certificate={{ value2['cert'] }}&accr={{ value2['accreditation'] }}&c_type={{ value2['certificate_type_id'] }}&destination=training-management" class='use-ajax book-course-icon' data-dialog-options='{&quot;width&quot;:800}' data-dialog-type='modal'>Book Course</a></td>
+                    {% if value2['pid'] and (value2['course_status']!='To be actioned')%}
+                      <td>
+                        <p style="display:none;">{% if (value2['course_status']=='completed')%}Passed {% else %}{{ value2['course_status'] }}{% endif %}</p>
+                        <a style="margin: 0 auto;" href="/courseupdated/{{ value2['pid'] }}/{{ value2['uid'] }}/{{ value2['cid'] }}/{{ value2['course_status'] }}" class='use-ajax' data-dialog-options='{&quot;width&quot;:800}' data-dialog-type='modal'>{% if (value2['course_status']=='completed')%} Passed {% else %}{{ value2['course_status'] }}{% endif %}</a>
+                      </td>
+                    {% else %}
+                      <td>{{ value2['course_status'] }}</td>
+                    {% endif %}
+                    {#{% if (value2['course_status']=='completed')%}#}
+                    {#<td><a style="margin: 0 auto;" href="/upload_certificate?uid={{ value2['uid'] }}&cid={{ value2['cert'] }}&csid={{ value2['course_name'] }}&pid={{ value2['provider_name'] }}&destination=training-management" class='use-ajax upload-file-icon' data-dialog-options='{&quot;width&quot;:800}' data-dialog-type='modal'>Upload Certificate</a></td>#}
+                    {#{% else %}#}
+                    {#<td></td>#}
+                    {#{% endif %}#}
+                  {% endif %}                                                
+                </tr>
+                <tr class="views-expandable-table-target" id="child-{{ value2['cid'] }}" data-views-expandable-table-target="{{ value2['cid'] }}">
+                  <td colspan="9">
+                    <div class="dashboardform-inner">
+                      <div class="table-design">
+                        <div class="table-responsive">
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th style="display:none;" onclick="sortTable(1)">First Name</th>
+                                <th style="display:none;" onclick="sortTable(2)">Last Name</th>
+                                <th style="display:none;" onclick="sortTable(3)">Course Name</th>
+                                <th style="display:none;" onclick="sortTable(4)">Expiry Date</th>
+                                <th style="display:none;" onclick="sortTable(5)">Accreditation </th>
+                                {% if roles[0] == 'administrator' or  roles[0] == 'mnager' %}
+                                  <th style="display:none;">Suggest Courses</th>
+                                  <th style="display:none;">Book Course</th>
+                                  <th style="display:none;" onclick="sortTable(8)">Course Booking Status</th>
+                                {% endif %}
+                                <th>Asset</th>
+                                <th>Job Title</th>
+                                <th>Training Provider</th>
+                                <th>Accreditation</th>
+                                <th>Start</th>
+                                <th>Upload Certificate</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td style="display:none;"><p style="display:none;">{{ value2['name'] }}</p><a href="/user/{{ value2['uid'] }}/?destination=training-management"> {{ value2['name'] }}</a></td>
+                                <td style="display:none;">{{ value2['last_name'] }}</td>
+                                <td style="display:none;">{{ value2['course_name'] }}</td>
+                                <td style="display:none;"><p style="display:none;">{{ value2['date_str'] }}</p>{{ value2['date']|date('d-m-Y') }}{{ value2['counts'] }}</td>
+                                <td style="display:none;">{{ value2['accreditation'] }}</td>
+                                {% if roles[0] == 'administrator' or  roles[0] == 'mnager' %}
+                                  <td style="display:none;"></td>
+                                  <td style="display:none;"></td>
+                                  {% if value2['pid'] and (value2['course_status']!='To be actioned')%}
+                                    <td style="display:none;">
+                                      <p style="display:none;">
+                                        {% if (value2['course_status']=='completed')%}Passed {% else %}{{ value2['course_status'] }}{% endif %}
+                                      </p>
+                                      <a style="margin: 0 auto;" href="/courseupdated/{{ value2['pid'] }}/{{ value2['uid'] }}/{{ value2['cid'] }}/{{ value2['course_status'] }}" class='use-ajax' data-dialog-options='{&quot;width&quot;:800}' data-dialog-type='modal'>
+                                        {% if (value2['course_status']=='completed')%} Passed {% else %}{{ value2['course_status'] }}{% endif %}
+                                      </a>
+                                    </td>
+                                  {% else %}
+                                    <td style="display:none;">{{ value2['course_status'] }}</td>
+                                  {% endif %}
+                                {% endif %}
+                                <td>{{ value2['asset'] }}</td>
+                                <td>{{ value2['job_title'] }}</td>
+                                <td>{{ value2['provider_name'] }}</td>
+                                <td>{{ value2['accreditation'] }}</td>
+                                <td>{{ value2['field_start_date']|date('d-m-Y') }}</td>
+                                  {% if roles[0] == 'administrator' or  roles[0] == 'mnager' %}
+                                    {% if (value2['course_status']=='completed')%}
+                                      <td><a style="margin: 0 auto;" href="/upload_certificate?uid={{ value2['uid'] }}&cid={{ value2['cert'] }}&csid={{ value2['course_name'] }}&pid={{ value2['provider_name'] }}&destination=training-management" class='use-ajax upload-file-icon' data-dialog-options='{&quot;width&quot;:800}' data-dialog-type='modal'>Upload Certificate</a> <img src="modules/custom/training_management/img/cross.png" class="cross-img" alt="" /></td>
+                                    {% else %}
+                                      <td></td>
+                                    {% endif %}
+                                  {% endif %}
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                
+                
+              {% endfor %} 
+            {% endfor %} 
+          </tbody>
+        {% else %}
+          <tbody>
+            <tr><td>No records found.</td></tr>
+          </tbody>
+        {% endif %}
+      </table>
+      <!--    Start Pagination -->
+      <div class='pagination-container' >
+        <nav>
+          <ul class="pagination training_pagination">
+            <li data-page="prev" >
+              <span> < <span class="sr-only">(current)</span></span>
+            </li>
+            <li data-page="next" id="prev">
+              <span> > <span class="sr-only">(current)</span></span>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>

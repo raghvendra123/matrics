@@ -1,0 +1,5 @@
+certificate_form_permission:
+  title: 'Add and bulk cetificate route Permission'
+  description: 'Permission for add and bulk certificate form'
+  restrict access: true
+

@@ -1,0 +1,1629 @@
+<?php
+
+/**
+ * @file
+ * Functions to support the matrics reports module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Drupal\file\Entity\File;
+use Drupal\node\Entity\Node;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Url;
+use Drupal\Core\Breadcrumb\Breadcrumb;
+use Drupal\Core\Link;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_mail().
+ */
+function matrics_reports_mail($key, &$message, $params) {
+  $options = [
+    'langcode' => $message['langcode'],
+  ];
+  switch ($key) {
+    case 'report_email':
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed; delsp=yes';
+      $message['from'] = 'ryan.patidar@agile451.com';
+      $message['subject'] = 'Report by Matrix';
+      $message['body'][] = Html::escape($params['message']);
+      // \Drupal::logger('mail-log')->error($message);.
+      break;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function matrics_reports_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'node_reports_form' || $form_id == 'node_reports_edit_form' || $form_id == 'node_financial_form' || $form_id == 'node_financial_edit_form') {
+    $customerid = get_session_customerid();
+    if ($customerid) {
+      $assets = getAssetsOptions($customerid);
+      $form['field_asset']['widget']['#options'] = $assets;
+    }
+    $courses = get_courses();
+    $form['field_course']['widget']['#options'] = $courses;
+    $training_provider = get_trainingprovider();
+    $form['field_training_provider']['widget']['#options'] = $training_provider;
+    $employees = get_employee();
+    $form['field_employee_name']['widget']['#options'] = $employees;
+    if ($form_id == 'node_reports_form' || $form_id == 'node_reports_edit_form') {
+      $certificate = get_certificates();
+      $form['field_certificate']['widget']['#options'] = $certificate;
+      $job_titles = get_jobtitles();
+      $form['field_job_title']['widget']['#options'] = $job_titles;
+    }
+  }
+  if ($form_id == 'node_reports_form' || $form_id == 'node_reports_edit_form') {
+    $form['#prefix'] = '<div id="form_fields">';
+    $form['#suffix'] = '</div>';
+    $form['field_file']['#prefix'] = "<div class='hidden'>";
+    $form['field_file']['#suffix'] = "</div>";
+    $form['actions']['submit']['#submit'][] = 'node_reports_submit_alter';
+    $form['container'] = [
+      '#type' => 'container',
+      '#attributes' => ['id' => 'box-container'],
+      '#weight' => '20',
+    ];
+
+    // The box contains some markup that we can change on a submit request.
+    $form['container']['box'] = [
+      '#type' => 'markup',
+      '#markup' => '',
+    ];
+
+    $form['preview'] = [
+      '#type' => 'submit',
+      '#value' => t('Preview'),
+      '#ajax' => [
+        'callback' => 'preview_callback',
+        'wrapper' => 'box-container',
+      ],
+      '#weight' => '30',
+    ];
+    if ($form_id == 'node_reports_form') {
+      $form['actions']['reset'] = [
+        '#type' => 'button',
+        '#value' => t('Reset'),
+        '#attributes' => [
+          'id' => 'reset_form',
+          // 'onclick' => 'this.form.reset(); return false;',
+        ],
+      ];
+    }
+    $form_state->setRebuild(TRUE);
+  }
+  
+  if ($form_id == 'node_financial_form' || $form_id == 'node_financial_edit_form') {
+    $form['#prefix'] = '<div id="form_fields1">';
+    $form['#suffix'] = '</div>';
+    $form['field_file']['#prefix'] = "<div class='hidden'>";
+    $form['field_file']['#suffix'] = "</div>";
+    $form['actions']['submit']['#submit'][] = 'node_financial_submit_alter';
+    $form['container'] = [
+      '#type' => 'container',
+      '#attributes' => ['id' => 'box-container'],
+      '#weight' => '20',
+    ];
+    // The box contains some markup that we can change on a submit request.
+    $form['container']['box'] = [
+      '#type' => 'markup',
+      '#markup' => '',
+    ];
+
+    $form['preview'] = [
+      '#type' => 'submit',
+      '#value' => t('Preview'),
+      '#ajax' => [
+        'callback' => 'preview_callback1',
+        'wrapper' => 'box-container',
+      ],
+      '#weight' => '30',
+    ];
+    if ($form_id == 'node_financial_form') {
+      $form['actions']['reset'] = [
+        '#type' => 'button',
+        '#value' => t('Reset'),
+        '#attributes' => [
+          'id' => 'reset_form1',
+          // 'onclick' => 'this.form.reset(); return false;',
+        ],
+      ];
+    }
+    $form_state->setRebuild(TRUE);
+  }
+
+  if ($form_id == 'user_form' || $form_id == 'user_register_form') {
+    $form['#attached']['library'][] = 'matrics_reports/userform-js';
+    $form['field_customer']['widget']['#attributes']['id'] = 'customer_list';
+    $form['field_asset']['widget']['#attributes']['class'] = ['asset_list'];
+    $form['field_job_title']['widget']['#attributes']['class'] = ['job_list'];
+
+    $roles = \Drupal::currentUser()->getRoles();
+
+    if (!in_array('administrator', $roles)) {
+      $form['field_certificates']['#prefix'] = '<div class="hidden">';
+      $form['field_certificates']['#suffix'] = "</div>";
+    }
+
+  }
+
+}
+
+/**
+ * Ajax callback function.
+ */
+function reset_callback(array $form, FormStateInterface $form_state) {
+  $form_state->setRebuild(FALSE);
+}
+
+/**
+ * Ajax callback function.
+ */
+function callback_field_select1_trigger(array $form, $form_state) {
+  $field_job_title = $form_state->getValue('field_asset');
+  if (!empty($field_job_title)) {
+    $field_job_title = $field_job_title[0]['target_id'];
+    $form['field_job_title']['widget']['#options'] = getSelect2Options($field_job_title);
+  }
+  return $form['field_job_title'];
+}
+
+/**
+ * Ajax callback function.
+ */
+function callback_field_select_trigger(array $form, $form_state) {
+  $customer = $form_state->getValue('field_customer');
+  if (!empty($customer)) {
+    $customer = $customer[0]['target_id'];
+    $form['field_asset']['widget']['#options'] = getAssetsOptions($customer);
+  }
+  return $form['field_asset'];
+}
+
+/**
+ * Select options.
+ */
+function getSelect2Options($field_job_title = NULL) {
+  $connection = \Drupal::database();
+  $query = \Drupal::database()->select('node_field_data', 'n')
+    ->fields('n', ['nid', 'status', 'type', 'created', 'title'])
+    ->condition('n.status', 1)
+    ->condition('n.type', 'job_title')
+    ->orderBy('n.created', 'DESC');
+  if ($field_job_title) {
+    $query->join('node__field_asset', 'fa', 'fa.entity_id = n.nid');
+    $query->condition('fa.field_asset_target_id', $field_job_title, '=');
+    $query->fields('fa', ['entity_id']);
+  }
+
+  $results = $query->execute()->fetchAll();
+  $options = [];
+  $options['_none'] = t('- Any -');
+  foreach ($results as $key => $user) {
+    $options[$user->nid] = $user->title;
+  }
+  return $options;
+
+}
+
+/**
+ * Assets function.
+ */
+function getAssetsOptions($customer = NULL) {
+  $connection = \Drupal::database();
+  $query = \Drupal::database()->select('node_field_data', 'n')
+    ->fields('n', ['nid', 'status', 'type', 'created', 'title'])
+    ->condition('n.status', 1)
+    ->condition('n.type', 'asset')
+    ->orderBy('n.created', 'DESC');
+  if ($customer) {
+    $query->join('node__field_customer', 'cu', 'n.nid = cu.entity_id');
+    $query->condition('cu.field_customer_target_id', $customer);
+  }
+  $results = $query->execute()->fetchAll();
+  $options = [];
+  $options['_none'] = t('- Any -');
+  foreach ($results as $key => $user) {
+    $options[$user->nid] = $user->title;
+  }
+  return $options;
+}
+
+/**
+ * Ajax callback function.
+ */
+function preview_callback($form, &$form_state) {
+  if (empty($form_state->getValue('title')[0]['value'])) {
+    $element = $form['container'];
+    $element['box']['#markup'] = "";
+    return $element;
+  }
+  $data_type = $form_state->getValue('field_data_type');
+  $datatype = [];
+  foreach ($data_type as $dt) {
+    $datatype[] = $dt['value'];
+  }
+
+  $header = [];
+  array_push($header, "Employee Name");
+  // Find and load all of the Article nodes we are going to include.
+  $connection = \Drupal::database();
+  $query = \Drupal::database()->select('users_field_data', 'u');
+  $query->fields('u', ['uid', 'name']);
+  $query->condition('u.uid', '1', '!=');
+  $query->condition('u.uid', '0', '!=');
+  $query->orderBy('u.name');
+  $query->join('user__roles', 'r', 'r.entity_id = u.uid');
+  $query->condition('r.roles_target_id', 'individual_employee', "=");
+  $customerid = get_session_customerid();
+  if (!empty($customerid)) {
+    $query->join('user__field_customer', 'uc', 'u.uid = uc.entity_id');
+    $query->condition('uc.field_customer_target_id', $customerid);
+  }
+  if (!empty($form_state->getValue('field_employee_name'))) {
+    $employees = $form_state->getValue('field_employee_name')[0];
+    if (!empty($employees)) {
+      foreach ($form_state->getValue('field_employee_name') as $employee_all) {
+        $employee_values[] = $employee_all['target_id'];
+      }
+      $query->condition('u.uid', $employee_values, 'IN');
+    }
+  }
+
+  // For Asset.
+  if (in_array('Asset', $datatype) || !empty($form_state->getValue('field_asset'))) {
+    $query->join('user__field_asset', 'fa', 'fa.entity_id = u.uid');
+    $query->fields('fa', ['field_asset_target_id']);
+    $query->join('node_field_data', 'n', 'n.nid = fa.field_asset_target_id');
+    $query->fields('n', ['title']);
+
+    $ass = $form_state->getValue('field_asset') ? $form_state->getValue('field_asset')[0] : '';
+    if (!empty($ass)) {
+      foreach ($form_state->getValue('field_asset') as $asset_all) {
+        $asset_values[] = $asset_all['target_id'];
+      }
+      $query->condition('n.nid', $asset_values, 'IN');
+    }
+    array_push($header, "Asset");
+  }
+
+  // For job title.
+  if (in_array('Job title', $datatype) || !empty($form_state->getValue('field_job_title'))) {
+    $query->join('user__field_job_title', 'jt', 'jt.entity_id = u.uid');
+    $query->fields('jt', ['field_job_title_target_id']);
+
+    $job_title = $form_state->getValue('field_job_title') ? $form_state->getValue('field_job_title')[0] : '';
+    if (!empty($job_title)) {
+      foreach ($form_state->getValue('field_job_title') as $job_title_all) {
+        $job_title_values[] = $job_title_all['target_id'];
+      }
+      $query->condition('jt.field_job_title_target_id', $job_title_values, 'IN');
+    }
+    array_push($header, "Job title");
+  }
+  $field_start_date = $form_state->getValue('field_start_date')[0]['value'];
+  $field_expire_date = $form_state->getValue('field_expir')[0]['value'];
+  if (in_array('Certificates', $datatype) || !empty($form_state->getValue('field_certificate')) || in_array('Date range', $datatype) || ($field_start_date != NULL && $field_expire_date != NULL)) {
+    $query->join('user__field_certificates', 'c', 'c.entity_id = u.uid');
+    $query->fields('c', ['field_certificates_target_id']);
+  }
+  // For Certificates.
+  if (in_array('Certificates', $datatype) || !empty($form_state->getValue('field_certificate'))) {
+    $query->join('paragraph__field_certificate_type', 'ct', 'ct.entity_id = c.field_certificates_target_id');
+    $query->fields('ct', ['field_certificate_type_target_id']);
+
+    $certificate = $form_state->getValue('field_certificate') ? $form_state->getValue('field_certificate')[0] : '';
+    if (!empty($certificate)) {
+      foreach ($form_state->getValue('field_certificate') as $certificate_all) {
+        $certificate_values[] = $certificate_all['target_id'];
+      }
+      $query->condition('ct.field_certificate_type_target_id', $certificate_values, 'IN');
+    }
+    array_push($header, 'Certificate link', 'Certificate type');
+  }
+
+  // For Date range.
+  if (in_array('Date range', $datatype)) {
+    array_push($header, 'Certificate start date', 'Certificate expiry date');
+  }
+  elseif ($field_start_date != NULL && $field_expire_date != NULL) {
+    array_push($header, 'Certificate start date', 'Certificate expiry date');
+  }
+  $field_start_date = $form_state->getValue('field_start_date')[0]['value'];
+  $field_expire_date = $form_state->getValue('field_expir')[0]['value'];
+
+  if ($field_start_date != NULL && $field_expire_date != NULL) {
+    $start_date = $field_start_date->format('Y-m-d');
+    $expire_date = $field_expire_date->format('Y-m-d');
+    $query->join('paragraph__field_start_date', 'sd', 'sd.entity_id = c.field_certificates_target_id');
+    $query->fields('sd', ['field_start_date_value']);
+    $query->join('paragraph__field_expiry_date', 'ed', 'ed.entity_id = c.field_certificates_target_id');
+    $query->fields('ed', ['field_expiry_date_value']);
+    $query->condition('sd.field_start_date_value', $start_date, '>=');
+    $query->condition('ed.field_expiry_date_value', $expire_date, '<=');
+
+  }
+
+  // For Training gap score.
+  if (in_array('Training gap score', $datatype) || isset($form_state->getValue('field_training_gap')[0])) {
+    $query->join('user__field_training_gap_score', 'gs', 'gs.entity_id = u.uid');
+    $query->fields('gs', ['field_training_gap_score_value']);
+
+    $training_gap_score = isset($form_state->getValue('field_training_gap')[0]) ? $form_state->getValue('field_training_gap')[0] : '';
+
+    if (!empty($training_gap_score)) {
+      if ($training_gap_score == '< 50') {
+        $query->condition('gs.field_training_gap_score_value', '50', '<');
+      }
+      elseif ($training_gap_score == '> 50') {
+        $query->condition('gs.field_training_gap_score_value', '50', '>');
+      }
+      else {
+        $query->condition('gs.field_training_gap_score_value', $training_gap_score, '=');
+      }
+    }
+    array_push($header, "Training gap score");
+  }
+
+  // For Training gap score.
+  if (in_array('Training gap count', $datatype) || isset($form_state->getValue('field_training_gapcount')[0])) {
+    $query->join('user__field_training_gap_count', 'gc', 'gc.entity_id = u.uid');
+    $query->fields('gc', ['field_training_gap_count_value']);
+
+    $field_training_gapcount = isset($form_state->getValue('field_training_gapcount')[0]) ? $form_state->getValue('field_training_gapcount')[0] : '';
+    if (!empty($field_training_gapcount)) {
+      if ($field_training_gapcount == '< 50') {
+        $query->condition('gc.field_training_gap_count_value', '50', '<');
+      }
+      elseif ($field_training_gapcount == '> 50') {
+        $query->condition('gc.field_training_gap_count_value', '50', '>');
+      }
+      else {
+        $query->condition('gc.field_training_gap_count_value', $field_training_gapcount, '=');
+      }
+    }
+    array_push($header, "Training gap count");
+  }
+
+  if (in_array('Course', $datatype) || !empty($form_state->getValue('field_course')) || in_array('Training request number', $datatype) || $form_state->getValue('field_training_request_number')[0]['value'] || in_array('Training provider', $datatype) || !empty($form_state->getValue('field_training_provider'))) {
+    $query->join('user__field_course_details', 'crs', 'crs.entity_id = u.uid');
+    $query->fields('crs', ['field_course_details_target_id']);
+    $query->join('paragraph__field_course_', 'p_crs', 'p_crs.entity_id = crs.field_course_details_target_id');
+    $query->fields('p_crs', ['field_course__target_id']);
+  }
+
+  // For Course.
+  if (in_array('Course', $datatype) || !empty($form_state->getValue('field_course'))) {
+    $course = $form_state->getValue('field_course') ? $form_state->getValue('field_course')[0] : '';
+    if (!empty($course)) {
+      foreach ($form_state->getValue('field_course') as $course_all) {
+        $course_values[] = $course_all['target_id'];
+      }
+      $query->condition('p_crs.field_course__target_id', $course_values, 'IN');
+    }
+    array_push($header, "Course");
+  }
+
+  // For Training request number.
+  if (in_array('Training request number', $datatype) || $form_state->getValue('field_training_request_number')[0]['value']) {
+    $query->join('node__field_course_id', 'n_crs', 'n_crs.entity_id = p_crs.field_course__target_id');
+    $query->fields('n_crs', ['field_course_id_value']);
+    $query->join('node_field_data', 'n_data', 'n_data.nid = p_crs.field_course__target_id');
+    $query->addField('n_data', 'title', 'course_name');
+    if (!empty($form_state->getValue('field_training_request_number')[0]['value'])) {
+      $course_id = $form_state->getValue('field_training_request_number')[0]['value'];
+      if (!empty($course_id)) {
+        $query->condition('n_crs.field_course_id_value', $course_id, 'IN');
+      }
+    }
+    array_push($header, "Course ID");
+  }
+
+  // For Training provider.
+  if (in_array('Training provider', $datatype) || !empty($form_state->getValue('field_training_provider'))) {
+    $query->join('paragraph__field_provider_name', 'cp', 'cp.entity_id = crs.field_course_details_target_id');
+    $query->fields('cp', ['field_provider_name_target_id']);
+    $training_providers = $form_state->getValue('field_training_provider') ? $form_state->getValue('field_training_provider')[0] : '';
+    if (!empty($training_providers)) {
+      foreach ($form_state->getValue('field_training_provider') as $training_provider) {
+        $training_providers_values[] = $training_provider['target_id'];
+      }
+      $query->condition('cp.field_provider_name_target_id', $training_providers_values, 'IN');
+    }
+    array_push($header, "Training provider");
+  }
+
+  $result = $query->execute()->fetchAll();
+  foreach ($result as $key => $node) {
+    if ((in_array('Date range', $datatype) || $field_start_date != NULL && $field_expire_date != NULL) || in_array('Certificates', $datatype)) {
+      $certificate = get_certificate_new($node->uid, $node->field_certificates_target_id);
+    }
+    else {
+      $certificate = get_certificate($node->uid);
+    }
+    // $certificate = get_certificate($node->uid);.
+    $data[$key][] = $node->name;
+    if (in_array('Asset', $datatype) || !empty($form_state->getValue('field_asset'))) {
+      $data[$key][] = $node->title;
+    }
+    if (in_array('Job title', $datatype) || !empty($form_state->getValue('field_job_title'))) {
+      $data[$key][] = get_job_title_name($node->field_job_title_target_id);
+    }
+    if (in_array('Certificates', $datatype) || !empty($form_state->getValue('field_certificate'))) {
+      if (!empty($certificate['link'])) {
+        $url = Url::fromUri($certificate['link']);
+        $data[$key][] = Link::fromTextAndUrl(t('Link'), $url)->toString();
+      }
+      else {
+        $data[$key][] = '';
+      }
+      $data[$key][] = $certificate['type'];
+    }
+    if (in_array('Date range', $datatype) || ($field_start_date != NULL && $field_expire_date != NULL)) {
+      $data[$key][] = $certificate['start_date'];
+      $data[$key][] = $certificate['expiry_date'];
+    }
+
+    if (in_array('Training gap score', $datatype) || isset($form_state->getValue('field_training_gap')[0])) {
+      $data[$key][] = $node->field_training_gap_score_value;
+    }
+    if (in_array('Training gap count', $datatype) || isset($form_state->getValue('field_training_gapcount')[0])) {
+      $data[$key][] = $node->field_training_gap_count_value;
+    }
+    if (in_array('Course', $datatype) || !empty($form_state->getValue('field_course'))) {
+      $course = get_course($node->uid, $node->field_course_details_target_id);
+      $data[$key][] = $course['title'];
+    }
+    if (in_array('Training request number', $datatype) || $form_state->getValue('field_training_request_number')[0]['value']) {
+      $data[$key][] = $node->field_course_id_value;
+      // $data[$key][] = $node->course_name;.
+    }
+    if (in_array('Training provider', $datatype) || !empty($form_state->getValue('field_training_provider'))) {
+      $provider_details = get_provider_details($node->uid, $node->field_course_details_target_id, $node->field_provider_name_target_id);
+      $data[$key][] = $provider_details['title'];
+    }
+  }
+  if (empty($data)) {
+    $data[1]['asset'] = "No result found";
+  }
+  $element = $form['container'];
+  $element['box']['table'] = [
+    '#type' => 'table',
+    '#header' => $header,
+    '#rows' => $data,
+  ];
+  return $element;
+}
+
+/**
+ * Submit handler for training coursezz add/edit form.
+ */
+function node_reports_submit_alter($form, &$form_state) {
+  $handle = fopen('php://temp', 'w');
+  $data_type = $form_state->getValue('field_data_type');
+  $datatype = [];
+  foreach ($data_type as $dt) {
+    $datatype[] = $dt['value'];
+  }
+  // Set up the header that will be displayed as the first line of the CSV file.
+  // Blank strings are used for multi-cell values where there is a count of
+  // the "keys" and a list of the keys with the count of their usage.
+  $header = [];
+  array_push($header, "Employee Name");
+  // Find and load all of the Article nodes we are going to include.
+  $connection = \Drupal::database();
+  $query = \Drupal::database()->select('users_field_data', 'u');
+  $query->fields('u', ['uid', 'name']);
+  $query->condition('u.uid', '1', '!=');
+  $query->condition('u.uid', '0', '!=');
+  $query->orderBy('u.name');
+  $query->join('user__roles', 'r', 'r.entity_id = u.uid');
+  $query->condition('r.roles_target_id', 'individual_employee', "=");
+  $customerid = get_session_customerid();
+  if (!empty($customerid)) {
+    $query->join('user__field_customer', 'uc', 'u.uid = uc.entity_id');
+    $query->condition('uc.field_customer_target_id', $customerid);
+  }
+  if (!empty($form_state->getValue('field_employee_name'))) {
+    $employees = $form_state->getValue('field_employee_name')[0];
+    if (!empty($employees)) {
+      foreach ($form_state->getValue('field_employee_name') as $employee_all) {
+        $employee_values[] = $employee_all['target_id'];
+      }
+      $query->condition('u.uid', $employee_values, 'IN');
+    }
+  }
+
+  // For Asset.
+  if (in_array('Asset', $datatype) || !empty($form_state->getValue('field_asset'))) {
+    $query->join('user__field_asset', 'fa', 'fa.entity_id = u.uid');
+    $query->fields('fa', ['field_asset_target_id']);
+    $query->join('node_field_data', 'n', 'n.nid = fa.field_asset_target_id');
+    $query->fields('n', ['title']);
+
+    $ass = $form_state->getValue('field_asset') ? $form_state->getValue('field_asset')[0] : '';
+    if (!empty($ass)) {
+      foreach ($form_state->getValue('field_asset') as $asset_all) {
+        $asset_values[] = $asset_all['target_id'];
+      }
+      $query->condition('n.nid', $asset_values, 'IN');
+    }
+    array_push($header, "Asset");
+  }
+
+  // For job title.
+  if (in_array('Job title', $datatype) || !empty($form_state->getValue('field_job_title'))) {
+    $query->join('user__field_job_title', 'jt', 'jt.entity_id = u.uid');
+    $query->fields('jt', ['field_job_title_target_id']);
+
+    $job_title = $form_state->getValue('field_job_title') ? $form_state->getValue('field_job_title')[0] : '';
+    if (!empty($job_title)) {
+      foreach ($form_state->getValue('field_job_title') as $job_title_all) {
+        $job_title_values[] = $job_title_all['target_id'];
+      }
+      $query->condition('jt.field_job_title_target_id', $job_title_values, 'IN');
+    }
+    array_push($header, "Job title");
+  }
+  $field_start_date = $form_state->getValue('field_start_date')[0]['value'];
+  $field_expire_date = $form_state->getValue('field_expir')[0]['value'];
+  if (in_array('Certificates', $datatype) || !empty($form_state->getValue('field_certificate')) || in_array('Date range', $datatype) || ($field_start_date != NULL && $field_expire_date != NULL)) {
+    $query->join('user__field_certificates', 'c', 'c.entity_id = u.uid');
+    $query->fields('c', ['field_certificates_target_id']);
+  }
+  // For Certificates.
+  if (in_array('Certificates', $datatype) || !empty($form_state->getValue('field_certificate'))) {
+    $query->join('paragraph__field_certificate_type', 'ct', 'ct.entity_id = c.field_certificates_target_id');
+    $query->fields('ct', ['field_certificate_type_target_id']);
+
+    $certificate = $form_state->getValue('field_certificate') ? $form_state->getValue('field_certificate')[0] : '';
+    if (!empty($certificate)) {
+      foreach ($form_state->getValue('field_certificate') as $certificate_all) {
+        $certificate_values[] = $certificate_all['target_id'];
+      }
+      $query->condition('ct.field_certificate_type_target_id', $certificate_values, 'IN');
+    }
+    array_push($header, 'Certificate link', 'Certificate type');
+  }
+
+  // For Date range.
+  if (in_array('Date range', $datatype)) {
+    array_push($header, 'Certificate start date', 'Certificate expiry date');
+  }
+  elseif ($field_start_date != NULL && $field_expire_date != NULL) {
+    array_push($header, 'Certificate start date', 'Certificate expiry date');
+  }
+  $field_start_date = $form_state->getValue('field_start_date')[0]['value'];
+  $field_expire_date = $form_state->getValue('field_expir')[0]['value'];
+
+  if ($field_start_date != NULL && $field_expire_date != NULL) {
+    $start_date = $field_start_date->format('Y-m-d');
+    $expire_date = $field_expire_date->format('Y-m-d');
+    $query->join('paragraph__field_start_date', 'sd', 'sd.entity_id = c.field_certificates_target_id');
+    $query->fields('sd', ['field_start_date_value']);
+    $query->join('paragraph__field_expiry_date', 'ed', 'ed.entity_id = c.field_certificates_target_id');
+    $query->fields('ed', ['field_expiry_date_value']);
+    $query->condition('sd.field_start_date_value', $start_date, '>=');
+    $query->condition('ed.field_expiry_date_value', $expire_date, '<=');
+
+  }
+
+  // For Training gap score.
+  if (in_array('Training gap score', $datatype) || isset($form_state->getValue('field_training_gap')[0])) {
+    $query->join('user__field_training_gap_score', 'gs', 'gs.entity_id = u.uid');
+    $query->fields('gs', ['field_training_gap_score_value']);
+
+    $training_gap_score = isset($form_state->getValue('field_training_gap')[0]) ? $form_state->getValue('field_training_gap')[0] : '';
+
+    if (!empty($training_gap_score)) {
+      if ($training_gap_score == '< 50') {
+        $query->condition('gs.field_training_gap_score_value', '50', '<');
+      }
+      elseif ($training_gap_score == '> 50') {
+        $query->condition('gs.field_training_gap_score_value', '50', '>');
+      }
+      else {
+        $query->condition('gs.field_training_gap_score_value', $training_gap_score, '=');
+      }
+    }
+    array_push($header, "Training gap score");
+  }
+
+  // For Training gap score.
+  if (in_array('Training gap count', $datatype) || isset($form_state->getValue('field_training_gapcount')[0])) {
+    $query->join('user__field_training_gap_count', 'gc', 'gc.entity_id = u.uid');
+    $query->fields('gc', ['field_training_gap_count_value']);
+
+    $field_training_gapcount = isset($form_state->getValue('field_training_gapcount')[0]) ? $form_state->getValue('field_training_gapcount')[0] : '';
+    if (!empty($field_training_gapcount)) {
+      if ($field_training_gapcount == '< 50') {
+        $query->condition('gc.field_training_gap_count_value', '50', '<');
+      }
+      elseif ($field_training_gapcount == '> 50') {
+        $query->condition('gc.field_training_gap_count_value', '50', '>');
+      }
+      else {
+        $query->condition('gc.field_training_gap_count_value', $field_training_gapcount, '=');
+      }
+    }
+    array_push($header, "Training gap count");
+  }
+
+  if (in_array('Course', $datatype) || !empty($form_state->getValue('field_course')) || in_array('Training request number', $datatype) || $form_state->getValue('field_training_request_number')[0]['value'] || in_array('Training provider', $datatype) || !empty($form_state->getValue('field_training_provider'))) {
+    $query->join('user__field_course_details', 'crs', 'crs.entity_id = u.uid');
+    $query->fields('crs', ['field_course_details_target_id']);
+    $query->join('paragraph__field_course_', 'p_crs', 'p_crs.entity_id = crs.field_course_details_target_id');
+    $query->fields('p_crs', ['field_course__target_id']);
+  }
+
+  // For Course.
+  if (in_array('Course', $datatype) || !empty($form_state->getValue('field_course'))) {
+    $course = $form_state->getValue('field_course') ? $form_state->getValue('field_course')[0] : '';
+    if (!empty($course)) {
+      foreach ($form_state->getValue('field_course') as $course_all) {
+        $course_values[] = $course_all['target_id'];
+      }
+      $query->condition('p_crs.field_course__target_id', $course_values, 'IN');
+    }
+    array_push($header, "Course");
+  }
+
+  // For Training request number.
+  if (in_array('Training request number', $datatype) || $form_state->getValue('field_training_request_number')[0]['value']) {
+    $query->join('node__field_course_id', 'n_crs', 'n_crs.entity_id = p_crs.field_course__target_id');
+    $query->fields('n_crs', ['field_course_id_value']);
+    $query->join('node_field_data', 'n_data', 'n_data.nid = p_crs.field_course__target_id');
+    $query->addField('n_data', 'title', 'course_name');
+    if (!empty($form_state->getValue('field_training_request_number')[0]['value'])) {
+      $course_id = $form_state->getValue('field_training_request_number')[0]['value'];
+      if (!empty($course_id)) {
+        $query->condition('n_crs.field_course_id_value', $course_id, 'IN');
+      }
+    }
+    array_push($header, "Course ID");
+  }
+
+  // For Training provider.
+  if (in_array('Training provider', $datatype) || !empty($form_state->getValue('field_training_provider'))) {
+    $query->join('paragraph__field_provider_name', 'cp', 'cp.entity_id = crs.field_course_details_target_id');
+    $query->fields('cp', ['field_provider_name_target_id']);
+    $training_providers = $form_state->getValue('field_training_provider') ? $form_state->getValue('field_training_provider')[0] : '';
+    if (!empty($training_providers)) {
+      foreach ($form_state->getValue('field_training_provider') as $training_provider) {
+        $training_providers_values[] = $training_provider['target_id'];
+      }
+      $query->condition('cp.field_provider_name_target_id', $training_providers_values, 'IN');
+    }
+    array_push($header, "Training provider");
+  }
+  $result = $query->execute()->fetchAll();
+  // dump($result);exit;
+  // Add the header as the first line of the CSV.
+  fputcsv($handle, $header);
+
+  // Iterate through the nodes.  We want one row in the CSV per Article.
+  foreach ($result as $node) {
+    if ((in_array('Date range', $datatype) || $field_start_date != NULL && $field_expire_date != NULL) || in_array('Certificates', $datatype)) {
+      $certificate = get_certificate_new($node->uid, $node->field_certificates_target_id);
+    }
+    else {
+      $certificate = get_certificate($node->uid);
+    }
+    $data['name'] = $node->name;
+
+    if (in_array('Asset', $datatype) || !empty($form_state->getValue('field_asset'))) {
+      $data['asset'] = $node->title;
+    }
+    if (in_array('Job title', $datatype) || !empty($form_state->getValue('field_job_title'))) {
+      $data['job_title'] = get_job_title_name($node->field_job_title_target_id);
+    }
+    if (in_array('Certificates', $datatype) || !empty($form_state->getValue('field_certificate'))) {
+      if (!empty($certificate['link'])) {
+        $url = Url::fromUri($certificate['link']);
+        $data['link'] = Link::fromTextAndUrl(t('Link'), $url)->toString();
+      }
+      else {
+        $data['link'] = '';
+      }
+      $data['type'] = $certificate['type'];
+    }
+    if (in_array('Date range', $datatype) || ($field_start_date != NULL && $field_expire_date != NULL)) {
+      $data['start_date'] = $certificate['start_date'];
+      $data['expiry_date'] = $certificate['expiry_date'];
+    }
+
+    if (in_array('Training gap score', $datatype) || isset($form_state->getValue('field_training_gap')[0])) {
+      $data['training_gap_score'] = $node->field_training_gap_score_value;
+    }
+    if (in_array('Training gap count', $datatype) || isset($form_state->getValue('field_training_gapcount')[0])) {
+      $data['training_gap_count'] = $node->field_training_gap_count_value;
+    }
+    if (in_array('Course', $datatype) || !empty($form_state->getValue('field_course'))) {
+      $course = get_course($node->uid, $node->field_course_details_target_id);
+      $data['course'] = $course['title'];
+    }
+    if (in_array('Training request number', $datatype) || $form_state->getValue('field_training_request_number')[0]['value']) {
+      $data['course_id'] = $node->field_course_id_value;
+      // $data[$key][] = $node->course_name;.
+    }
+    if (in_array('Training provider', $datatype) || !empty($form_state->getValue('field_training_provider'))) {
+      $provider_details = get_provider_details($node->uid, $node->field_course_details_target_id, $node->field_provider_name_target_id);
+      $data['training_provider'] = $provider_details['title'];
+    }
+    // Add the data we exported to the next line of the CSV>.
+    fputcsv($handle, array_values($data));
+  }
+  // Reset where we are in the CSV.
+  rewind($handle);
+
+  // Retrieve the data from the file handler.
+  $csv_data = stream_get_contents($handle);
+
+  // Close the file handler since we don't need it anymore.  We are not storing
+  // this file anywhere in the filesystem.
+  fclose($handle);
+
+  // This is the "magic" part of the code.  Once the data is built, we can
+  // return it as a response.
+  $response = new Response();
+  $filename = strtolower(str_replace(' ', '-', $form_state->getValue('title')[0]['value'])) . '.csv';
+
+  // By setting these 2 header options, the browser will see the URL
+  // used by this Controller to return a CSV file called "article-report.csv".
+  $response->headers->set('Content-Type', 'text/csv');
+  $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+
+  // $image = base64_decode($csv_data);.
+  $file = file_save_data($csv_data, 'public://report/' . $filename);
+
+  $node = Node::load($form_state->getValue('nid'));
+  // $node->set('field_file', $file->id());.
+  if (!empty($file)) {
+    $node->set('field_file', $file->id());
+  }
+  $customerid = get_session_customerid();
+  if (!empty($customerid)) {
+    $node->set('field_customer', $customerid);
+  }
+  $node->save();
+
+  \Drupal::messenger()->addMessage('You can download the report from the below list.');
+  $response = new RedirectResponse('/reporting');
+  $response->send();
+}
+
+/**
+ * Ajax callback function.
+ */
+function preview_callback1($form, &$form_state) {
+  if (empty($form_state->getValue('title')[0]['value'])) {
+    $element = $form['container'];
+    $element['box']['#markup'] = "";
+    return $element;
+  }
+  $data_type = $form_state->getValue('field_data1');
+  $datatype = [];
+  foreach ($data_type as $dt) {
+    $datatype[] = $dt['value'];
+  }
+
+  $header = [];
+  array_push($header, "Employee Id");
+  array_push($header, "Employee Name");
+  // Find and load all of the Article nodes we are going to include.
+  $connection = \Drupal::database();
+  $query = \Drupal::database()->select('users_field_data', 'u');
+  $query->fields('u', ['uid', 'name']);
+  $query->condition('u.uid', '1', '!=');
+  $query->condition('u.uid', '0', '!=');
+  $query->join('user__field_employee_id', 'e', 'e.entity_id = u.uid');
+  $query->fields('e', ['field_employee_id_value']);
+  $query->orderBy('name');
+  $query->join('user__roles', 'r', 'r.entity_id = u.uid');
+  $query->condition('r.roles_target_id', 'individual_employee', "=");
+  $customerid = get_session_customerid();
+  if (!empty($customerid)) {
+    $query->join('user__field_customer', 'uc', 'u.uid = uc.entity_id');
+    $query->condition('uc.field_customer_target_id', $customerid);
+  }
+  if (!empty($form_state->getValue('field_employee_name'))) {
+    $employees = $form_state->getValue('field_employee_name')[0];
+    if (!empty($employees)) {
+      foreach ($form_state->getValue('field_employee_name') as $employee_all) {
+        $employee_values[] = $employee_all['target_id'];
+      }
+      $query->condition('u.uid', $employee_values, 'IN');
+    }
+  }
+
+  // For Asset.
+  if (in_array('Asset', $datatype) || !empty($form_state->getValue('field_asset'))) {
+    $query->join('user__field_asset', 'fa', 'fa.entity_id = u.uid');
+    $query->fields('fa', ['field_asset_target_id']);
+    $query->join('node_field_data', 'n', 'n.nid = fa.field_asset_target_id');
+    $query->fields('n', ['title']);
+
+    $ass = $form_state->getValue('field_asset') ? $form_state->getValue('field_asset')[0] : '';
+    if (!empty($ass)) {
+      foreach ($form_state->getValue('field_asset') as $asset_all) {
+        $asset_values[] = $asset_all['target_id'];
+      }
+      $query->condition('n.nid', $asset_values, 'IN');
+    }
+    array_push($header, "Asset");
+  }
+
+  if (in_array('Course', $datatype) || !empty($form_state->getValue('field_course')) || !empty($form_state->getValue('field_course_status')) || $form_state->getValue('field_start_date')[0]['value'] != NULL || $form_state->getValue('field_expir')[0]['value'] != NULL || in_array('Training provider', $datatype) || !empty($form_state->getValue('field_training_provider'))) {
+    $query->join('user__field_course_details', 'crs', 'crs.entity_id = u.uid');
+    $query->fields('crs', ['field_course_details_target_id']);
+    $query->join('paragraph__field_course_', 'p_crs', 'p_crs.entity_id = crs.field_course_details_target_id');
+    $query->fields('p_crs', ['field_course__target_id']);
+  }
+  // For Course.
+  if (in_array('Course', $datatype) || !empty($form_state->getValue('field_course')) || !empty($form_state->getValue('field_course_status'))) {
+    $query->join('paragraph__field_status', 'st', 'st.entity_id = crs.field_course_details_target_id');
+    $query->fields('st', ['field_status_value']);
+    $course = $form_state->getValue('field_course') ? $form_state->getValue('field_course')[0] : '';
+    if (!empty($course)) {
+      foreach ($form_state->getValue('field_course') as $course_all) {
+        $course_values[] = $course_all['target_id'];
+      }
+      $query->condition('p_crs.field_course__target_id', $course_values, 'IN');
+    }
+    $c_status = $form_state->getValue('field_course_status') ? $form_state->getValue('field_course_status')[0] : '';
+    if (!empty($c_status)) {
+      foreach ($form_state->getValue('field_course_status') as $status) {
+        $status_values[] = $status['value'];
+      }
+      $query->condition('st.field_status_value', $status_values, 'IN');
+    }
+    if (in_array('Course', $datatype) || !empty($form_state->getValue('field_course'))) {
+      array_push($header, "Course");
+    }
+    array_push($header, "Course Status");
+  }
+
+  // For Date range.
+  $field_start_date = $form_state->getValue('field_start_date')[0]['value'];
+  $field_expire_date = $form_state->getValue('field_expir')[0]['value'];
+  if (in_array('Date range', $datatype) || $field_start_date != NULL && $field_expire_date != NULL) {
+    array_push($header, 'Course start date', 'Course end date');
+    $query->join('paragraph__field_start_date', 'sd', 'sd.entity_id = crs.field_course_details_target_id');
+    $query->fields('sd', ['field_start_date_value']);
+    $query->join('paragraph__field_expiry_date', 'ed', 'ed.entity_id = crs.field_course_details_target_id');
+    $query->fields('ed', ['field_expiry_date_value']);
+    if ($field_start_date != NULL && $field_expire_date != NULL) {
+      $start_date = $field_start_date->format('Y-m-d');
+      $expire_date = $field_expire_date->format('Y-m-d');
+      $query->condition('sd.field_start_date_value', $start_date, '>=');
+      $query->condition('ed.field_expiry_date_value', $expire_date, '<=');
+    }
+  }
+
+  // For Training provider.
+  if (in_array('Training provider', $datatype) || !empty($form_state->getValue('field_training_provider'))) {
+    $query->join('paragraph__field_provider_name', 'cp', 'cp.entity_id = crs.field_course_details_target_id');
+    $query->fields('cp', ['field_provider_name_target_id']);
+    $training_providers = $form_state->getValue('field_training_provider') ? $form_state->getValue('field_training_provider')[0] : '';
+    if (!empty($training_providers)) {
+      foreach ($form_state->getValue('field_training_provider') as $training_provider) {
+        $training_providers_values[] = $training_provider['target_id'];
+      }
+      $query->condition('cp.field_provider_name_target_id', $training_providers_values, 'IN');
+    }
+    array_push($header, "Training provider");
+    array_push($header, "List Price");
+    array_push($header, "Discount Price");
+    array_push($header, "TMS Fee");
+  }
+
+  $result = $query->execute()->fetchAll();
+  foreach ($result as $key => $node) {
+    $data[$key][] = $node->field_employee_id_value;
+    $data[$key][] = $node->name;
+    if (in_array('Asset', $datatype) || !empty($form_state->getValue('field_asset'))) {
+      $data[$key][] = $node->title;
+    }
+
+    if (in_array('Course', $datatype) || !empty($form_state->getValue('field_course'))) {
+      $course = get_course($node->uid, $node->field_course_details_target_id);
+      $data[$key][] = $course['title'];
+      $data[$key][] = $node->field_status_value;
+    }
+    elseif (!empty($form_state->getValue('field_course_status'))) {
+      $data[$key][] = $node->field_status_value;
+    }
+    if (in_array('Date range', $datatype) || ($field_start_date != NULL && $field_expire_date != NULL)) {
+      $data[$key][] = $node->field_start_date_value;
+      $data[$key][] = $node->field_expiry_date_value;
+    }
+    if (in_array('Training provider', $datatype) || !empty($form_state->getValue('field_training_provider'))) {
+      $provider_details = get_provider_details($node->uid, $node->field_course_details_target_id, $node->field_provider_name_target_id);
+      $data[$key][] = $provider_details['title'];
+      $data[$key][] = $provider_details['cost'];
+      $data[$key][] = $provider_details['discount'];
+      $data[$key][] = $provider_details['tms_fee'];
+    }
+  }
+  if (empty($data)) {
+    $data[1]['asset'] = "No result found";
+  }
+  $element = $form['container'];
+  $element['box']['table'] = [
+    '#type' => 'table',
+    '#header' => $header,
+    '#rows' => $data,
+  ];
+  return $element;
+}
+
+/**
+ * Submit handler for training coursezz add/edit form.
+ */
+function node_financial_submit_alter($form, &$form_state) {
+  $handle = fopen('php://temp', 'w');
+  $data_type = $form_state->getValue('field_data1');
+  $datatype = [];
+  foreach ($data_type as $dt) {
+    $datatype[] = $dt['value'];
+  }
+  // Set up the header that will be displayed as the first line of the CSV file.
+  // Blank strings are used for multi-cell values where there is a count of
+  // the "keys" and a list of the keys with the count of their usage.
+  $header = [];
+  array_push($header, "Employee Id");
+  array_push($header, "Employee Name");
+  // Find and load all of the Article nodes we are going to include.
+  $connection = \Drupal::database();
+  $query = \Drupal::database()->select('users_field_data', 'u');
+  $query->fields('u', ['uid', 'name']);
+  $query->condition('u.uid', '1', '!=');
+  $query->condition('u.uid', '0', '!=');
+  $query->join('user__field_employee_id', 'e', 'e.entity_id = u.uid');
+  $query->fields('e', ['field_employee_id_value']);
+  $query->orderBy('name');
+  $query->join('user__roles', 'r', 'r.entity_id = u.uid');
+  $query->condition('r.roles_target_id', 'individual_employee', "=");
+  $customerid = get_session_customerid();
+  if (!empty($customerid)) {
+    $query->join('user__field_customer', 'uc', 'u.uid = uc.entity_id');
+    $query->condition('uc.field_customer_target_id', $customerid);
+  }
+  if (!empty($form_state->getValue('field_employee_name'))) {
+    $employees = $form_state->getValue('field_employee_name')[0];
+    if (!empty($employees)) {
+      foreach ($form_state->getValue('field_employee_name') as $employee_all) {
+        $employee_values[] = $employee_all['target_id'];
+      }
+      $query->condition('u.uid', $employee_values, 'IN');
+    }
+  }
+
+  // For Asset.
+  if (in_array('Asset', $datatype) || !empty($form_state->getValue('field_asset'))) {
+    $query->join('user__field_asset', 'fa', 'fa.entity_id = u.uid');
+    $query->fields('fa', ['field_asset_target_id']);
+    $query->join('node_field_data', 'n', 'n.nid = fa.field_asset_target_id');
+    $query->fields('n', ['title']);
+
+    $ass = $form_state->getValue('field_asset') ? $form_state->getValue('field_asset')[0] : '';
+    if (!empty($ass)) {
+      foreach ($form_state->getValue('field_asset') as $asset_all) {
+        $asset_values[] = $asset_all['target_id'];
+      }
+      $query->condition('n.nid', $asset_values, 'IN');
+    }
+    array_push($header, "Asset");
+  }
+
+  if (in_array('Course', $datatype) || !empty($form_state->getValue('field_course')) || !empty($form_state->getValue('field_course_status')) || $form_state->getValue('field_start_date')[0]['value'] != NULL || $form_state->getValue('field_expir')[0]['value'] != NULL || in_array('Training provider', $datatype) || !empty($form_state->getValue('field_training_provider'))) {
+    $query->join('user__field_course_details', 'crs', 'crs.entity_id = u.uid');
+    $query->fields('crs', ['field_course_details_target_id']);
+    $query->join('paragraph__field_course_', 'p_crs', 'p_crs.entity_id = crs.field_course_details_target_id');
+    $query->fields('p_crs', ['field_course__target_id']);
+  }
+  // For Course.
+  if (in_array('Course', $datatype) || !empty($form_state->getValue('field_course')) || !empty($form_state->getValue('field_course_status'))) {
+    $query->join('paragraph__field_status', 'st', 'st.entity_id = crs.field_course_details_target_id');
+    $query->fields('st', ['field_status_value']);
+    $course = $form_state->getValue('field_course') ? $form_state->getValue('field_course')[0] : '';
+    if (!empty($course)) {
+      foreach ($form_state->getValue('field_course') as $course_all) {
+        $course_values[] = $course_all['target_id'];
+      }
+      $query->condition('p_crs.field_course__target_id', $course_values, 'IN');
+    }
+    $c_status = $form_state->getValue('field_course_status') ? $form_state->getValue('field_course_status')[0] : '';
+    if (!empty($c_status)) {
+      foreach ($form_state->getValue('field_course_status') as $status) {
+        $status_values[] = $status['value'];
+      }
+      $query->condition('st.field_status_value', $status_values, 'IN');
+    }
+    if (in_array('Course', $datatype) || !empty($form_state->getValue('field_course'))) {
+      array_push($header, "Course");
+    }
+    array_push($header, "Course Status");
+  }
+
+  // For Date range.
+  $field_start_date = $form_state->getValue('field_start_date')[0]['value'];
+  $field_expire_date = $form_state->getValue('field_expir')[0]['value'];
+  if (in_array('Date range', $datatype) || $field_start_date != NULL && $field_expire_date != NULL) {
+    array_push($header, 'Course start date', 'Course end date');
+    $query->join('paragraph__field_start_date', 'sd', 'sd.entity_id = crs.field_course_details_target_id');
+    $query->fields('sd', ['field_start_date_value']);
+    $query->join('paragraph__field_expiry_date', 'ed', 'ed.entity_id = crs.field_course_details_target_id');
+    $query->fields('ed', ['field_expiry_date_value']);
+    if ($field_start_date != NULL && $field_expire_date != NULL) {
+      $start_date = $field_start_date->format('Y-m-d');
+      $expire_date = $field_expire_date->format('Y-m-d');
+      $query->condition('sd.field_start_date_value', $start_date, '>=');
+      $query->condition('ed.field_expiry_date_value', $expire_date, '<=');
+    }
+  }
+
+  // For Training provider.
+  if (in_array('Training provider', $datatype) || !empty($form_state->getValue('field_training_provider'))) {
+    $query->join('paragraph__field_provider_name', 'cp', 'cp.entity_id = crs.field_course_details_target_id');
+    $query->fields('cp', ['field_provider_name_target_id']);
+    $training_providers = $form_state->getValue('field_training_provider') ? $form_state->getValue('field_training_provider')[0] : '';
+    if (!empty($training_providers)) {
+      foreach ($form_state->getValue('field_training_provider') as $training_provider) {
+        $training_providers_values[] = $training_provider['target_id'];
+      }
+      $query->condition('cp.field_provider_name_target_id', $training_providers_values, 'IN');
+    }
+    array_push($header, "Training provider");
+    array_push($header, "List Price");
+    array_push($header, "Discount Price");
+    array_push($header, "TMS Fee");
+  }
+  $result = $query->execute()->fetchAll();
+  // Add the header as the first line of the CSV.
+  fputcsv($handle, $header);
+
+  // Iterate through the nodes.  We want one row in the CSV per Article.
+  foreach ($result as $node) {
+    $data['employee_id'] = $node->field_employee_id_value;
+    $data['name'] = $node->name;
+    if (in_array('Asset', $datatype) || !empty($form_state->getValue('field_asset'))) {
+      $data['asset'] = $node->title;
+    }
+    if (in_array('Course', $datatype) || !empty($form_state->getValue('field_course'))) {
+      $course = get_course($node->uid, $node->field_course_details_target_id);
+      $data['course'] = $course['title'];
+      $data['status'] = $node->field_status_value;
+    }
+    elseif (!empty($form_state->getValue('field_course_status'))) {
+      $data['status'] = $node->field_status_value;
+    }
+    if (in_array('Date range', $datatype) || ($field_start_date != NULL && $field_expire_date != NULL)) {
+      $data['start'] = $node->field_start_date_value;
+      $data['expiry'] = $node->field_expiry_date_value;
+    }
+    if (in_array('Training provider', $datatype) || !empty($form_state->getValue('field_training_provider'))) {
+      $provider_details = get_provider_details($node->uid, $node->field_course_details_target_id, $node->field_provider_name_target_id);
+      $data['training_provider'] = $provider_details['title'];
+      $data['cost'] = $provider_details['cost'];
+      $data['discount'] = $provider_details['discount'];
+      $data['tms_fees'] = $provider_details['tms_fee'];
+    }
+
+    // Add the data we exported to the next line of the CSV>.
+    fputcsv($handle, array_values($data));
+  }
+  // Reset where we are in the CSV.
+  rewind($handle);
+
+  // Retrieve the data from the file handler.
+  $csv_data = stream_get_contents($handle);
+
+  // Close the file handler since we don't need it anymore.  We are not storing
+  // this file anywhere in the filesystem.
+  fclose($handle);
+
+  // This is the "magic" part of the code.  Once the data is built, we can
+  // return it as a response.
+  $response = new Response();
+  $filename = strtolower(str_replace(' ', '-', $form_state->getValue('title')[0]['value'])) . '.csv';
+
+  // By setting these 2 header options, the browser will see the URL
+  // used by this Controller to return a CSV file called "article-report.csv".
+  $response->headers->set('Content-Type', 'text/csv');
+  $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+
+  // $image = base64_decode($csv_data);.
+  $file = file_save_data($csv_data, 'public://report/' . $filename);
+
+  $node = Node::load($form_state->getValue('nid'));
+  // $node->set('field_file', $file->id());.
+  if (!empty($file)) {
+    $node->set('field_file', $file->id());
+  }
+  $customerid = get_session_customerid();
+  if (!empty($customerid)) {
+    $node->set('field_customer', $customerid);
+  }
+  $node->set('status', 1);
+  $node->save();
+
+  \Drupal::messenger()->addMessage('You can download the financial from the below list.');
+  $response = new RedirectResponse('/financials');
+  $response->send();
+}
+
+/**
+ * Support function.
+ */
+function get_certificate($uid) {
+  $query = \Drupal::database()->select('user__field_certificates', 'u');
+  $query->fields('u', ['field_certificates_target_id']);
+  $query->condition('u.entity_id', $uid);
+  $result = $query->execute()->fetchAll();
+  if (!empty($result)) {
+    $p = Paragraph::load($result[0]->field_certificates_target_id);
+
+    if (!empty($p)) {
+      $cetificate = !empty($p->get('field_certificate_type')->getValue()) ? $p->get('field_certificate_type')->getValue()[0]['target_id'] : 0;
+      $query1 = \Drupal::database()->select('node_field_data', 'n');
+      $query1->fields('n', ['title']);
+      $query1->condition('n.nid', $cetificate);
+      $result2 = $query1->execute()->fetchAll();
+
+      $certi = !empty($p->get('field_certificates')->getValue()) ? $p->get('field_certificates')->getValue()[0]['target_id'] : 0;
+      $path = '';
+      if ($certi != 0) {
+        $file = File::load($certi);
+        $path = file_create_url($file->getFileUri());
+      }
+      $certificate['link'] = $path;
+      $certificate['type'] = !empty($result2) ? $result2[0]->title : '';
+      $certificate['expiry_date'] = !empty($p->get('field_expiry_date')->getValue()) ? $p->get('field_expiry_date')->getValue()[0]['value'] : '';
+      $certificate['start_date'] = !empty($p->get('field_start_date')->getValue()) ? $p->get('field_start_date')->getValue()[0]['value'] : '';
+
+      return $certificate;
+    }
+    else {
+      return NULL;
+    }
+  }
+  else {
+    return NULL;
+  }
+}
+
+/**
+ * Support function().
+ */
+function get_certificate_new($uid, $cid = NULL) {
+  $query = \Drupal::database()->select('user__field_certificates', 'u');
+  $query->fields('u', ['field_certificates_target_id']);
+  $query->condition('u.entity_id', $uid);
+  $query->condition('u.field_certificates_target_id', $cid);
+  $result = $query->execute()->fetchAll();
+  $p = Paragraph::load($result[0]->field_certificates_target_id);
+  if (!empty($p)) {
+    $cetificate = !empty($p->get('field_certificate_type')->getValue()) ? $p->get('field_certificate_type')->getValue()[0]['target_id'] : 0;
+    $query1 = \Drupal::database()->select('node_field_data', 'n');
+    $query1->fields('n', ['title']);
+    $query1->condition('n.nid', $cetificate);
+    $result2 = $query1->execute()->fetchAll();
+
+    $certi = !empty($p->get('field_certificates')->getValue()) ? $p->get('field_certificates')->getValue()[0]['target_id'] : 0;
+    $path = '';
+    if ($certi != 0) {
+      $file = File::load($certi);
+      $path = file_create_url($file->getFileUri());
+    }
+
+    $certificate['link'] = $path;
+    $certificate['type'] = !empty($result2) ? $result2[0]->title : '';
+    $certificate['expiry_date'] = !empty($p->get('field_expiry_date')->getValue()) ? $p->get('field_expiry_date')->getValue()[0]['value'] : '';
+    $certificate['start_date'] = !empty($p->get('field_start_date')->getValue()) ? $p->get('field_start_date')->getValue()[0]['value'] : '';
+
+    return $certificate;
+  }
+  else {
+    return NULL;
+  }
+}
+
+/**
+ * Support function().
+ */
+function get_course($uid, $cid = NULL) {
+  $query = \Drupal::database()->select('user__field_course_details', 'u');
+  $query->fields('u', ['field_course_details_target_id']);
+  $query->condition('u.entity_id', $uid);
+  $query->condition('u.field_course_details_target_id', $cid);
+  $result = $query->execute()->fetchAll();
+  $p = Paragraph::load($result[0]->field_course_details_target_id);
+
+  if (!empty($p)) {
+    $query1 = \Drupal::database()->select('node_field_data', 'n');
+    $query1->fields('n', ['nid', 'title']);
+    $query1->condition('n.nid', $p->get('field_course_')->getValue()[0]['target_id']);
+    $result2 = $query1->execute()->fetchAll();
+    $course['title'] = $result2[0]->title;
+    return $course;
+  }
+  else {
+    return NULL;
+  }
+}
+
+/**
+ * Support function().
+ */
+function get_provider_details($uid, $cid = NULL, $pid = NULL) {
+  $p = Paragraph::load($cid);
+  $provider_details = [];
+  if (!empty($p) && !empty($cid) && !empty($pid)) {
+    $query1 = \Drupal::database()->select('node_field_data', 'n');
+    $query1->fields('n', ['nid']);
+    $query1->condition('n.nid', $p->get('field_course_')->getValue()[0]['target_id']);
+    $query1->join('node__field_provider_details', 'd', 'd.entity_id = n.nid');
+    $query1->fields('d', ['field_provider_details_target_id']);
+    $query1->join('paragraph__field_provider_name', 'p', 'p.entity_id = d.field_provider_details_target_id');
+    $query1->fields('p', ['field_provider_name_target_id']);
+    $query1->condition('p.field_provider_name_target_id', $pid);
+    $query1->join('node_field_data', 'nd', 'nd.nid = p.field_provider_name_target_id');
+    $query1->fields('nd', ['title']);
+    $query1->leftJoin('paragraph__field_course_discounted', 'cd', 'cd.entity_id = d.field_provider_details_target_id');
+    $query1->fields('cd', ['field_course_discounted_value']);
+    $query1->leftJoin('paragraph__field_cost', 'c', 'c.entity_id = d.field_provider_details_target_id');
+    $query1->fields('c', ['field_cost_value']);
+    $query1->leftJoin('paragraph__field_tm', 'tm', 'tm.entity_id = d.field_provider_details_target_id');
+    $query1->fields('tm', ['field_tm_value']);
+    $result2 = $query1->execute()->fetchAll();
+
+    $provider_details['title'] = isset($result2[0]->title) ? $result2[0]->title : '';
+    $provider_details['discount'] = isset($result2[0]->field_course_discounted_value) ? $result2[0]->field_course_discounted_value : '';
+    $provider_details['cost'] = isset($result2[0]->field_cost_value) ? $result2[0]->field_cost_value : '';
+    $provider_details['tms_fee'] = isset($result2[0]->field_tm_value) ? $result2[0]->field_tm_value : '';
+    return $provider_details;
+  }
+  else {
+    return NULL;
+  }
+}
+
+/**
+ * Support function().
+ */
+function get_job_title_name($id) {
+  $query1 = \Drupal::database()->select('node_field_data', 'n');
+  $query1->fields('n', ['title']);
+  $query1->condition('n.nid', $id);
+  $result = $query1->execute()->fetchAll();
+  if ($result) {
+    return $result[0]->title;
+  }
+  return FALSE;
+}
+
+/**
+ * Support function().
+ */
+function list_certificate($uid) {
+  $query = \Drupal::database()->select('user__field_certificates', 'u');
+  $query->fields('u', ['field_certificates_target_id']);
+  $query->condition('u.entity_id', $uid);
+  $query->join('paragraph__field_enable', 'e', 'e.entity_id = u.field_certificates_target_id');
+  $query->condition('e.field_enable_value', 1);
+  $result = $query->execute()->fetchAll();
+  $certificate = [];
+  if (!empty($result)) {
+    foreach ($result as $value) {
+      $p = Paragraph::load($value->field_certificates_target_id);
+      if (!empty($p) && $p->hasField('field_certificate_type') && !$p->get('field_certificate_type')->isEmpty()) {
+        $query1 = \Drupal::database()->select('node_field_data', 'n');
+        $query1->fields('n', ['title']);
+        $query1->condition('n.nid', $p->get('field_certificate_type')->getValue()[0]['target_id']);
+        $result2 = $query1->execute()->fetchAll();
+        if (!empty($result2)) {
+          $certificate[] = $result2[0]->title;
+        }
+      }
+    }
+  }
+  return $certificate;
+}
+
+/**
+ * Support function.
+ */
+function certificate_expiration_date($uid, $all = NULL) {
+  $query = \Drupal::database()->select('user__field_certificates', 'u');
+  $query->fields('u', ['field_certificates_target_id']);
+  $query->condition('u.entity_id', $uid);
+  $query->join('paragraph__field_enable', 'e', 'e.entity_id = u.field_certificates_target_id');
+  $query->condition('e.field_enable_value', 1);
+  $result = $query->execute()->fetchAll();
+  $certificate = [];
+  if (!empty($result)) {
+    foreach ($result as $key => $value) {
+      $p = Paragraph::load($value->field_certificates_target_id);
+      if (!empty($p)) {
+        $query1 = \Drupal::database()->select('node_field_data', 'n');
+        $query1->fields('n', ['title']);
+        $query1->condition('n.nid', $p->get('field_certificate_type')->getValue()[0]['target_id']);
+        $result2 = $query1->execute()->fetchAll();
+        if (!empty($result2)) {
+          $result3 = [];
+          if (!empty($p->get('field_course_name')->getValue())) {
+            $query2 = \Drupal::database()->select('node_field_data', 'n');
+            $query2->fields('n', ['title']);
+            $query2->condition('n.nid', $p->get('field_course_name')->getValue()[0]['target_id']);
+            $result3 = $query2->execute()->fetchAll();
+          }
+
+          $result4 = [];
+          if (!empty($p->get('field_provider_name')->getValue())) {
+            $query3 = \Drupal::database()->select('node_field_data', 'n');
+            $query3->fields('n', ['title']);
+            $query3->condition('n.nid', $p->get('field_provider_name')->getValue()[0]['target_id']);
+            $result4 = $query3->execute()->fetchAll();
+          }
+          $current_date = new DrupalDateTime();
+          $current_date = strtotime($current_date);
+          $field_expiry_date = !empty($p->get('field_expiry_date')->getValue()) ? strtotime($p->get('field_expiry_date')->getValue()[0]['value']) : 0;
+          $diff = abs($field_expiry_date - $current_date);
+          $years = round($diff / 60 / 60 / 24 / 365);
+          $months = round($diff / 60 / 60 / 24 / 30);
+          if ($field_expiry_date > $current_date && ($months > 6 || $years != 0) && $all == NULL) {
+          }
+          else {
+            $certificate[$result2[0]->title] = !empty($p->get('field_expiry_date')->getValue()) ? $p->get('field_expiry_date')->getValue()[0]['value'] : '';
+            $certificate[$result2[0]->title . '0'] = !empty($result3) ? $result3[0]->title : '';
+            $certificate[$result2[0]->title . '1'] = !empty($result4) ? $result4[0]->title : '';
+            $certificate[$result2[0]->title . '2'] = !empty($p->get('field_start_date')->getValue()) ? $p->get('field_start_date')->getValue()[0]['value'] : '';
+            $certificate[$result2[0]->title . '3'] = !empty($p->get('id')->getValue()) ? $p->get('id')->getValue()[0]['value'] : '';
+            $certificate[$result2[0]->title . '4'] = !empty($p->get('field_provider_name')->getValue()) ? $p->get('field_provider_name')->getValue()[0]['target_id'] : '';
+            $certificate[$result2[0]->title . '5'] = !empty($p->get('field_certificate_type')->getValue()) ? $p->get('field_certificate_type')->getValue()[0]['target_id'] : '';
+          }
+        }
+      }
+      else {
+      }
+    }
+  }
+  return $certificate;
+}
+
+/**
+ * Support function.
+ */
+function certificate_expiration_date_by_uid($uid, $all = NULL) {
+  $query = \Drupal::database()->select('user__field_certificates', 'u');
+  $query->fields('u', ['field_certificates_target_id']);
+  $query->condition('u.entity_id', $uid);
+  $result = $query->execute()->fetchAll();
+  $certificate = [];
+  if (!empty($result)) {
+    foreach ($result as $key => $value) {
+      $p = Paragraph::load($value->field_certificates_target_id);
+      if (!empty($p)) {
+        $query1 = \Drupal::database()->select('node_field_data', 'n');
+        $query1->fields('n', ['title']);
+        $query1->condition('n.nid', $p->get('field_certificate_type')->getValue()[0]['target_id']);
+        $result2 = $query1->execute()->fetchAll();
+        if (!empty($result2)) {
+          $result3 = [];
+          if (!empty($p->get('field_course_name')->getValue())) {
+            $query2 = \Drupal::database()->select('node_field_data', 'n');
+            $query2->fields('n', ['title']);
+            $query2->condition('n.nid', $p->get('field_course_name')->getValue()[0]['target_id']);
+            $result3 = $query2->execute()->fetchAll();
+          }
+
+          $result4 = [];
+          if (!empty($p->get('field_provider_name')->getValue())) {
+            $query3 = \Drupal::database()->select('node_field_data', 'n');
+            $query3->fields('n', ['title']);
+            $query3->condition('n.nid', $p->get('field_provider_name')->getValue()[0]['target_id']);
+            $result4 = $query3->execute()->fetchAll();
+          }
+          $current_date = new DrupalDateTime();
+          $current_date = strtotime($current_date);
+          $field_expiry_date = !empty($p->get('field_expiry_date')->getValue()) ? strtotime($p->get('field_expiry_date')->getValue()[0]['value']) : 0;
+          $diff = abs($field_expiry_date - $current_date);
+          $years = round($diff / 60 / 60 / 24 / 365);
+          $months = round($diff / 60 / 60 / 24 / 30);
+          $certificate[$result2[0]->title] = !empty($p->get('field_expiry_date')->getValue()) ? $p->get('field_expiry_date')->getValue()[0]['value'] : '';
+          $certificate[$result2[0]->title . '0'] = !empty($result3) ? $result3[0]->title : '';
+          $certificate[$result2[0]->title . '1'] = !empty($result4) ? $result4[0]->title : '';
+          $certificate[$result2[0]->title . '2'] = !empty($p->get('field_start_date')->getValue()) ? $p->get('field_start_date')->getValue()[0]['value'] : '';
+          $certificate[$result2[0]->title . '3'] = !empty($p->get('id')->getValue()) ? $p->get('id')->getValue()[0]['value'] : '';
+          $certificate[$result2[0]->title . '4'] = !empty($p->get('field_provider_name')->getValue()) ? $p->get('field_provider_name')->getValue()[0]['target_id'] : '';
+          $certificate[$result2[0]->title . '5'] = !empty($p->get('field_certificate_type')->getValue()) ? $p->get('field_certificate_type')->getValue()[0]['target_id'] : '';
+        }
+      }
+      else {
+        return NULL;
+      }
+    }
+  }
+  return $certificate;
+}
+
+/**
+ * Custom function.
+ */
+function certificate_course_name($uid) {
+  $query = \Drupal::database()->select('user__field_certificates', 'u');
+  $query->fields('u', ['field_course_name_target_id']);
+  $query->condition('u.entity_id', $uid);
+  $result = $query->execute()->fetchAll();
+  foreach ($result as $key => $value) {
+    $p = Paragraph::load($value->field_course_name_target_id);
+    if (!empty($p)) {
+      $query1 = \Drupal::database()->select('node_field_data', 'n');
+      $query1->fields('n', ['title']);
+      $query1->condition('n.nid', $p->get('field_certificate_type')->getValue()[0]['target_id']);
+      $result2 = $query1->execute()->fetchAll();
+      print "<pre>"; print_r($result2);die;
+      $certificate[$result2[0]->title] = $p->get('field_course_name')->getValue()[0]['value'];
+    }
+    else {
+      return NULL;
+    }
+  }
+  return $certificate;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function matrics_reports_theme() {
+  return [
+    'job_scheduling_matrix' => [
+      'variables' => ['items' => NULL, 'blocks' => NULL],
+      'template' => 'job-scheduling-matrix',
+    ],
+    'charts_api_example' => [
+      'template' => 'charts_score',
+      'variables' => [
+        'library' => '',
+        'categories' => [],
+        'seriesData' => [],
+        'options' => [],
+        'id' => '',
+      ],
+    ],
+    'view_report' => [
+      'variables' => [
+        'header' => NULL,
+        'row' => NULL,
+        'blocks' => NULL,
+        'nid' => NULL,
+      ],
+      'template' => 'view-report',
+    ],
+  ];
+
+}
+
+/**
+ * Implements hook_system_breadcrumb_alter().
+ */
+function matrics_reports_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
+  $cacheability = CacheableMetadata::createFromObject($breadcrumb);
+  $actual_link = "http://$_SERVER[HTTP_HOST]";
+  $ref_url_string = \Drupal::request()->headers->get('referer');
+
+  if ($ref_url_string == "http://$_SERVER[HTTP_HOST]/") {
+    $actual_link = "http://$_SERVER[HTTP_HOST]/";
+  }
+  if (strpos($ref_url_string, "/?") !== FALSE) {
+    $ref_url_string = substr($ref_url_string, 0, strpos($ref_url_string, "/?"));
+  }
+  elseif (strpos($ref_url_string, "?") !== FALSE) {
+    $ref_url_string = substr($ref_url_string, 0, strpos($ref_url_string, "?"));
+  }
+
+  $current_path = \Drupal::service('path.current')->getPath();
+
+  if (strpos($ref_url_string, "/?") !== FALSE) {
+    $current_path = substr($current_path, 0, strpos($current_path, "/?"));
+  }
+
+  if ($actual_link != $ref_url_string && $ref_url_string != '') {
+    $links = $breadcrumb->getLinks();
+    $last_string = explode('/', $ref_url_string);
+    $count1 = count($last_string);
+    $last_arg1 = $last_string[$count1 - 1];
+    $last_text = $last_string[$count1 - 1];
+    $arr = [];
+
+    if (preg_match("/asset-compliance/i", $ref_url_string) || preg_match("/user/i", $ref_url_string) || preg_match("/node/i", $ref_url_string)) {
+      for ($i = 0; $i < $count1; $i++) {
+        if ($i != 0) {
+          array_push($arr, $last_string[$i]);
+        }
+      }
+      $last_text = $last_string[$count1 - 2];
+
+      if (preg_match("/edit/i", $ref_url_string)) {
+        $last_text = $last_string[$count1 - 3] . ' ' . $last_string[$count1 - 1];
+      }
+      $last_arg1 = implode("/", $arr);
+    }
+
+    if (!empty($links) && preg_match("/asset-compliance/i", $current_path)) {
+      $path_args = explode('/', $current_path);
+      $count = count($links);
+      $last_arg = $links[$count - 1];
+      $nid = $last_arg->getText();
+
+      if (preg_match("/{$nid}/i", $current_path)) {
+        $last_arg->setText(ucfirst(str_replace('-', ' ', $last_text)));
+        $last_arg->setUrl(Url::fromUri('internal:/' . $last_arg1));
+        $node = Node::load($nid);
+
+        if ($node instanceof  Drupal\node\NodeInterface) {
+          // You can get nid and anything else you need from the node object.
+          $title = $node->getTitle();
+          if (!empty($title)) {
+            $breadcrumb->addLink(Link::createFromRoute($title, '<none>'));
+          }
+        }
+      }
+    }
+
+    if ($current_path == '/node/add/courses' || $current_path == '/admin/people/create' || $current_path == '/node/add/tasks' || preg_match("/import/i", $current_path) || (preg_match("/node/i", $current_path) && $current_path != '/node/13' && $current_path != '/node/add/reports' && $current_path != '/node/11' && $current_path != '/node/482') || preg_match("/user/i", $current_path)  || $current_path == '/mail/trigger' || preg_match("/share/i", $current_path)) {
+      $count1 = count($links);
+
+      if ($count1 > 2) {
+        array_splice($links, 1, ($count1 - 2));
+      }
+
+      $path_args = explode('/', $current_path);
+      $count = count($links);
+      $last_arg = $links[$count - 1];
+      $text = $last_arg->getText();
+      $last_arg->setText(ucfirst(str_replace('-', ' ', $last_text)));
+      $last_arg->setUrl(Url::fromUri('internal:/' . $last_arg1));
+      $breadcrumb = new Breadcrumb();
+      $breadcrumb->setLinks($links);
+      $breadcrumb->addLink(Link::createFromRoute($text, '<none>'));
+      $breadcrumb->addCacheContexts(['route', 'url.path', 'languages']);
+      $breadcrumb->addCacheableDependency($cacheability);
+    }
+  }
+}
+
+/**
+ * Implements template_preprocess_views_view_field().
+ */
+function matrics_reports_preprocess_views_view_field(&$variables) {
+  $view = $variables['view'];
+  $field = $variables['field'];
+  if ($view->storage->id() == 'certificate' && $view->current_display == 'page_1' && $field->field == 'field_expiry_date' && $field->options['type'] == 'datetime_time_ago') {
+    $expiry_date = $variables['field']->getValue($variables['row']);
+    if ($expiry_date) {
+      $exp_timestamp = strtotime($expiry_date);
+      $today = time();
+      $difference = $exp_timestamp - $today;
+      $days = floor($difference / 86400);
+      $format = t('Days hence');
+      if ($days < 0) {
+        $days = -1 * $days;
+        $format = t('Days ago');
+      }
+      if ($days == 1) {
+        $format = t('Day hence');
+      }
+      $variables['output'] = $days . " " . $format;
+    }
+  }
+
+}

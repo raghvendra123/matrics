@@ -1,0 +1,10 @@
+uuid: a698b78c-4e2e-46bf-a50a-5f340994d4e0
+langcode: en
+status: true
+dependencies: {  }
+id: certificates
+label: Certificates
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

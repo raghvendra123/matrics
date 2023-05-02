@@ -1,0 +1,22 @@
+uuid: 990eb85a-3e74-4074-b8eb-4dcf367a9ee7
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.financial
+id: node.financial.promote
+field_name: promote
+entity_type: node
+bundle: financial
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

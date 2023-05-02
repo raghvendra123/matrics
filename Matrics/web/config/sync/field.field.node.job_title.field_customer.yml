@@ -1,0 +1,29 @@
+uuid: d9df6be8-4a2f-4fc4-9892-fa9d7dcf8983
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_customer
+    - node.type.job_title
+    - taxonomy.vocabulary.customer
+id: node.job_title.field_customer
+field_name: field_customer
+entity_type: node
+bundle: job_title
+label: Customer
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      customer: customer
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

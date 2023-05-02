@@ -1,0 +1,14 @@
+/* Remove border from trigger when expanded. */
+table.views-expandable-table tr.expanded[data-views-expandable-table-trigger] {
+  border-bottom: none;
+}
+
+/* With JS, initially hide the expandable content. */
+html.js table.views-expandable-table tr[data-views-expandable-table-target]:not(.expanded) {
+  display: none;
+}
+
+/* Display cursor as pointer on trigger row. */
+tr[data-views-expandable-table-trigger] {
+  cursor: pointer;
+}

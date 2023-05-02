@@ -1,0 +1,25 @@
+uuid: f0dfdc70-4f61-4683-84b9-bad46c03cb84
+langcode: en
+status: true
+dependencies:
+  module:
+    - edit_profiles_perms
+    - matrics_data_upload
+    - paragraphs_type_permissions
+id: super_user
+label: 'Super user'
+weight: 8
+is_admin: null
+permissions:
+  - 'Import form'
+  - 'access user profiles'
+  - 'create paragraph content certificates'
+  - 'delete paragraph content certificates'
+  - 'edit admin users profiles'
+  - 'edit administrator users profiles'
+  - 'edit content_editor users profiles'
+  - 'edit course_and_certificate_admin users profiles'
+  - 'edit individual_employee users profiles'
+  - 'edit mnager users profiles'
+  - 'edit super_user users profiles'
+  - 'update paragraph content certificates'

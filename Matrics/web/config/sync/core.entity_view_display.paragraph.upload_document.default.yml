@@ -1,0 +1,32 @@
+uuid: d147d60e-4a4b-40c0-9f34-879c99735e4a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.upload_document.field_description
+    - field.field.paragraph.upload_document.field_upload_contract
+    - paragraphs.paragraphs_type.upload_document
+  module:
+    - file
+id: paragraph.upload_document.default
+targetEntityType: paragraph
+bundle: upload_document
+mode: default
+content:
+  field_description:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_upload_contract:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden: {  }

@@ -1,0 +1,63 @@
+matrics_data_upload.employee_import:
+  path: '/admin/structure/import/employee'
+  defaults:
+    _title: 'Employee Import'
+    _form: '\Drupal\matrics_data_upload\Form\ImportEmployeeForm'
+  requirements:
+    _permission: 'Import form'
+
+matrics_data_upload.asset_import:
+  path: '/admin/structure/import/asset'
+  defaults:
+    _title: 'Asset Import'
+    _form: '\Drupal\matrics_data_upload\Form\ImportAssetForm'
+  requirements:
+    _permission: 'Import form'
+    
+matrics_data_upload.course_import:
+  path: '/admin/structure/import/course'
+  defaults:
+    _title: 'Course Import'
+    _form: '\Drupal\matrics_data_upload\Form\ImportCourseForm'
+  requirements:
+    _permission: 'Import form'
+    
+matrics_data_upload.jobtitle_import:
+  path: '/admin/structure/import/job_title'
+  defaults:
+    _title: 'Job Title Import'
+    _form: '\Drupal\matrics_data_upload\Form\ImportJobtitleForm'
+  requirements:
+    _permission: 'Import form'
+
+matrics_data_upload.certificate_import:
+  path: '/admin/structure/import/certificate'
+  defaults:
+    _title: 'Certificate Import'
+    _form: '\Drupal\matrics_data_upload\Form\ImportCertificateForm'
+  requirements:
+    _permission: 'Import form'
+    
+matrics_data_upload.matrix_import:
+  path: '/admin/structure/import/matrix'
+  defaults:
+    _title: 'Matrix Import'
+    _form: '\Drupal\matrics_data_upload\Form\ImportMatrixForm'
+  requirements:
+    _permission: 'Import form'
+
+matrics_data_upload.training:
+  path: '/training-form'
+  defaults:
+    _controller: 'Drupal\matrics_data_upload\Controller\TrainingMatrix::training'
+    _title: 'Training Matrix'
+  requirements:
+    _permission: 'access content'
+
+matrics_data_upload.training_form:
+  path: '/training-matrix'
+  defaults:
+    _title: 'Training Matrix'
+    _form: '\Drupal\matrics_data_upload\Form\TrainingMatrixForm'
+  requirements:
+    _role: 'administrator+mnager'

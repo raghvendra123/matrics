@@ -1,0 +1,31 @@
+uuid: a8775cde-7ba7-48f2-9269-bac84ae39e39
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: content
+label: Content
+type: 'canonical_entities:node'
+pattern: '[node:title]'
+selection_criteria:
+  1eff35b4-58e2-4be7-98fc-e1d07e7d1ae2:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 1eff35b4-58e2-4be7-98fc-e1d07e7d1ae2
+    context_mapping:
+      node: node
+    bundles:
+      page: page
+  7baba66f-3822-4900-83e2-09fd3223fdab:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 7baba66f-3822-4900-83e2-09fd3223fdab
+    context_mapping:
+      node: node
+    bundles:
+      page: page
+      faq: faq
+selection_logic: and
+weight: -5
+relationships: {  }

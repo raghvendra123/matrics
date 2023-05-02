@@ -1,0 +1,14 @@
+site_setting form_permission:
+  title: 'Add matrics site settings Permission'
+  description: 'Permission for add site settings form'
+  restrict access: true
+  
+site_setting courese_cancel:
+  title: 'Add matrics course cancel Permission'
+  description: 'Permission for course cancel form'
+  restrict access: true
+
+dashboard permission:
+  title: 'Dashboard Page Permission'
+  description: 'Permission for dashboard page access'
+  restrict access: true

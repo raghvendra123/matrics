@@ -1,0 +1,48 @@
+uuid: 1949a3fb-b7ae-4048-9ee1-46d148e4d0fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.courses.field_accreditation
+    - field.field.node.courses.field_certificates
+    - field.field.node.courses.field_cm
+    - field.field.node.courses.field_course_availability
+    - field.field.node.courses.field_course_date
+    - field.field.node.courses.field_course_description
+    - field.field.node.courses.field_course_duration
+    - field.field.node.courses.field_course_id
+    - field.field.node.courses.field_course_location
+    - field.field.node.courses.field_customer_fee
+    - field.field.node.courses.field_delivery_method
+    - field.field.node.courses.field_no_bookings
+    - field.field.node.courses.field_provider_details
+    - field.field.node.courses.field_training_provider
+    - node.type.courses
+  module:
+    - user
+id: node.courses.teaser
+targetEntityType: node
+bundle: courses
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_accreditation: true
+  field_certificates: true
+  field_cm: true
+  field_course_availability: true
+  field_course_date: true
+  field_course_description: true
+  field_course_duration: true
+  field_course_id: true
+  field_course_location: true
+  field_customer_fee: true
+  field_delivery_method: true
+  field_no_bookings: true
+  field_provider_details: true
+  field_training_provider: true

@@ -1,0 +1,14 @@
+uuid: 83eb43ef-a5d6-4511-b5df-14cdcdec3d48
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.scheduling_admin
+  module:
+    - user
+id: user_add_role_action.scheduling_admin
+label: 'Add the Scheduling Admin role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: scheduling_admin

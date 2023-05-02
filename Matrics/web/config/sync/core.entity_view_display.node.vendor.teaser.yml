@@ -1,0 +1,40 @@
+uuid: 4728d727-b676-45b2-b15e-d785f635da45
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.vendor.field_address
+    - field.field.node.vendor.field_customer
+    - field.field.node.vendor.field_email
+    - field.field.node.vendor.field_first_name
+    - field.field.node.vendor.field_last_name
+    - field.field.node.vendor.field_mobile
+    - field.field.node.vendor.field_poc
+    - field.field.node.vendor.field_upload_document
+    - field.field.node.vendor.field_url_to_training_website_bo
+    - field.field.node.vendor.field_vendorstatus
+    - node.type.vendor
+  module:
+    - user
+id: node.vendor.teaser
+targetEntityType: node
+bundle: vendor
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_address: true
+  field_customer: true
+  field_email: true
+  field_first_name: true
+  field_last_name: true
+  field_mobile: true
+  field_poc: true
+  field_upload_document: true
+  field_url_to_training_website_bo: true
+  field_vendorstatus: true

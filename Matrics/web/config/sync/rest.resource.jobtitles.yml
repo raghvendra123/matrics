@@ -1,0 +1,19 @@
+uuid: 1017a46a-f587-4ee7-a99a-66015ebefb75
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: jobtitles
+plugin_id: jobtitles
+granularity: resource
+configuration:
+  methods:
+    - GET
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

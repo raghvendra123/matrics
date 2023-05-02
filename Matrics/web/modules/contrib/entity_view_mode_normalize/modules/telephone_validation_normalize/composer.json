@@ -1,0 +1,16 @@
+{
+    "name": "drupal/telephone_validation_normalize",
+    "description": "Sub modules of entity_view_mode_normalize use for telephone field with e164 validation.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Thi Dang",
+            "email": "mr.ddthi@gmail.com"
+        }
+    ],
+    "require": {
+        "drupal/entity_view_mode_normalize": "^1.0",
+        "drupal/telephone_validation": "^2.0"
+    }
+}

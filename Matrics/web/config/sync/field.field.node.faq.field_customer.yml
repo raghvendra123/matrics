@@ -1,0 +1,29 @@
+uuid: 7ad910b2-b1e1-4928-b6bd-70fedd8046a0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_customer
+    - node.type.faq
+    - taxonomy.vocabulary.customer
+id: node.faq.field_customer
+field_name: field_customer
+entity_type: node
+bundle: faq
+label: Customer
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      customer: customer
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

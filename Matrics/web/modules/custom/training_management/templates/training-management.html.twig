@@ -1,0 +1,23 @@
+<div class="row card-parent">
+  <div class="col-xl-6 col-sm-12">
+    <div class="row">
+      {% for key,value in items['status'] %}
+        <div class="col-xl-6 col-sm-12 card-child">
+          <a href="javascript:void(0);" class="card" style= "background-color: {{ key}};color: #000000;">
+            <div class="card--inner">
+              <div class="card-content">
+                <h3></h3>
+                <p>{{ value }}</p>
+              </div>                                     
+            </div>
+          </a>
+        </div>
+      {% endfor %}   
+    </div>
+  </div> 
+  <div class="col-xl-6 col-sm-12">
+    <div class="row">
+      {{ items['chart'] }} 
+    </div>
+  </div> 
+</div>

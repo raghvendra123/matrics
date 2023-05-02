@@ -1,0 +1,25 @@
+uuid: e6fca281-be72-44e5-853a-5bd0037b421c
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - matrics
+_core:
+  default_config_hash: d-0emr1mEq7sFKDu5RHUJckvNk62hvIZdRwPEfnJyGg
+id: matrics_branding
+theme: matrics
+region: header
+weight: 0
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  label_display: '0'
+  provider: system
+  use_site_logo: true
+  use_site_name: true
+  use_site_slogan: true
+visibility: {  }

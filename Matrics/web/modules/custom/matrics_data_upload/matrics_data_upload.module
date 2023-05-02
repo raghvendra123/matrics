@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Functions to support the matrics dashboard module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function matrics_data_upload_theme() {
+  return [
+    'training_matrix' => [
+      'variables' => ['items' => NULL, 'blocks' => NULL],
+      'template' => 'training-matrix',
+    ],
+    'employee_matrix' => [
+      'variables' => ['items' => NULL, 'blocks' => NULL],
+      'template' => 'employee-matrix',
+    ],
+  ];
+}

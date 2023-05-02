@@ -1,0 +1,18 @@
+uuid: 59fd2218-df32-4e57-b95b-943184bac83c
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: assets
+plugin_id: assets
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - cookie

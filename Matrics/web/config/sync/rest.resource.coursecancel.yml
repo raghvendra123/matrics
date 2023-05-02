@@ -1,0 +1,19 @@
+uuid: d4d867c9-2d87-49e3-acbd-460713bd63a9
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: coursecancel
+plugin_id: coursecancel
+granularity: resource
+configuration:
+  methods:
+    - GET
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

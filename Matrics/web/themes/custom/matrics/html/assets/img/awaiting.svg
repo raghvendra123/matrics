@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="160" height="160" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.958" y1="0.297" x2="0.043" y2="0.699" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#f56036"/>
+      <stop offset="1" stop-color="#f5365c"/>
+    </linearGradient>
+    <filter id="Oval" x="0" y="0" width="160" height="160" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="16" result="blur"/>
+      <feFlood flood-color="#8898aa" flood-opacity="0.149"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_44" data-name="Group 44" transform="translate(-545 -220)">
+    <g id="Group_11" data-name="Group 11" transform="translate(593 268)">
+      <g id="Gradient_Button" data-name="Gradient Button">
+        <g transform="matrix(1, 0, 0, 1, -48, -48)" filter="url(#Oval)">
+          <circle id="Oval-2" data-name="Oval" cx="32" cy="32" r="32" transform="translate(48 48)" fill="url(#linear-gradient)"/>
+        </g>
+      </g>
+    </g>
+    <g id="Group_36" data-name="Group 36" transform="translate(613.76 287.186)">
+      <g id="Group_35" data-name="Group 35" transform="translate(0)">
+        <line id="Line_7" data-name="Line 7" x2="22" transform="translate(0.24 0.814)" fill="none" stroke="#fff" stroke-linejoin="round" stroke-width="1.5"/>
+        <line id="Line_8" data-name="Line 8" x2="22" transform="translate(0.24 24.814)" fill="none" stroke="#fff" stroke-linejoin="round" stroke-width="1.5"/>
+        <path id="Path_102" data-name="Path 102" d="M7,3V8.584a7,7,0,0,0,7.028,6.98h0a7,7,0,0,1,7.028,6.98v5.584" transform="translate(-2.756 -3)" fill="none" stroke="#fff" stroke-linejoin="round" stroke-width="1.5"/>
+        <path id="Path_103" data-name="Path 103" d="M21.057,3V8.584a7,7,0,0,1-7.028,6.98h0A7,7,0,0,0,7,22.544v5.584" transform="translate(-2.756 -3)" fill="none" stroke="#fff" stroke-linejoin="round" stroke-width="1.5"/>
+        <path id="Path_104" data-name="Path 104" d="M10,6V7.4a2.8,2.8,0,0,0,2.811,2.792h0m2.811,12.564v-1.4a2.8,2.8,0,0,0-2.811-2.792h0" transform="translate(-1.539 -1.812)" fill="none" stroke="#fff" stroke-linejoin="round" stroke-width="1.5"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,27 @@
+uuid: 75273f2e-ea2e-4379-b9da-5fc2c008d6a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_file
+    - node.type.financial
+  module:
+    - file
+id: node.financial.field_file
+field_name: field_file
+entity_type: node
+bundle: financial
+label: File
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'txt pdf doc docx csv'
+  max_filesize: ''
+  description_field: false
+field_type: file

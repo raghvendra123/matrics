@@ -1,0 +1,37 @@
+uuid: ab27c6a9-40b8-4060-968e-db2e6377d9d0
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - node
+    - options
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: node.field_past
+field_name: field_past
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '1'
+      label: 'One Month Past'
+    -
+      value: '3'
+      label: 'Three Month Past'
+    -
+      value: '6'
+      label: 'Six Month Past'
+    -
+      value: '12'
+      label: 'A Year Past'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

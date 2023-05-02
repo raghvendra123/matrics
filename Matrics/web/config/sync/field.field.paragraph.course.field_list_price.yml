@@ -1,0 +1,19 @@
+uuid: 27b189d8-6ae9-4f75-af5a-f32f502196e4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_list_price
+    - paragraphs.paragraphs_type.course
+id: paragraph.course.field_list_price
+field_name: field_list_price
+entity_type: paragraph
+bundle: course
+label: 'Course price'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

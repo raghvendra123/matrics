@@ -1,0 +1,23 @@
+uuid: b922d8bc-ba93-4a61-b808-1302e19279a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_tm
+    - paragraphs.paragraphs_type.provider_details
+id: paragraph.provider_details.field_tm
+field_name: field_tm
+entity_type: paragraph
+bundle: provider_details
+label: 'TMS fees'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: float

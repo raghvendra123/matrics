@@ -1,0 +1,24 @@
+uuid: 390d8471-1628-497d-801b-a40aa4c708d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_expiry_date
+    - paragraphs.paragraphs_type.certificates
+  module:
+    - datetime
+id: paragraph.certificates.field_expiry_date
+field_name: field_expiry_date
+entity_type: paragraph
+bundle: certificates
+label: 'Expiry Date'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

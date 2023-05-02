@@ -1,0 +1,30 @@
+uuid: 7b86995e-be0c-45ad-8010-d60283260bb1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_job_title
+    - node.type.job_title
+  module:
+    - user
+id: user.user.field_job_title
+field_name: field_job_title
+entity_type: user
+bundle: user
+label: 'Job Title'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      job_title: job_title
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

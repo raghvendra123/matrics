@@ -1,0 +1,39 @@
+uuid: 9026e4e2-2a57-49c5-982f-a458030f34d7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_course_location
+    - node.type.courses
+  module:
+    - address
+id: node.courses.field_course_location
+field_name: field_course_location
+entity_type: node
+bundle: courses
+label: Location
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  available_countries: {  }
+  langcode_override: ''
+  field_overrides:
+    givenName:
+      override: hidden
+    additionalName:
+      override: hidden
+    familyName:
+      override: hidden
+    organization:
+      override: hidden
+    addressLine2:
+      override: hidden
+    sortingCode:
+      override: hidden
+    dependentLocality:
+      override: hidden
+  fields: {  }
+field_type: address

@@ -1,0 +1,18 @@
+uuid: 3cbff18b-a1b5-4112-825f-a15d2eaee64d
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: update_image
+plugin_id: update_image
+granularity: resource
+configuration:
+  methods:
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

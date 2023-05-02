@@ -1,0 +1,6 @@
+matrics_dashboard.settings:
+  title: 'Matrics site settings'
+  route_name: matrics_dashboard.settings
+  description: 'Define Matrics site settings.'
+  parent: system.admin_config_system
+  weight: 99

@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Contains entity_view_mode_normalize.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function entity_view_mode_normalize_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the entity_view_mode_normalize module.
+    case 'help.page.entity_view_mode_normalize':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This module provide the view mode normalizer for entity.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+

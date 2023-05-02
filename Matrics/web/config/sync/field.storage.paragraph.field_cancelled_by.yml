@@ -1,0 +1,31 @@
+uuid: 75666e3c-1230-44b9-8607-e134ec3211d9
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - options
+    - paragraphs
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: paragraph.field_cancelled_by
+field_name: field_cancelled_by
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: 'Cancelled by provider﻿'
+      label: 'Cancelled by provider﻿'
+    -
+      value: 'Cancelled by Customer'
+      label: 'Cancelled by Customer'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

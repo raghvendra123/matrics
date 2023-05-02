@@ -1,0 +1,10 @@
+uuid: 6cd74cb0-9831-4a82-bb87-45ad99bf672c
+langcode: en
+status: true
+dependencies: {  }
+id: provider_details
+label: 'Provider Details'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

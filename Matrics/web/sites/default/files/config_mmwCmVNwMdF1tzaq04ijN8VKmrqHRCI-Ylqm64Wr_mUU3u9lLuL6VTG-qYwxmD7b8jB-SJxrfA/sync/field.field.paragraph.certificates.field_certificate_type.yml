@@ -1,0 +1,29 @@
+uuid: 4733bf9e-09cf-4bd2-bd20-bb6080ba5ba8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_certificate_type
+    - node.type.certificate
+    - paragraphs.paragraphs_type.certificates
+id: paragraph.certificates.field_certificate_type
+field_name: field_certificate_type
+entity_type: paragraph
+bundle: certificates
+label: 'Certificate Type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      certificate: certificate
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

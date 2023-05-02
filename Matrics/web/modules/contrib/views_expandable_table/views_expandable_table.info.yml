@@ -1,0 +1,12 @@
+name: Views Expandable Table
+type: module
+description: 'Provides an expandable table style plugin.'
+core_version_requirement: ^8.8 || ^9
+package: Views
+dependencies:
+  - drupal:views
+
+# Information added by Drupal.org packaging script on 2021-05-25
+version: '1.0.0-alpha3'
+project: 'views_expandable_table'
+datestamp: 1621954527

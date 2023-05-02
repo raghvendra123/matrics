@@ -1,0 +1,21 @@
+uuid: 892c3dcc-d281-447b-8b6b-80bef0edf7e5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_expir
+    - node.type.financial
+  module:
+    - datetime
+id: node.financial.field_expir
+field_name: field_expir
+entity_type: node
+bundle: financial
+label: 'End Date'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

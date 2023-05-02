@@ -1,0 +1,26 @@
+uuid: 9ac0f097-622f-4633-b969-5d8d82130cef
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_training_gap_score
+  module:
+    - user
+id: user.user.field_training_gap_score
+field_name: field_training_gap_score
+entity_type: user
+bundle: user
+label: 'Training gap score'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

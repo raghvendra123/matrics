@@ -1,0 +1,4 @@
+training_management permission:
+  title: 'Training Management Page Permission'
+  description: 'Permission for training management page access'
+  restrict access: true

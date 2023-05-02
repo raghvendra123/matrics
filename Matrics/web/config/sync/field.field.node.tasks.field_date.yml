@@ -1,0 +1,24 @@
+uuid: 58f12f87-7245-4cf2-baf4-6f8e5eec9097
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date
+    - node.type.tasks
+  module:
+    - datetime
+id: node.tasks.field_date
+field_name: field_date
+entity_type: node
+bundle: tasks
+label: 'Date added'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

@@ -1,0 +1,25 @@
+uuid: f3fe4c25-dd39-456a-9f60-1b6801f1cbd2
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+    - training_management
+  theme:
+    - matrics
+id: suggestedcoursed
+theme: matrics
+region: content
+weight: 3
+provider: null
+plugin: suggested_course
+settings:
+  id: suggested_course
+  label: 'Suggested Coursed'
+  label_display: '0'
+  provider: training_management
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*'

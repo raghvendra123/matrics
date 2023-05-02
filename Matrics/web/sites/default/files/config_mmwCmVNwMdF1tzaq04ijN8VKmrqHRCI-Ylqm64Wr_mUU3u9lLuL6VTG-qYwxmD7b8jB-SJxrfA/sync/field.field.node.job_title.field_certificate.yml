@@ -1,0 +1,29 @@
+uuid: 6d4be2a3-bfd2-4583-834b-37ea5a03d245
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_certificate
+    - node.type.certificate
+    - node.type.job_title
+id: node.job_title.field_certificate
+field_name: field_certificate
+entity_type: node
+bundle: job_title
+label: Certificate
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      certificate: certificate
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: certificate
+field_type: entity_reference

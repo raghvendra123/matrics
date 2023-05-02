@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaina+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="assets/css/main.css" />
+</head>
+
+<body class="dashboard-page">
+    <!-- Dashboard page start CSS -->
+    <div id="dash_wrapper">
+        <!-- Sidebar start -->
+        <div id="sidebar-wrapper" class="">
+            <!-- Sidebar Top Start -->
+            <div class="sidebar_top">
+                <div class="top-bar-brand">
+                    <a class="navbar-brand" href="index.html">
+                        <img src="assets/img/logo-white.png" alt="logo" title="">
+                    </a>
+                    <a href="javascript:void();" class="hamburger-icon"><img src="assets/img/hamburger_icon.svg" alt=""></a>
+                </div>
+                <div class="dashboard_user">
+                    <h3>John Doe</h3>
+                    <p>John@gmail.com</p>
+                    <div class="user_img">
+                        <img src="assets/img/user_sidebar.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <!-- Sidebar Top End -->
+            <!-- Sidebar Menu Start -->
+            <ul class="sidebar-nav" id="menu">
+                <li class="active">
+                    <a href="dashboard.html">
+                        <span>
+                            <img src="assets/img/dashboard_icon.svg" alt="">
+                        </span> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="dashboard.html">
+                        <span>
+                            <img src="assets/img/training_icon.svg" alt="">
+                        </span> Training management
+                    </a>
+                </li>
+                <li>
+                    <a href="dashboard.html">
+                        <span>
+                            <img src="assets/img/employee_icon.svg" alt="">
+                        </span> Employee overview
+                    </a>
+                </li>
+                <li>
+                    <a href="dashboard.html">
+                        <span>
+                            <img src="assets/img/tasks.svg" alt="">
+                        </span> Tasks
+                    </a>
+                </li>
+                <li>
+                    <a href="dashboard.html">
+                        <span>
+                            <img src="assets/img/certification_icon.svg" alt="">
+                        </span> Certification
+                    </a>
+                </li>
+                <li>
+                    <a href="dashboard.html">
+                        <span>
+                            <img src="assets/img/supplier_icon.svg" alt="">
+                        </span> Supplier portal
+                    </a>
+                </li>
+                <li>
+                    <a href="dashboard.html">
+                        <span>
+                            <img src="assets/img/reporting_icon.svg" alt="">
+                        </span> Reporting
+                    </a>
+                </li>
+                <li>
+                    <a href="dashboard.html">
+                        <span>
+                            <img src="assets/img/administration_icon.svg" alt="">
+                        </span> Administration
+                    </a>
+                </li>
+            </ul>
+            <!-- Sidebar Menu End -->
+            <!-- Bootstrap CSS -->
+        </div>
+        <!-- Sidebar End -->
+        <!-- Dashboard Right Start -->
+        <div class="dashboard-rightbar">
+            <!-- Dashboard Header Start -->
+            <header class="dashboard-header">
+                <div class="dashboard-inner">
+
+                    <div class="desh-headerright">
+                        <div class="header_icons">
+                            <div class="search__form">
+                                <form>
+                                    <div class="form-group">
+                                        <input class="form-control" type="text">
+                                        <a href="javascript:void(0);" class="search-icon"><img src="assets/img/search_icon.svg" alt=""></a>
+                                    </div>
+                                </form>
+                            </div>
+                            <a href="#"><img src="assets/img/bell_icon.svg" alt=""></a>
+                        </div>
+                        <div class="logged-in">
+                            <div class="user_identity">
+                                <p>John doe</p>
+                                <span>Guest</span>
+                            </div>
+
+                            <a href="javascript:void(0);" class="profile-detail">
+                                <span class="logged-img">
+                                <img src="assets/img/user.png" alt="lprofile">
+                              </span>
+                            </a>
+                            <ul>
+                                <li>
+                                    <a href="javascript:void(0);">profile </a>
+                                </li>
+                                <li>
+                                    <a href="index.html">logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="desh-headerleft">
+                        <div class="sidemenu-btn">
+                            <a href="javascript:void();" class="hamburger-icon"><img src="assets/img/hamburger_icon.svg" alt=""></a>
+                        </div>
+                        <a class="logo-2" href="javascript:void();">
+                            <img src="assets/img/logo-white.png" alt="logo" title="">
+                        </a>
+                    </div>
+                    <!-- /.navbar-collapse -->
+                </div>
+            </header>
+            <!-- Dashboard Header End -->
+
+            <div class="page-topForm ">
+                <form action="javascript:void(0);" id="top-form">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6 form_col">
+                            <div class="form-group focus_input">
+                                <label for="u-name">Asset Name</label>
+                                <span class="select_arrow"></span>
+                                <div class="custom_select">
+                                    <select class="form-control">
+                                    <option>All</option>
+                                    <option>Asset 1</option>
+                                    <option>Asset 2</option>
+                                  </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6  form_col">
+                            <div class="form-group focus_input"><label for="u-name">From Date</label>
+                                <input class="form-control" type="date" name="from_date">
+
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6  form_col">
+                            <div class="form-group focus_input"><label for="u-name">To Date</label>
+                                <input class="form-control" type="date" name="to_date">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <!-- Dashboard Content Start -->
+
+            <div class="dashboard-content">
+
+                <div class="page-header ">
+                    <div class="page-header__inner">
+                        <h1>Bookings</h1>
+                    </div>
+                </div>
+                <div class="row card-parent">
+                    <!-- Card  Start -->
+                    <div class="col-xl-3 col-sm-6 card-child">
+                        <a href="javascript:void(0);" class="card">
+                            <div class="card--inner">
+                                <div class="card-content">
+                                    <h3>Awaiting Confirmation</h3>
+                                    <p>21
+                                    </p>
+                                </div>
+                                <div class="card-icon">
+                                    <img src="assets/img/icon1.png" alt="">
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Card  End -->
+                    <!-- Card  Start -->
+                    <div class="col-xl-3 col-sm-6 card-child">
+                        <a href="javascript:void(0);" class="card">
+                            <div class="card--inner">
+                                <div class="card-content">
+                                    <h3>Booking Confirmed</h3>
+                                    <p>3
+
+                                    </p>
+                                </div>
+                                <div class="card-icon">
+                                    <img src="assets/img/booking_confirm.png" alt="">
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Card  End -->
+                    <!-- Card  Start -->
+                    <div class="col-xl-3 col-sm-6 card-child">
+                        <a href="javascript:void(0);" class="card">
+                            <div class="card--inner">
+                                <div class="card-content">
+                                    <h3>Completed</h3>
+                                    <p>50
+                                    </p>
+                                </div>
+                                <div class="card-icon">
+                                    <img src="assets/img/complete_icon.png" alt="">
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Card  End -->
+                    <!-- Card  Start -->
+                    <div class="col-xl-3 col-sm-6 card-child">
+                        <a href="javascript:void(0);" class="card">
+                            <div class="card--inner">
+                                <div class="card-content">
+                                    <h3>Cancelled </h3>
+                                    <p>2
+                                    </p>
+                                </div>
+                                <div class="card-icon">
+                                    <img src="assets/img/cancel_icon.png" alt="">
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Card  End -->
+                    <!-- Card  Start -->
+                    <div class="col-xl-3 col-sm-6 card-child">
+                        <a href="javascript:void(0);" class="card">
+                            <div class="card--inner">
+                                <div class="card-content">
+                                    <h3>Cancelled By - Vendor </h3>
+                                    <p>20
+                                    </p>
+                                </div>
+                                <div class="card-icon">
+                                    <img src="assets/img/cancel_icon2.png" alt="">
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Card  End -->
+                    <!-- Card  Start -->
+                    <div class="col-xl-3 col-sm-6 card-child">
+                        <a href="javascript:void(0);" class="card">
+                            <div class="card--inner">
+                                <div class="card-content">
+                                    <h3>Cancelled No - Show</h3>
+                                    <p>32
+                                    </p>
+                                </div>
+                                <div class="card-icon">
+                                    <img src="assets/img/cancel_icon3.png" alt="">
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Card  End -->
+                </div>
+
+            </div>
+            <!-- Dashboard Content End -->
+
+        </div>
+        <!-- Dashboard Right End -->
+    </div>
+    <!-- Dashboard Page End -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>

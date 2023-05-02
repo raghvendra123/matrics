@@ -1,0 +1,18 @@
+uuid: 3dcf2013-2386-49f0-972e-f23aece3eb51
+langcode: en
+status: true
+dependencies:
+  module:
+    - contact
+    - serialization
+    - user
+id: entity.contact_message
+plugin_id: 'entity:contact_message'
+granularity: resource
+configuration:
+  methods:
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

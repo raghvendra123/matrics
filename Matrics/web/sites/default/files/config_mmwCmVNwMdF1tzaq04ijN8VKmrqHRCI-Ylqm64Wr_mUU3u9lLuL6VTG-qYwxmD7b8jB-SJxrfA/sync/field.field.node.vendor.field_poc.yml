@@ -1,0 +1,19 @@
+uuid: da3dd42b-018b-4ac7-90cf-0a678edde04c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_poc
+    - node.type.vendor
+id: node.vendor.field_poc
+field_name: field_poc
+entity_type: node
+bundle: vendor
+label: POC
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

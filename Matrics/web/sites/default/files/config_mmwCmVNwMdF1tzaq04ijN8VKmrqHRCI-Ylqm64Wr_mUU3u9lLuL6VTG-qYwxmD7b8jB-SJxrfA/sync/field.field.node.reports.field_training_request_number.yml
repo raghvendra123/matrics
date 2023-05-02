@@ -1,0 +1,19 @@
+uuid: aa8ec579-34e5-42c3-a361-1413feedf4f5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_training_request_number
+    - node.type.reports
+id: node.reports.field_training_request_number
+field_name: field_training_request_number
+entity_type: node
+bundle: reports
+label: 'Training request number'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

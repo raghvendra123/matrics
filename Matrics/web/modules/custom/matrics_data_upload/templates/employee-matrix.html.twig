@@ -1,0 +1,26 @@
+<div class="table-responsive">
+  <table class="tableNew table training_table tiltHeader">
+    <thead>
+      {% for key2,value2 in items['certificate'] %}
+        <th><div><span><div href="#" data-toggle="tooltip" data-placement="top" title="{{ value2 }}">{{ value2 }}</div></span></div></th>
+      {% endfor %}
+    </thead>
+    <tbody>
+      {% for key3,value3 in items['row'] %}
+        <tr>
+          {% for key4,value4 in value3 %}
+            {% if key4 == '0' %}
+              <th width="100px">{{ value4 }}</th>
+            {% else %}
+              {% if (value4['date'] == 0 ) and value4['color']=='lightgray' %}
+                <th style="color:#000 !important; background-color:{{ value4['color'] }} !important; border-right:1px solid #fff;"><a href="/bulk_certificate?uid={{ value4['uid'] }}&destination=user/{{ value4['uid'] }}" class="use-ajax" data-dialog-options="{&quot;width&quot;:1200}" data-dialog-type="modal">Upload</a></th>
+              {% else %}
+                <th style="color:#000 !important;background-color:{{ value4['color'] }} !important; border-right:1px solid #fff;">{{ value4['date'] }}</th>
+              {% endif %}
+            {% endif %}
+          {% endfor %}        
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

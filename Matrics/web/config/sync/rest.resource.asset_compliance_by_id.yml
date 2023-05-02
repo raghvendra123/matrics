@@ -1,0 +1,19 @@
+uuid: db3a83d5-0d63-456e-8c50-abed8ff60351
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: asset_compliance_by_id
+plugin_id: asset_compliance_by_id
+granularity: resource
+configuration:
+  methods:
+    - GET
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

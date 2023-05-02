@@ -1,0 +1,24 @@
+uuid: 1ccb3ec2-b87c-4fc8-b5eb-13b421be1cc7
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.pie_chart.field_customer
+    - field.field.node.pie_chart.field_data
+    - node.type.pie_chart
+  module:
+    - user
+id: node.pie_chart.teaser
+targetEntityType: node
+bundle: pie_chart
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_customer: true
+  field_data: true

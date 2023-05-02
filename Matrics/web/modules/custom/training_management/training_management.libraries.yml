@@ -1,0 +1,4 @@
+training-management:
+  version: 1.x
+  js:
+    js/training-management.js: {}

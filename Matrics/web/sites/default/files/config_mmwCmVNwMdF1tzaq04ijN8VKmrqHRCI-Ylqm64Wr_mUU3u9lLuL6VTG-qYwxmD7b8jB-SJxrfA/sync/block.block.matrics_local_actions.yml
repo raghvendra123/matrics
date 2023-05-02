@@ -1,0 +1,20 @@
+uuid: 8db63334-49eb-4a32-b282-be58ed991115
+langcode: en
+status: true
+dependencies:
+  theme:
+    - matrics
+_core:
+  default_config_hash: XRdb8LpbArVA6CpuuEZxzi50JIdjsJaCCZ5o3fH0Blk
+id: matrics_local_actions
+theme: matrics
+region: content
+weight: -4
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

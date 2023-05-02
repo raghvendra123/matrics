@@ -1,0 +1,30 @@
+uuid: e6d4c174-6b33-4b66-8f41-2f6bb0fd4f2b
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.user_blocks
+  module:
+    - system
+    - views
+  theme:
+    - matrics
+id: views_block__user_blocks_block_2
+theme: matrics
+region: content
+weight: 2
+provider: null
+plugin: 'views_block:user_blocks-block_2'
+settings:
+  id: 'views_block:user_blocks-block_2'
+  label: 'Course Booking Details'
+  label_display: visible
+  provider: views
+  context_mapping: {  }
+  views_label: 'Course Booking Details'
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*'

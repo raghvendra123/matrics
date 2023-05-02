@@ -1,0 +1,19 @@
+uuid: 9164393a-581b-4535-a28d-e7b20701d4d5
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: suggestedcoursebooked
+plugin_id: suggestedcoursebooked
+granularity: resource
+configuration:
+  methods:
+    - GET
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

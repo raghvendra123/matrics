@@ -1,0 +1,23 @@
+uuid: 7f16d373-c4f2-44b9-98eb-d231515a905a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_cost
+    - paragraphs.paragraphs_type.provider_details
+id: paragraph.provider_details.field_cost
+field_name: field_cost
+entity_type: paragraph
+bundle: provider_details
+label: 'Course List price'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

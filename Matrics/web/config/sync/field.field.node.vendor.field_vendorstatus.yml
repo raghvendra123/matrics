@@ -1,0 +1,21 @@
+uuid: 86610dcd-1720-4d55-9ef6-5e64c56fba3f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_vendorstatus
+    - node.type.vendor
+  module:
+    - options
+id: node.vendor.field_vendorstatus
+field_name: field_vendorstatus
+entity_type: node
+bundle: vendor
+label: Status
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

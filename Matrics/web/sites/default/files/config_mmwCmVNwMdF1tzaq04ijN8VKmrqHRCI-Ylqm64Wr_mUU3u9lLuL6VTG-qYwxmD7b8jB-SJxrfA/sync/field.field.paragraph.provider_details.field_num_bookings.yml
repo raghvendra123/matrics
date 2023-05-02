@@ -1,0 +1,19 @@
+uuid: b86622aa-06b2-4c6a-9da6-64e189221d7c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_num_bookings
+    - paragraphs.paragraphs_type.provider_details
+id: paragraph.provider_details.field_num_bookings
+field_name: field_num_bookings
+entity_type: paragraph
+bundle: provider_details
+label: 'Number of Bookings'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

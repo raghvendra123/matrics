@@ -1,0 +1,24 @@
+uuid: 5f8b1016-9d4d-4b09-8d55-e96cb692c605
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - node
+    - webform
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: node.field_feedback_form
+field_name: field_feedback_form
+entity_type: node
+type: webform
+settings:
+  target_type: webform
+module: webform
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

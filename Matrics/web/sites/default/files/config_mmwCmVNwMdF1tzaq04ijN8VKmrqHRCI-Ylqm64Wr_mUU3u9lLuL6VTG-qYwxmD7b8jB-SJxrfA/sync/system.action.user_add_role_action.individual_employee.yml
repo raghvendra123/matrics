@@ -1,0 +1,14 @@
+uuid: 9760b1a9-b9bb-4164-8875-e6cea77ecd6c
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.individual_employee
+  module:
+    - user
+id: user_add_role_action.individual_employee
+label: 'Add the Individual employee role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: individual_employee

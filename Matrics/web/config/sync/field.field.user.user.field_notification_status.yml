@@ -1,0 +1,24 @@
+uuid: 4dc4ac2b-803e-4b6b-82c6-5b5830aee390
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_notification_status
+  module:
+    - user
+id: user.user.field_notification_status
+field_name: field_notification_status
+entity_type: user
+bundle: user
+label: 'Notification Status'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

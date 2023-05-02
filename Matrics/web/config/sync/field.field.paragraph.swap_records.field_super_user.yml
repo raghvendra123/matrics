@@ -1,0 +1,29 @@
+uuid: 419887e9-a0d1-45af-a3f2-a2f889704c7e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_super_user
+    - paragraphs.paragraphs_type.swap_records
+id: paragraph.swap_records.field_super_user
+field_name: field_super_user
+entity_type: paragraph
+bundle: swap_records
+label: 'Swap user'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    filter:
+      type: _none
+    include_anonymous: true
+field_type: entity_reference

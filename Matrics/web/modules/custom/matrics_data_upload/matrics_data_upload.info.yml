@@ -1,0 +1,8 @@
+name: 'matrics data upload'
+type: module
+description: 'matrics data upload'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: 'matrics'
+
+configure: matrics_data_upload.settings

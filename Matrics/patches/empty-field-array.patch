@@ -1,0 +1,17 @@
+diff --git a/core/modules/rest/src/Plugin/views/row/DataFieldRow.php b/core/modules/rest/src/Plugin/views/row/DataFieldRow.php
+index b328e452e0..9b8485442e 100644
+--- a/core/modules/rest/src/Plugin/views/row/DataFieldRow.php
++++ b/core/modules/rest/src/Plugin/views/row/DataFieldRow.php
+@@ -139,7 +139,11 @@ public function render($row) {
+     foreach ($this->view->field as $id => $field) {
+       // If the raw output option has been set, just get the raw value.
+       if (!empty($this->rawOutputOptions[$id])) {
+-        $value = $field->getValue($row);
++        //$value = $field->getValue($row);
++        $value = $field->getValue($row) ?? $field->getValue($row) ?: '';
++        if(is_array($field->getValue($row))) {
++          $value = $field->getValue($row) ?? $field->getValue($row) ?: [];
++        }
+       }
+       // Otherwise, get rendered field.
+       else {

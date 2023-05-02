@@ -1,0 +1,16 @@
+send mail by report:
+  title: 'send mail by report settings Permission'
+  description: 'Permission for send mail by report'
+  restrict access: true
+share reports:
+  title: 'Share report settings Permission'
+  description: 'Permission for Share report'
+  restrict access: true
+asset list:
+  title: 'Asset list settings Permission'
+  description: 'Permission for Asset list'
+  restrict access: true
+asset compliance:
+  title: 'Asset compliance settings Permission'
+  description: 'Permission for Asset compliance'
+  restrict access: true

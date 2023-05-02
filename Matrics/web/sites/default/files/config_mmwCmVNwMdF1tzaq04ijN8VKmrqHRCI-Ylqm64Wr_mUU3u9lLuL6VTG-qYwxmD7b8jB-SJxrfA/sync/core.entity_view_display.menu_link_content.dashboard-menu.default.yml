@@ -1,0 +1,35 @@
+uuid: 0ef4e785-d659-4bcd-a5fc-55ab03d9847e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.menu_link_content.dashboard-menu.field_menu_icon
+    - system.menu.dashboard-menu
+  module:
+    - svg_image
+id: menu_link_content.dashboard-menu.default
+targetEntityType: menu_link_content
+bundle: dashboard-menu
+mode: default
+content:
+  children:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_menu_icon:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden: {  }

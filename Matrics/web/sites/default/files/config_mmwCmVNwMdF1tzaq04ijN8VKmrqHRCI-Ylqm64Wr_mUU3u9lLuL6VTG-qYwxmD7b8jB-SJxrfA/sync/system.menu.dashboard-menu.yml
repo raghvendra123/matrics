@@ -1,0 +1,8 @@
+uuid: 17dcf3d0-1c93-4bd1-a321-654af1e59207
+langcode: en
+status: true
+dependencies: {  }
+id: dashboard-menu
+label: 'Dashboard Menu'
+description: 'This is main menu og Dashborad'
+locked: false

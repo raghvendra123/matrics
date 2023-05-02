@@ -1,0 +1,43 @@
+uuid: 19b2a257-82c8-43ed-a810-e71d7c541e6a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_upload_document
+    - node.type.vendor
+    - paragraphs.paragraphs_type.upload_document
+  module:
+    - entity_reference_revisions
+id: node.vendor.field_upload_document
+field_name: field_upload_document
+entity_type: node
+bundle: vendor
+label: 'Upload Document'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      upload_document: upload_document
+    negate: 0
+    target_bundles_drag_drop:
+      certificates:
+        weight: 6
+        enabled: false
+      course:
+        weight: 7
+        enabled: false
+      provider_details:
+        weight: 8
+        enabled: false
+      swap_records:
+        weight: 9
+        enabled: false
+      upload_document:
+        weight: 10
+        enabled: true
+field_type: entity_reference_revisions

@@ -1,0 +1,6 @@
+services:
+  telephone_validation_normalize_normalizer.telephone:
+    class: Drupal\telephone_validation_normalize\Normalizer\PhoneNumberFieldItemListNormalizer
+    arguments: ['@country_manager']
+    tags:
+      - { name: normalizer, priority: 13 }

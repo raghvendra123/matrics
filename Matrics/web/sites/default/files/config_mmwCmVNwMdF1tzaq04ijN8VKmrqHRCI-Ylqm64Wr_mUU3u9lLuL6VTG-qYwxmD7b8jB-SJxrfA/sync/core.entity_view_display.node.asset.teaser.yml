@@ -1,0 +1,34 @@
+uuid: 2407ea86-d829-4860-bed4-10ce4801265d
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.asset.field_company
+    - field.field.node.asset.field_employee_id
+    - field.field.node.asset.field_location
+    - field.field.node.asset.field_number_of_employee
+    - field.field.node.asset.field_status
+    - field.field.node.asset.field_training_gap_count
+    - field.field.node.asset.field_training_gap_score
+    - node.type.asset
+  module:
+    - user
+id: node.asset.teaser
+targetEntityType: node
+bundle: asset
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_company: true
+  field_employee_id: true
+  field_location: true
+  field_number_of_employee: true
+  field_status: true
+  field_training_gap_count: true
+  field_training_gap_score: true

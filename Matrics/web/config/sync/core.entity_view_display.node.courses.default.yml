@@ -1,0 +1,168 @@
+uuid: 4ce614bf-1613-4c3e-b060-e8e65db0c23f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.courses.field_accreditation
+    - field.field.node.courses.field_certificates
+    - field.field.node.courses.field_cm
+    - field.field.node.courses.field_course_availability
+    - field.field.node.courses.field_course_date
+    - field.field.node.courses.field_course_description
+    - field.field.node.courses.field_course_duration
+    - field.field.node.courses.field_course_id
+    - field.field.node.courses.field_course_location
+    - field.field.node.courses.field_customer
+    - field.field.node.courses.field_customer_fee
+    - field.field.node.courses.field_delivery_method
+    - field.field.node.courses.field_feedback_form
+    - field.field.node.courses.field_no_bookings
+    - field.field.node.courses.field_provider_details
+    - field.field.node.courses.field_training_provider
+    - node.type.courses
+  module:
+    - address
+    - datetime
+    - entity_reference_revisions
+    - options
+    - text
+    - user
+    - webform
+id: node.courses.default
+targetEntityType: node
+bundle: courses
+mode: default
+content:
+  field_accreditation:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 117
+    region: content
+  field_certificates:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 111
+    region: content
+  field_cm:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 121
+    region: content
+  field_course_availability:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 113
+    region: content
+  field_course_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 120
+    region: content
+  field_course_description:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 118
+    region: content
+  field_course_duration:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 115
+    region: content
+  field_course_id:
+    type: string
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 110
+    region: content
+  field_course_location:
+    type: address_default
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  field_customer:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 124
+    region: content
+  field_customer_fee:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 122
+    region: content
+  field_delivery_method:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 116
+    region: content
+  field_feedback_form:
+    type: webform_entity_reference_entity_view
+    label: above
+    settings:
+      source_entity: true
+    third_party_settings: {  }
+    weight: 125
+    region: content
+  field_no_bookings:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 119
+    region: content
+  field_provider_details:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 123
+    region: content
+  field_training_provider:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 114
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

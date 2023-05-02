@@ -1,0 +1,70 @@
+{% if items['data'] is not defined %}
+  <ul class="color_legend">
+    <li class="legend_green">
+      Expiry Date more than 6 Months in the future
+    </li>
+    <li class="legend_orange">
+      Expiry Date between 6 Months and 3 Months
+    </li>
+    <li class="legend_yellow">
+        Expiry Date Between 3 Months and 1 Month
+    </li>
+    <li class="legend_red">
+        Expiry Date within 1 Month or Expired
+    </li>
+  </ul>
+
+  {% for key,value in items %}
+    {% for key1,value1 in value %}
+      <div class="table-responsive">
+        <table class="tableNew table training_table tiltHeader">
+          {% if value1['user'] is not empty %}
+            {# <caption>{{ value1['job_title'] }}</caption><br> #}
+            <thead>
+              <th></th>
+              <th><div><span>{{ 'Job title' }}</span></div></th>
+              {% for key2,value2 in value1['certificate'] %}
+                <th><div><span>{{ value2 }}</span></div></th>
+              {% endfor %}
+            </thead>
+            <tbody>
+              {% for key3,value3 in value1['user'] %}
+                <tr>
+                  {% for key4,value4 in value3 %}
+                    {% if key4 == '0' %}
+                      {#<th width="100px">{{ value4 }}</th>#}
+                      <th width="100px"><a href="/user/{{ key3 }}/?destination=training-manage">{{ value4 }}</a></th>
+                      <th width="100px">{{ value1['job_title'] }}</th>
+                    {% else %}
+                      {% if value4['date'] == 0 %}
+                        <th style="color:#000 !important; background-color:{{ value4['color'] }} !important; border-right:1px solid #fff;"></th>
+                      {% else %}
+                        <th style="color:#000 !important;background-color:{{ value4['color'] }} !important; border-right:1px solid #fff;"><a href="{{ value4['url'] }}" class="use-ajax" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:500}" >{{ value4['date'] }}</a></th>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}                
+                </tr>
+              {% endfor %}
+            </tbody>
+          {% endif %}
+        </table>
+      </div>
+    {% endfor %}
+  {% endfor %}
+  <ul class="color_legend">
+    <li class="legend_green">
+      Expiry Date more than 6 Months in the future
+    </li>
+    <li class="legend_orange">
+      Expiry Date between 6 Months and 3 Months
+    </li>
+    <li class="legend_yellow">
+      Expiry Date Between 3 Months and 1 Month
+    </li>
+    <li class="legend_red">
+      Expiry Date within 1 Month or Expired
+    </li>
+  </ul>
+{% else %}
+  <p>{{ items['data'] }}</p>
+{% endif %}

@@ -1,0 +1,34 @@
+uuid: ac740951-d3d2-4120-9314-1b8daff55b99
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - options
+    - paragraphs
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: paragraph.field_course_result
+field_name: field_course_result
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: passed
+      label: Passed
+    -
+      value: failed
+      label: Failed
+    -
+      value: resit
+      label: Resit
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

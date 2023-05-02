@@ -1,0 +1,56 @@
+<div class="col-lg-6">
+  <h3>Forecast</h3>
+  <div class="table-responsive">
+    <table class="tableNew table training_table">
+      <thead>
+        <th>Employee</th>
+        <th>Job title</th>
+        <th>Certificate</th>
+        <th>Compliance score</th>
+      </thead>
+      <tbody>
+        {% for key,value in items %}
+          <tr>
+            {% for key1,value1 in value %}
+              {% if key1 == 0 %}
+                <td>{{ value1|raw }}</td>
+              {% elseif key1 == 1 %}
+                <td>{{ value1 }}</td>
+              {% elseif key1 == 2 %}
+              {% elseif key1 == 'score' %}
+                <td>{{ value1|raw }}</td>
+              {% elseif key1 == 3 %}
+                <td width="350px">
+                  <table width="350px">
+                    <tbody>
+                      <tr>
+                        {% for key2,value2 in value1 %}
+                          <td style="background-color:{{ value2['color'] }}; border-right: 1px solid #fff;" title="{{ value2['date'] }}"></td>
+                        {% endfor %}
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+    
+<ul class="color_legend">
+  <li class="legend_green">
+    Expiry Date more than 6 Months in the future
+  </li>
+  <li class="legend_orange">
+    Expiry Date between 6 Months and 3 Months
+  </li>
+  <li class="legend_yellow">
+    Expiry Date Between 3 Months and 1 Month
+  </li>
+  <li class="legend_red">
+    Expiry Date within 1 Month or Expired
+  </li>
+</ul>

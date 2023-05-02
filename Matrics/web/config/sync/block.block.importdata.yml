@@ -1,0 +1,42 @@
+uuid: 15f82248-c4f2-4ff8-b519-837a8174cf2b
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:1a59ee2c-d767-437f-85eb-2fe336d7b02d'
+  module:
+    - block_content
+    - system
+    - user
+  theme:
+    - matrics
+id: importdata
+theme: matrics
+region: content
+weight: -3
+provider: null
+plugin: 'block_content:1a59ee2c-d767-437f-85eb-2fe336d7b02d'
+settings:
+  id: 'block_content:1a59ee2c-d767-437f-85eb-2fe336d7b02d'
+  label: 'Import Data'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /administration
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      content_editor: content_editor
+      administrator: administrator
+      mnager: mnager
+      admin: admin
+      super_user: super_user

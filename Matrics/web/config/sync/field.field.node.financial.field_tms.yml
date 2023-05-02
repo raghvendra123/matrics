@@ -1,0 +1,23 @@
+uuid: 1059e92d-9f85-4851-a206-64fdfd6ddb0a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_tms
+    - node.type.financial
+id: node.financial.field_tms
+field_name: field_tms
+entity_type: node
+bundle: financial
+label: 'TMS fee'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

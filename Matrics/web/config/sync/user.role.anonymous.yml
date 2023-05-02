@@ -1,0 +1,29 @@
+uuid: b9a4b785-9992-40d8-ad30-d09d70b07a64
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.restricted_html
+    - rest.resource.contactus
+  module:
+    - comment
+    - contact
+    - filter
+    - media
+    - rest
+    - search
+    - system
+_core:
+  default_config_hash: 6WavjUYXIegP9AAg2zXGx54MWIVoomC3SZhNiqe-Dyk
+id: anonymous
+label: 'Anonymous user'
+weight: 0
+is_admin: false
+permissions:
+  - 'access comments'
+  - 'access content'
+  - 'access site-wide contact form'
+  - 'restful post contactus'
+  - 'search content'
+  - 'use text format restricted_html'
+  - 'view media'

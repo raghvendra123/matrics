@@ -1,0 +1,22 @@
+uuid: f12d21a1-96b8-4281-89d9-29580e0ac80c
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_dashboard
+    - matrics_reports
+    - matrics_schedule
+    - paragraphs_type_permissions
+id: tms_admins_
+label: 'TMS coordinator'
+weight: 11
+is_admin: null
+permissions:
+  - 'Scheduling form'
+  - 'administer users'
+  - 'asset compliance'
+  - 'asset list'
+  - 'create paragraph content course'
+  - 'delete paragraph content course'
+  - 'site_setting form_permission'
+  - 'update paragraph content course'

@@ -1,0 +1,22 @@
+matrics_schedule.report:
+  path: '/scheduling'
+  defaults:
+    _title: 'Scheduling'
+    _form: '\Drupal\matrics_schedule\Form\SchedulingForm'
+  requirements:
+    _permission: 'Scheduling form'
+matrics_schedule.job_filter_compliance:
+  path: '/job-scheduling/{job}/{user}/{asset}'
+  defaults:
+    _form: 'Drupal\matrics_schedule\Form\JobschedulingForm'
+  requirements:
+    _permission: 'Scheduling form'
+    job: \d+
+matrics_schedule.swap:
+  path: '/swap/{uid}/user/{id}/{asset}'
+  defaults:
+    _form: '\Drupal\matrics_schedule\Form\SwapUserForm'
+    _title: 'Confirm Swap User'
+  requirements:
+    _permission: 'Scheduling form'
+    uid: \d+    

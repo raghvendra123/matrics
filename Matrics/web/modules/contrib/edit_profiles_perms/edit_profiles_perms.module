@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Restricts editing user profiles based on user roles.
+ */
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function edit_profiles_perms_entity_type_alter(array &$entity_types) {
+  $entity_types['user']->setHandlerClass('access', 'Drupal\edit_profiles_perms\EditProfilesPermsAccessHandler');
+}

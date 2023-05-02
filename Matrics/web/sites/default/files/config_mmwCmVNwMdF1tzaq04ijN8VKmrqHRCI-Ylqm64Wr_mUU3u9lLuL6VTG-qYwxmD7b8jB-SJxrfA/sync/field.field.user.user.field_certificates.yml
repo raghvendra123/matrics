@@ -1,0 +1,37 @@
+uuid: 8b90c896-a1dd-4c38-8acf-979764f13726
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_certificates
+    - paragraphs.paragraphs_type.certificates
+  module:
+    - entity_reference_revisions
+    - user
+id: user.user.field_certificates
+field_name: field_certificates
+entity_type: user
+bundle: user
+label: Certificates
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      certificates: certificates
+    negate: 0
+    target_bundles_drag_drop:
+      certificates:
+        weight: 2
+        enabled: true
+      course:
+        weight: 5
+        enabled: false
+      swap_records:
+        weight: 6
+        enabled: false
+field_type: entity_reference_revisions

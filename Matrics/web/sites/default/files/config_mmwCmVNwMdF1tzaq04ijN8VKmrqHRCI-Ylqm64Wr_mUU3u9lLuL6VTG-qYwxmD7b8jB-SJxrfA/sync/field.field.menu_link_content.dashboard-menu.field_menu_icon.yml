@@ -1,0 +1,38 @@
+uuid: 6bdf8ae4-8511-4e02-8b4e-e30bd3f35f90
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.menu_link_content.field_menu_icon
+    - system.menu.dashboard-menu
+  module:
+    - image
+id: menu_link_content.dashboard-menu.field_menu_icon
+field_name: field_menu_icon
+entity_type: menu_link_content
+bundle: dashboard-menu
+label: 'Menu Icon'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'png gif jpg jpeg svg'
+  max_filesize: ''
+  max_resolution: ''
+  min_resolution: ''
+  alt_field: true
+  alt_field_required: false
+  title_field: false
+  title_field_required: false
+  default_image:
+    uuid: ''
+    alt: ''
+    title: ''
+    width: null
+    height: null
+field_type: image

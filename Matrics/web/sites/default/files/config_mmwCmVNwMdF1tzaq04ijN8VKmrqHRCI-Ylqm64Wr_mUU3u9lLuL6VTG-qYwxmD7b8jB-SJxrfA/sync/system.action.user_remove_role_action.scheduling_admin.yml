@@ -1,0 +1,14 @@
+uuid: a5d6613b-1869-435c-90d6-4fcf661d94f3
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.scheduling_admin
+  module:
+    - user
+id: user_remove_role_action.scheduling_admin
+label: 'Remove the Scheduling Admin role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: scheduling_admin

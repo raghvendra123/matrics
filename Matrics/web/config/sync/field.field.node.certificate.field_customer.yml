@@ -1,0 +1,29 @@
+uuid: c872fe91-c5ce-46d5-97b0-be34cdd53dc1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_customer
+    - node.type.certificate
+    - taxonomy.vocabulary.customer
+id: node.certificate.field_customer
+field_name: field_customer
+entity_type: node
+bundle: certificate
+label: Customer
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      customer: customer
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

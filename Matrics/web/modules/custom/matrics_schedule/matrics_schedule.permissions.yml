@@ -1,0 +1,4 @@
+Scheduling form:
+  title: 'Scheduling Form settings Permission'
+  description: 'Permission for Scheduling Form'
+  restrict access: true

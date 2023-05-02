@@ -1,0 +1,14 @@
+uuid: 14ea8eaf-6ece-4561-8376-2cb466482ae6
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.tms_admins_
+  module:
+    - user
+id: user_remove_role_action.tms_admins_
+label: 'Remove the TMS admins role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: tms_admins_

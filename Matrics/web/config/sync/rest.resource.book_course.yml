@@ -1,0 +1,18 @@
+uuid: 8384b556-1582-46ac-a831-ee2f49ea43dc
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: book_course
+plugin_id: book_course
+granularity: resource
+configuration:
+  methods:
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

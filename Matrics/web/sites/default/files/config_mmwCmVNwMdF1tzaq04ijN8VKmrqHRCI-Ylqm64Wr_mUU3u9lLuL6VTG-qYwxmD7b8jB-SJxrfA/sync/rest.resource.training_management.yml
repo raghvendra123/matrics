@@ -1,0 +1,19 @@
+uuid: 13dae3d7-6827-4aac-b270-835eeb2ac06e
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: training_management
+plugin_id: training_management
+granularity: resource
+configuration:
+  methods:
+    - GET
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

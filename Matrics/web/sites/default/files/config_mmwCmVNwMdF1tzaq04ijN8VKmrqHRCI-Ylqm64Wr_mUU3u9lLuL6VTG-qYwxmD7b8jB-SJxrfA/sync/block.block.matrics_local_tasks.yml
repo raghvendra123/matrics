@@ -1,0 +1,22 @@
+uuid: 6e2cff88-8beb-4c8b-8f70-b9bf44cbe7d1
+langcode: en
+status: true
+dependencies:
+  theme:
+    - matrics
+_core:
+  default_config_hash: Qf2BoIzd9py5AYXZj8fJzCYDyVk1-AWXcu-AqQeDZKA
+id: matrics_local_tasks
+theme: matrics
+region: content
+weight: -6
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: Tabs
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: true
+visibility: {  }

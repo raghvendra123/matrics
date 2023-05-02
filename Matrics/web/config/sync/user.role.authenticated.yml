@@ -1,0 +1,112 @@
+uuid: 521edf81-64bd-460f-b8d9-56a4783d58e2
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+    - node.type.tasks
+    - rest.resource.asset_compliance
+    - rest.resource.asset_compliance_by_id
+    - rest.resource.assets
+    - rest.resource.book_course
+    - rest.resource.change_password
+    - rest.resource.coursecancel
+    - rest.resource.courseupdate
+    - rest.resource.dashboard
+    - rest.resource.dashboard_personalized_title
+    - rest.resource.employees
+    - rest.resource.jobtitles
+    - rest.resource.locations
+    - rest.resource.lost_password_resource
+    - rest.resource.manage_tiles
+    - rest.resource.notification
+    - rest.resource.notification_status
+    - rest.resource.suggestedcourse
+    - rest.resource.suggestedcoursebooked
+    - rest.resource.task_complete
+    - rest.resource.training_chart
+    - rest.resource.training_management
+    - rest.resource.training_matrix
+    - rest.resource.training_providers
+    - rest.resource.types
+  module:
+    - comment
+    - contact
+    - field_permissions
+    - filter
+    - matrics_dashboard
+    - media
+    - node
+    - paragraphs_type_permissions
+    - rest
+    - search
+    - shortcut
+    - system
+    - webform
+_core:
+  default_config_hash: I44QAB4es39lNzMQWiJLq2dfjX7VRSOzT_5KzAcUq_M
+id: authenticated
+label: 'Authenticated user'
+weight: 1
+is_admin: false
+permissions:
+  - 'access comments'
+  - 'access content'
+  - 'access shortcuts'
+  - 'access site-wide contact form'
+  - 'access user profiles'
+  - 'create tasks content'
+  - 'post comments'
+  - 'restful get asset_compliance'
+  - 'restful get asset_compliance_by_id'
+  - 'restful get assets'
+  - 'restful get coursecancel'
+  - 'restful get courseupdate'
+  - 'restful get dashboard'
+  - 'restful get dashboard_personalized_title'
+  - 'restful get employees'
+  - 'restful get jobtitles'
+  - 'restful get locations'
+  - 'restful get manage_tiles'
+  - 'restful get notification'
+  - 'restful get suggestedcourse'
+  - 'restful get suggestedcoursebooked'
+  - 'restful get task_complete'
+  - 'restful get training_chart'
+  - 'restful get training_management'
+  - 'restful get training_providers'
+  - 'restful get types'
+  - 'restful post asset_compliance'
+  - 'restful post asset_compliance_by_id'
+  - 'restful post book_course'
+  - 'restful post change_password'
+  - 'restful post coursecancel'
+  - 'restful post courseupdate'
+  - 'restful post dashboard'
+  - 'restful post dashboard_personalized_title'
+  - 'restful post jobtitles'
+  - 'restful post lost_password_resource'
+  - 'restful post manage_tiles'
+  - 'restful post notification_status'
+  - 'restful post suggestedcourse'
+  - 'restful post suggestedcoursebooked'
+  - 'restful post training_management'
+  - 'restful post training_matrix'
+  - 'search content'
+  - 'site_setting courese_cancel'
+  - 'skip comment approval'
+  - 'use text format basic_html'
+  - 'view any webform submission'
+  - 'view field_certificates'
+  - 'view field_course_details'
+  - 'view field_customer'
+  - 'view media'
+  - 'view own field_certificates'
+  - 'view own field_course_details'
+  - 'view own field_task_status'
+  - 'view own field_training_gap_count'
+  - 'view own field_training_gap_score'
+  - 'view own webform submission'
+  - 'view paragraph content certificates'
+  - 'view paragraph content course'
+  - 'view user email addresses'

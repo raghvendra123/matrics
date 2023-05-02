@@ -1,0 +1,5 @@
+services:
+ matrics_schedule.default_job:
+   class: Drupal\matrics_schedule\DefaultJoblist
+ matrics_schedule.reload_asset_job:
+   class: Drupal\matrics_schedule\ReloadAssetjoblist   

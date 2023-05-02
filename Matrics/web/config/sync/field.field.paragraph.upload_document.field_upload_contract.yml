@@ -1,0 +1,27 @@
+uuid: e629fbb1-c964-459b-bb51-cc5228c3255b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_upload_contract
+    - paragraphs.paragraphs_type.upload_document
+  module:
+    - file
+id: paragraph.upload_document.field_upload_contract
+field_name: field_upload_contract
+entity_type: paragraph
+bundle: upload_document
+label: 'Upload contract'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'txt pdf doc docx'
+  max_filesize: ''
+  description_field: false
+field_type: file

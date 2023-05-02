@@ -1,0 +1,21 @@
+uuid: 68e1eaa5-09ed-42f3-98a8-882cf55733d7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_training_gap
+    - node.type.reports
+  module:
+    - options
+id: node.reports.field_training_gap
+field_name: field_training_gap
+entity_type: node
+bundle: reports
+label: 'Training gap score'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,19 @@
+uuid: ab5d7f99-781b-46cc-a9ae-91d24bda237c
+langcode: en
+status: false
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: employeeoverview
+plugin_id: employeeoverview
+granularity: resource
+configuration:
+  methods:
+    - GET
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

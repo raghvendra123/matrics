@@ -1,0 +1,88 @@
+uuid: e7122e96-d6fb-43fb-8b28-6ec635eb514b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.provider_details.field_accreditation
+    - field.field.paragraph.provider_details.field_cost
+    - field.field.paragraph.provider_details.field_course_discounted
+    - field.field.paragraph.provider_details.field_course_duration
+    - field.field.paragraph.provider_details.field_location
+    - field.field.paragraph.provider_details.field_num_bookings
+    - field.field.paragraph.provider_details.field_provider_name
+    - field.field.paragraph.provider_details.field_tm
+    - paragraphs.paragraphs_type.provider_details
+  module:
+    - address
+    - select2
+    - select_or_other
+id: paragraph.provider_details.default
+targetEntityType: paragraph
+bundle: provider_details
+mode: default
+content:
+  field_accreditation:
+    type: select_or_other_list
+    weight: 5
+    region: content
+    settings:
+      select_element_type: select_or_other_select
+      sort_options: ''
+      add_other_value_to_allowed_values: true
+    third_party_settings: {  }
+  field_cost:
+    type: number
+    weight: 1
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_course_discounted:
+    type: number
+    weight: 6
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_course_duration:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_location:
+    type: address_default
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_num_bookings:
+    type: string_textfield
+    weight: 7
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_provider_name:
+    type: select2_entity_reference
+    weight: 0
+    region: content
+    settings:
+      width: 100%
+      autocomplete: false
+      match_operator: CONTAINS
+      match_limit: 10
+    third_party_settings: {  }
+  field_tm:
+    type: number
+    weight: 8
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

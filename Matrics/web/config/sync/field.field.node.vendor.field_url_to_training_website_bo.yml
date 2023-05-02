@@ -1,0 +1,19 @@
+uuid: 932adbf6-e187-4239-8e24-34eae1a00468
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_url_to_training_website_bo
+    - node.type.vendor
+id: node.vendor.field_url_to_training_website_bo
+field_name: field_url_to_training_website_bo
+entity_type: node
+bundle: vendor
+label: 'URL to training website booking page'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

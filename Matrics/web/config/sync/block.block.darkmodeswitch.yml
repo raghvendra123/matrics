@@ -1,0 +1,20 @@
+uuid: 953aaf92-43ed-4061-ae35-60b001ccce39
+langcode: en
+status: false
+dependencies:
+  module:
+    - dark_mode_switch
+  theme:
+    - matrics
+id: darkmodeswitch
+theme: matrics
+region: sidebar_first
+weight: -10
+provider: null
+plugin: dark_mode_switch_block
+settings:
+  id: dark_mode_switch_block
+  label: 'Dark Mode Switch'
+  label_display: '0'
+  provider: dark_mode_switch
+visibility: {  }

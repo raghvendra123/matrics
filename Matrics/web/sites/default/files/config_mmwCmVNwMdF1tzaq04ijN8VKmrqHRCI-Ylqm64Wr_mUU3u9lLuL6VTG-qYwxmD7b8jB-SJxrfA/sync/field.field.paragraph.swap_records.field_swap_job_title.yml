@@ -1,0 +1,29 @@
+uuid: 09dd19d7-5aee-4369-bd35-019906358230
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_swap_job_title
+    - node.type.job_title
+    - paragraphs.paragraphs_type.swap_records
+id: paragraph.swap_records.field_swap_job_title
+field_name: field_swap_job_title
+entity_type: paragraph
+bundle: swap_records
+label: 'Swap job title'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      job_title: job_title
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

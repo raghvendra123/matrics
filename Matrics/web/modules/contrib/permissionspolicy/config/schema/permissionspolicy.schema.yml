@@ -1,0 +1,118 @@
+# Schema for the configuration files of the permissionspolicy module.
+
+permissionspolicy.settings:
+  type: config_object
+  label: 'Permissions Policy Settings'
+  mapping:
+    enforce:
+      type: permissionspolicy_policy
+      label: 'Enforce Policy'
+
+permissionspolicy_policy:
+  type: mapping
+  label: 'Policy'
+  mapping:
+    enable:
+      type: boolean
+      label: 'Enable'
+    features:
+      type: sequence
+      label: 'Features'
+      sequence:
+        type: permissionspolicy_feature.[%key]
+
+permissionspolicy_feature_allowlist:
+  type: mapping
+  mapping:
+    base:
+      type: string
+      label: 'Base'
+    origins:
+      type: sequence
+      label: 'Origins'
+      sequence:
+        type: string
+
+# Standardized Features
+permissionspolicy_feature.accelerometer:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.ambient-light-sensor:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.autoplay:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.battery:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.camera:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.cross-origin-isolated:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.display-capture:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.document-domain:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.encrypted-media:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.execution-while-not-rendered:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.execution-while-out-of-viewport:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.fullscreen:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.geolocation:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.gyroscope:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.magnetometer:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.microphone:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.midi:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.navigation-override:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.payment:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.picture-in-picture:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.publickey-credentials-get:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.screen-wake-lock:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.sync-xhr:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.usb:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.web-share:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.xr-spatial-tracking:
+  type: permissionspolicy_feature_allowlist
+
+# Proposed Features
+permissionspolicy_feature.clipboard-read:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.clipboard-write:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.gamepad:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.speaker-selection:
+  type: permissionspolicy_feature_allowlist
+
+# Experimental Features
+permissionspolicy_feature.conversion-measurement:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.focus-without-user-activation:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.hid:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.idle-detection:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.interest-cohort:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.serial:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.sync-script:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.trust-token-redemption:
+  type: permissionspolicy_feature_allowlist
+permissionspolicy_feature.vertical-scroll:
+  type: permissionspolicy_feature_allowlist

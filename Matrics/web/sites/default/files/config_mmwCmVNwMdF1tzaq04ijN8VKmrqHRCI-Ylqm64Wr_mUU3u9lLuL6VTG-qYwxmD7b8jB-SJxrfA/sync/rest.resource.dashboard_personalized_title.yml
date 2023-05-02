@@ -1,0 +1,19 @@
+uuid: 228e3b76-c5b3-4cfb-b772-2cfe49df931c
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: dashboard_personalized_title
+plugin_id: dashboard_personalized_title
+granularity: resource
+configuration:
+  methods:
+    - GET
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

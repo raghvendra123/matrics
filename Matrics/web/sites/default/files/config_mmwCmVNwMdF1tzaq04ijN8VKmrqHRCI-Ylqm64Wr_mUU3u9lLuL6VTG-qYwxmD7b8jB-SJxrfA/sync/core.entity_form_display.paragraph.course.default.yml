@@ -1,0 +1,128 @@
+uuid: 27e4360d-508c-4063-b3c4-7bdbc46300e9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.course.field_cancelled_by
+    - field.field.paragraph.course.field_cancelled_fee
+    - field.field.paragraph.course.field_certificate_type
+    - field.field.paragraph.course.field_close_booking
+    - field.field.paragraph.course.field_comments
+    - field.field.paragraph.course.field_course_
+    - field.field.paragraph.course.field_course_result
+    - field.field.paragraph.course.field_discount_price
+    - field.field.paragraph.course.field_expiry_date
+    - field.field.paragraph.course.field_list_price
+    - field.field.paragraph.course.field_location
+    - field.field.paragraph.course.field_provider_name
+    - field.field.paragraph.course.field_start_date
+    - field.field.paragraph.course.field_status
+    - paragraphs.paragraphs_type.course
+  module:
+    - address
+    - datetime
+id: paragraph.course.default
+targetEntityType: paragraph
+bundle: course
+mode: default
+content:
+  field_cancelled_by:
+    type: options_select
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_cancelled_fee:
+    type: string_textfield
+    weight: 11
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_certificate_type:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_close_booking:
+    type: boolean_checkbox
+    weight: 14
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_comments:
+    type: string_textarea
+    weight: 12
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_course_:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_course_result:
+    type: options_select
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_discount_price:
+    type: string_textfield
+    weight: 10
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_expiry_date:
+    type: datetime_default
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_list_price:
+    type: string_textfield
+    weight: 9
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_location:
+    type: address_default
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_provider_name:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_start_date:
+    type: datetime_default
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_status:
+    type: options_select
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

@@ -1,0 +1,10 @@
+uuid: c00128c7-d28d-4bb2-92a9-7332bd7f6264
+langcode: en
+status: true
+dependencies: {  }
+id: course
+label: Course
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

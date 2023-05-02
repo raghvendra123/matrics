@@ -1,0 +1,33 @@
+uuid: ac541c22-ae23-4424-b2a4-d4fec69b7cb3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.upload_document.field_description
+    - field.field.paragraph.upload_document.field_upload_contract
+    - paragraphs.paragraphs_type.upload_document
+  module:
+    - file
+id: paragraph.upload_document.default
+targetEntityType: paragraph
+bundle: upload_document
+mode: default
+content:
+  field_description:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_upload_contract:
+    type: file_generic
+    weight: 0
+    region: content
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

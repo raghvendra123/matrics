@@ -1,0 +1,6 @@
+example:
+  path: '/check_csrf'
+  defaults:
+    _controller: '\Drupal\matrics_api\Controller\CsrfController::validation'
+  requirements:
+    _csrf_token: 'TRUE'

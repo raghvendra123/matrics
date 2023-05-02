@@ -1,0 +1,19 @@
+uuid: 044901c5-8815-4d37-a7df-7e839cd0387b
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: manage_tiles
+plugin_id: manage_tiles
+granularity: resource
+configuration:
+  methods:
+    - GET
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

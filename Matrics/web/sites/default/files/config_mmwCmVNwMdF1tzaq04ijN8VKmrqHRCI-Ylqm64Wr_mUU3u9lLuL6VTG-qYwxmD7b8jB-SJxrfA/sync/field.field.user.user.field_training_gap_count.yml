@@ -1,0 +1,26 @@
+uuid: 3ae10d96-448c-4c7d-ac4f-01c734cd63f3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_training_gap_count
+  module:
+    - user
+id: user.user.field_training_gap_count
+field_name: field_training_gap_count
+entity_type: user
+bundle: user
+label: 'Training gap count'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

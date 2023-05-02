@@ -1,0 +1,92 @@
+uuid: eea68a28-6c5b-40b4-8d95-1bb6d740b0ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.provider_details.field_accreditation
+    - field.field.paragraph.provider_details.field_cost
+    - field.field.paragraph.provider_details.field_course_discounted
+    - field.field.paragraph.provider_details.field_course_duration
+    - field.field.paragraph.provider_details.field_location
+    - field.field.paragraph.provider_details.field_num_bookings
+    - field.field.paragraph.provider_details.field_provider_name
+    - field.field.paragraph.provider_details.field_tm
+    - paragraphs.paragraphs_type.provider_details
+  module:
+    - address
+    - options
+id: paragraph.provider_details.default
+targetEntityType: paragraph
+bundle: provider_details
+mode: default
+content:
+  field_accreditation:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_cost:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_course_discounted:
+    type: number_decimal
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_course_duration:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_location:
+    type: address_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_num_bookings:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_provider_name:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_tm:
+    type: number_decimal
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 8
+    region: content
+hidden: {  }

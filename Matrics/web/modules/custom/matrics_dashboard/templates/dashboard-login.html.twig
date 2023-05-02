@@ -1,0 +1,52 @@
+<div class="login-body">
+  <div id="wrapper">
+    <!--Main wrapper start-->
+    <div class="login-section">
+      <div class="container">
+        <div class="login-wrapper">
+          <div class="row g-0 login_row">
+            <!--Login Left Start -->
+            <div class="col-lg-4 login-left">
+              <div class="login_form">
+                <div class="login_head">
+                  <div class="login_head_left">
+                    <a href="#">
+                      <h3>
+                        <img src="/themes/custom/matrics/img/logo-blue.svg" alt="">
+                      </h3>
+                      <p class="active">MATRICS</p>
+                    </a>
+                  </div>
+                  <div class="login_head_right">
+                    <a href="#">
+                      <div class="flag_img">
+                        <img src="/themes/custom/matrics/img/logotype_flag.png" alt="">
+                      </div>
+                      <p>STENA</p>
+                    </a>
+                  </div>
+                </div>
+                <div id="loginForm">
+                  {{ blocks }}
+                  <div class="forgot-password">
+                    <a href="{{ items.link }}">Contact Us</a>
+                    <a href="{{ items.forgot_password }}">Forgot Password?</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--Login Left  End-->
+            <!--Login Right Start -->
+            <div class="col-lg-8 login-right" style="background: url({{ items.img }}) no-repeat center ">
+              <div class="login-content">
+                <h1>{{ items.title }}</h1>
+                <p>{{ items.description }}</p>
+              </div>
+            </div>
+            <!--Login Right End -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

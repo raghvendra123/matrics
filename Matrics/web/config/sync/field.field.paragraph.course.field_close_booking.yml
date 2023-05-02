@@ -1,0 +1,23 @@
+uuid: 3ed42244-97ab-4b42-b0de-cd1182a3cb90
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_close_booking
+    - paragraphs.paragraphs_type.course
+id: paragraph.course.field_close_booking
+field_name: field_close_booking
+entity_type: paragraph
+bundle: course
+label: 'Close Booking'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

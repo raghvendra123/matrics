@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Theme override for a views exposed form.
+ *
+ * Available variables:
+ * - form: A render element representing the form.
+ *
+ * @see template_preprocess_views_exposed_form()
+ */
+#}
+{% if q is not empty %}
+  {#
+    This ensures that, if clean URLs are off, the 'q' is added first,
+    as a hidden form element, so that it shows up first in the POST URL.
+  #}
+{{ q }}
+{% endif %}
+<div class="filter-mobile-head"><h2>Filter</h2></div>
+<div class="page-topForm page-topForm-mobile">
+  <div class="row">
+    <div class="col-xl-5">
+      <div class="row inner_top_row">
+        <div class="col-lg-6 form_col_asset">
+          <div class="form-group focus_input">
+            {#{{ form.uid }}#}
+            {{ form.title }}
+          </div>
+        </div>
+        <div class="col-lg-6 form_col_asset">
+          <div class="form-group focus_input">
+            {#{{ form.uid }}#}
+            {{ form.uid }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-2 exposed-action-button">
+      {{ form.form_build_id }}
+      {{ form.form_id }}
+      {{ form.actions }}
+    </div>
+  </div>
+</div>

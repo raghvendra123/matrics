@@ -1,0 +1,21 @@
+uuid: ba6854b5-ddca-464c-8270-cb12597c22f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_data_type
+    - node.type.reports
+  module:
+    - options
+id: node.reports.field_data_type
+field_name: field_data_type
+entity_type: node
+bundle: reports
+label: Data
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,186 @@
+{
+    "name": "drupal/recommended-project",
+    "description": "Project template for Drupal 9 projects with a relocated document root",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.drupal.org/project/drupal",
+    "support": {
+        "docs": "https://www.drupal.org/docs/user_guide/en/index.html",
+        "chat": "https://www.drupal.org/node/314178"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "google/charts",
+                "version": "45",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "google_charts"
+                },
+                "dist": {
+                    "url": "https://www.gstatic.com/charts/loader.js",
+                    "type": "file"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        }
+    ],
+    "require": {
+        "composer/installers": "^1.0",
+        "cweagans/composer-patches": "^1.7",
+        "drupal/address": "^1.10",
+        "drupal/addtocal": "^2.0@beta",
+        "drupal/addtocalendar": "^3.2",
+        "drupal/admin_toolbar": "^3.1",
+        "drupal/autologout": "^1.4",
+        "drupal/better_exposed_filters": "^5.2",
+        "drupal/business_rules": "^2.0@beta",
+        "drupal/change_pwd_page": "^1.0",
+        "drupal/charts": "^3.3",
+        "drupal/conditional_fields": "^4.0@alpha",
+        "drupal/core-composer-scaffold": "9.5.7",
+        "drupal/core-project-message": "9.5.7",
+        "drupal/core-recommended": "9.5.7",
+        "drupal/csrf_anonymous_token": "^9.4@alpha",
+        "drupal/ctools": "^3.9",
+        "drupal/dark_mode_switch": "^2.0",
+        "drupal/dependent_fields": "^1.0",
+        "drupal/draggableviews": "^2.0",
+        "drupal/easy_breadcrumb": "2.0.3",
+        "drupal/edit_profiles_perms": "^1.0",
+        "drupal/entity_view_mode_normalize": "^1.0",
+        "drupal/entityreference_filter": "^1.4",
+        "drupal/faq": "^1.1",
+        "drupal/field_permissions": "^1.1",
+        "drupal/file_download_link": "^2.0",
+        "drupal/fivestar": "^1.0@alpha",
+        "drupal/http_cache_control": "^2.1",
+        "drupal/jquery_ui_touch_punch": "^1.0",
+        "drupal/menu_item_extras": "^2.17",
+        "drupal/menu_per_role": "^1.4",
+        "drupal/multiple_fields_remove_button": "^1.0@alpha",
+        "drupal/nodeaccess": "^1.1",
+        "drupal/paragraphs": "^1.14",
+        "drupal/password_policy": "^4.0",
+        "drupal/pathauto": "^1.10",
+        "drupal/permissions_by_term": "3.1.21",
+        "drupal/permissionspolicy": "^1.1",
+        "drupal/range_slider": "^1.5",
+        "drupal/redirect_after_login": "^2.7",
+        "drupal/rest_password": "8.1.8",
+        "drupal/rest_views": "^2.0",
+        "drupal/restui": "^1.21",
+        "drupal/role_delegation": "^1.2",
+        "drupal/select2": "^1.13",
+        "drupal/select_or_other": "^4.0",
+        "drupal/svg_image": "^1.16",
+        "drupal/twig_tweak": "^3.1",
+        "drupal/user_current_paths": "^2.0",
+        "drupal/verf": "^1.0",
+        "drupal/view_profiles_perms": "^2.0",
+        "drupal/views_conditional": "^1.5",
+        "drupal/views_entity_form_field": "^1.0@beta",
+        "drupal/views_expandable_table": "^1.0@alpha",
+        "drupal/views_field_permissions": "^2.0@alpha",
+        "drupal/views_field_view": "^1.0@beta",
+        "drupal/votingapi": "^3.0@beta",
+        "drupal/webform": "^6.2@beta",
+        "drupal/webform_rest": "^4.0",
+        "drush/drush": "^11.1",
+        "google/charts": "45",
+        "phpoffice/phpspreadsheet": "^1.22"
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "web/"
+            }
+        },
+        "installer-paths": {
+            "web/core": [
+                "type:drupal-core"
+            ],
+            "web/libraries/{$name}": [
+                "type:drupal-library"
+            ],
+            "web/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "web/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "web/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "drush/Commands/contrib/{$name}": [
+                "type:drupal-drush"
+            ],
+            "web/modules/custom/{$name}": [
+                "type:drupal-custom-module"
+            ],
+            "web/profiles/custom/{$name}": [
+                "type:drupal-custom-profile"
+            ],
+            "web/themes/custom/{$name}": [
+                "type:drupal-custom-theme"
+            ],
+            "libraries/{$name}": [
+                "type:drupal-library"
+                ]
+        },
+        "enable-patching": true,
+        "patches": {
+            "drupal/core": {
+                "Return empty array": "patches/empty-field-array.patch",
+                "GROUP BY clause and contains nonaggregated column and incompatible with sql_mode=only_full_group_by": "https://www.drupal.org/files/issues/2022-07-01/sql_mode_fullgroupby_issue-3098307-15.patch",
+                "Model popup array to string conversion": "patches/modal-popup-array-string-conversion.patch",
+                "Own account role access": "https://www.drupal.org/files/issues/2019-02-07/3031391-7.patch",
+                "Rest contact message send mail": "https://www.drupal.org/files/issues/2022-08-09/2936644-42.patch",
+                "Undefined type in form helper": "https://www.drupal.org/files/issues/2021-05-12/2700667-133a.patch"
+            },
+            "drupal/views_expandable_table": {
+                "Apply js once": "patches/view-expandable-table-jsonce.patch"
+            },
+            "drupal/change_pwd_page": {
+                "Undefined function _password_policy_show_policy after use password policy module": "https://www.drupal.org/files/issues/2020-10-21/change_pwd_page-password_policy-undefined_function-3178214-2.patch"
+            }
+            
+        },
+        "drupal-core-project-message": {
+            "include-keys": [
+                "homepage",
+                "support"
+            ],
+            "post-create-project-cmd-message": [
+                "<bg=blue;fg=white>                                                         </>",
+                "<bg=blue;fg=white>  Congratulations, you’ve installed the Drupal codebase  </>",
+                "<bg=blue;fg=white>  from the drupal/recommended-project template!          </>",
+                "<bg=blue;fg=white>                                                         </>",
+                "",
+                "<bg=yellow;fg=black>Next steps</>:",
+                "  * Install the site: https://www.drupal.org/docs/8/install",
+                "  * Read the user guide: https://www.drupal.org/docs/user_guide/en/index.html",
+                "  * Get support: https://www.drupal.org/support",
+                "  * Get involved with the Drupal community:",
+                "      https://www.drupal.org/getting-involved",
+                "  * Remove the plugin that prints this message:",
+                "      composer remove drupal/core-project-message"
+            ]
+        }
+    }
+}

@@ -1,0 +1,9 @@
+Import form:
+  title: 'Add Import data settings Permission'
+  description: 'Permission for add import data form'
+  restrict access: true
+
+training_matrix permission:
+  title: 'Training Matrix Page Permission'
+  description: 'Permission for training matrix page access'
+  restrict access: true

@@ -1,0 +1,31 @@
+uuid: 14f9d5ef-613d-4d9a-98ab-abb805112fd9
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - node
+    - options
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: node.field_training_gap
+field_name: field_training_gap
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '< 50'
+      label: '< 50'
+    -
+      value: '> 50'
+      label: '> 50'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

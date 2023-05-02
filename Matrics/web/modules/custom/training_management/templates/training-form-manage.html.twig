@@ -1,0 +1,95 @@
+<div class="row card_tiles">
+  {{ form.cer_count }}
+</div> 
+<div class="card-parent" id="training_output">
+  <div class="filter-mobile-head"><h2>Filter</h2></div>
+  <div class="training-mobilefilter page-topForm-mobile">
+    <div class="row">
+      <div class="col-lg-2  col-md-6  col-sm-12 training_filter">
+        {{ form.certificate_count }}
+      </div>
+      <div class="col-lg-2  col-md-6  col-sm-12 training_filter">
+        {{ form.asset }}
+      </div>
+      <div class="col-lg-2 col-md-6 col-sm-12 training_filter">
+        {{ form.asset_fieldset_container }}
+      </div>
+      <div class="col-lg-2 col-md-6  col-sm-6 training_filter">
+        {{ form.training_provider }}
+      </div>
+      <div class="col-lg-2 col-md-6  col-sm-6 training_filter">
+        {{ form.start_date }}
+      </div>  
+      <div class="col-lg-2 col-md-6  col-sm-6 training_filter">
+        {{ form.end_date }}
+      </div>
+      <div class="col-lg-2 col-md-6  col-sm-6 training_filter">
+        {{ form.cer_start_date }}
+      </div>  
+      <div class="col-lg-2 col-md-6  col-sm-6 training_filter">
+        {{ form.cer_end_date }}
+      </div>
+      <div class="col-lg-2 col-md-6  col-sm-6 training_filter">
+        {{ form.course_booked }}
+      </div>
+      <div class="col-lg-2 col-md-6  col-sm-6 training_filter">
+        {{ form.accreditation }}
+      </div>
+      <div class="col-lg-2 col-md-6  col-sm-6 training_filter">
+        {{ form.employee }}
+      </div>
+      {#<div class="col-lg-2 col-md-6  col-sm-6 training_filter">#}
+      {#  {{ form.sort_name }}#}
+      {#</div>#}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-12 col-sm-12">
+      <div id="box-contain">
+        {{ form.container2 }}
+      </div>
+    </div> 
+  </div> 
+</div> 
+
+<div style="display:none"></div>
+
+{{ form.form_build_id }}
+{{ form.form_token }}
+{{ form.form_id }}
+
+<div class="chart_toggle">
+  <h2>Chart</h2>
+</div>
+
+<div class="row chart_toggle_option">
+  <div class="col-md-12"> 
+    {{ drupal_block('training_chart') }}
+  </div>
+  {#<div class="col-md-6">#}
+  {#    {{ drupal_block('training_line_chart') }}#}
+  {#</div>#}
+</div>
+
+<div class="chart_toggle">
+  <h2>Booked Courses</h2>
+</div>
+
+<div class="row chart_toggle_option">
+  <div class="col-md-12"> 
+    {{ drupal_view('courses_list', 'block_1') }}
+  </div>
+  {#<div class="col-md-6">#}
+  {#    {{ drupal_block('training_line_chart') }}#}
+  {#</div>#}
+</div>
+
+<div class="chart_toggle">
+  <h2>Completed Bookings</h2>
+</div>
+<div class="row chart_toggle_option">
+  <div class="col-md-12"> 
+    {{ drupal_view('courses_list', 'block_2') }}
+  </div>
+</div>
+   

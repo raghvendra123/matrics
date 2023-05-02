@@ -1,0 +1,29 @@
+uuid: e0016b64-11a4-4ec1-9090-f5f2fac718f6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_provider_name
+    - node.type.vendor
+    - paragraphs.paragraphs_type.provider_details
+id: paragraph.provider_details.field_provider_name
+field_name: field_provider_name
+entity_type: paragraph
+bundle: provider_details
+label: 'Provider Name'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      vendor: vendor
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

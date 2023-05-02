@@ -1,0 +1,19 @@
+uuid: 9b786490-659e-425e-960f-fdfa464fb067
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: courseupdate
+plugin_id: courseupdate
+granularity: resource
+configuration:
+  methods:
+    - GET
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

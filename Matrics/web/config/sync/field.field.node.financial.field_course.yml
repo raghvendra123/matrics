@@ -1,0 +1,29 @@
+uuid: 0fccb9ab-2da2-4e50-adf5-b8f09b1338ab
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_course
+    - node.type.courses
+    - node.type.financial
+id: node.financial.field_course
+field_name: field_course
+entity_type: node
+bundle: financial
+label: Course
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      courses: courses
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

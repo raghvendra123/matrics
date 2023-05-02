@@ -1,0 +1,10 @@
+uuid: b4036148-ad54-4db4-86f4-22e16c3f2e32
+langcode: en
+status: true
+dependencies: {  }
+id: swap_records
+label: 'Swap Records'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

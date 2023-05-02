@@ -1,0 +1,55 @@
+<div class="row">
+<div class="col-md-8 reports_left">
+  <div class="report_data">
+    {{ form.field_data_type }}    
+    {{ form.preview }}
+    {{ form.reset }}
+    {{ form.actions }}
+  </div>
+  <div class="">
+    {{ form.container }}
+  </div>
+  <div class="col-md-4 reports_right mob-view">    
+  {{ form.title }}
+  <div class="report_date_range">{{ form.field_start_date }} {{ form.field_expir }}</div>
+  {{ form.field_asset }}    
+  {{ form.field_certificate }}
+  {{ form.field_employee_name }}
+  {{ form.field_course }}
+  {{ form.field_file }}
+  {{ form.field_job_title }}
+  {{ form.field_participant_name }}
+  {{ form.field_past }}
+  {{ form.field_training_gapcount }}
+  {{ form.field_training_gap }}
+  {{ form.field_training_provider }}
+  {{ form.field_training_request_number }}
+  {{ form.form_build_id }}
+  {{ form.form_token }}
+  {{ form.form_id }}
+</div>
+  <div class="report_listing">
+    <h2>Report List</h2>
+    {{ drupal_view('reports', 'block_1') }}
+  </div>
+</div>
+<div class="col-md-4 reports_right dks-view">    
+  {{ form.title }}
+  <div class="report_date_range">{{ form.field_start_date }} {{ form.field_expir }}</div>
+  {{ form.field_asset }}    
+  {{ form.field_certificate }}
+  {{ form.field_employee_name }}
+  {{ form.field_course }}
+  {{ form.field_file }}
+  {{ form.field_job_title }}
+  {{ form.field_participant_name }}
+  {{ form.field_past }}
+  {{ form.field_training_gapcount }}
+  {{ form.field_training_gap }}
+  {{ form.field_training_provider }}
+  {{ form.field_training_request_number }}
+  {{ form.form_build_id }}
+  {{ form.form_token }}
+  {{ form.form_id }}
+</div>
+</div>

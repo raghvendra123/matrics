@@ -1,0 +1,4 @@
+matrics_dashboard.settings:
+  title: Site setting
+  route_name: matrics_dashboard.settings
+  base_route: matrics_dashboard.settings

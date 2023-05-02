@@ -1,0 +1,21 @@
+uuid: e884feca-e17e-46aa-a79c-0942ad1186bb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_accreditation
+    - node.type.courses
+  module:
+    - options
+id: node.courses.field_accreditation
+field_name: field_accreditation
+entity_type: node
+bundle: courses
+label: Accreditation
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

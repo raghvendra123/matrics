@@ -1,0 +1,9 @@
+expandable_table:
+  css:
+    component:
+      css/views_expandable_table.css: {}
+  js:
+    js/views_expandable_table.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

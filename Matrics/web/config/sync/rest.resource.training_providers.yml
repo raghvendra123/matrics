@@ -1,0 +1,18 @@
+uuid: 422e2bd2-df0c-4f50-8915-544c5606931a
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: training_providers
+plugin_id: training_providers
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - cookie

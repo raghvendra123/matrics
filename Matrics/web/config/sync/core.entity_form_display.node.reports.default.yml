@@ -1,0 +1,167 @@
+uuid: 3ee8a9b5-cd4d-4f21-b30d-e713d0b04561
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.reports.field_asset
+    - field.field.node.reports.field_certificate
+    - field.field.node.reports.field_course
+    - field.field.node.reports.field_customer
+    - field.field.node.reports.field_data_type
+    - field.field.node.reports.field_employee_name
+    - field.field.node.reports.field_expir
+    - field.field.node.reports.field_file
+    - field.field.node.reports.field_job_title
+    - field.field.node.reports.field_past
+    - field.field.node.reports.field_start_date
+    - field.field.node.reports.field_training_gap
+    - field.field.node.reports.field_training_gapcount
+    - field.field.node.reports.field_training_provider
+    - field.field.node.reports.field_training_request_number
+    - node.type.reports
+  module:
+    - conditional_fields
+    - datetime
+    - file
+    - select2
+    - select_or_other
+id: node.reports.default
+targetEntityType: node
+bundle: reports
+mode: default
+content:
+  field_asset:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings:
+      conditional_fields: {  }
+  field_certificate:
+    type: select2_entity_reference
+    weight: 3
+    region: content
+    settings:
+      width: 100%
+      autocomplete: false
+      match_operator: CONTAINS
+      match_limit: 10
+    third_party_settings:
+      conditional_fields: {  }
+  field_course:
+    type: options_select
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings:
+      conditional_fields: {  }
+  field_customer:
+    type: options_select
+    weight: 27
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_data_type:
+    type: options_buttons
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_employee_name:
+    type: select2_entity_reference
+    weight: 26
+    region: content
+    settings:
+      width: 100%
+      autocomplete: false
+      match_operator: CONTAINS
+      match_limit: 10
+    third_party_settings: {  }
+  field_expir:
+    type: datetime_default
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings:
+      conditional_fields: {  }
+  field_file:
+    type: file_generic
+    weight: 7
+    region: content
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+  field_job_title:
+    type: select2_entity_reference
+    weight: 4
+    region: content
+    settings:
+      width: 100%
+      autocomplete: false
+      match_operator: CONTAINS
+      match_limit: 10
+    third_party_settings:
+      conditional_fields: {  }
+  field_start_date:
+    type: datetime_default
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings:
+      conditional_fields: {  }
+  field_training_gap:
+    type: select_or_other_list
+    weight: 6
+    region: content
+    settings:
+      select_element_type: select_or_other_buttons
+      sort_options: ''
+      add_other_value_to_allowed_values: false
+    third_party_settings:
+      conditional_fields: {  }
+  field_training_gapcount:
+    type: select_or_other_list
+    weight: 5
+    region: content
+    settings:
+      select_element_type: select_or_other_buttons
+      sort_options: ''
+      add_other_value_to_allowed_values: false
+    third_party_settings:
+      conditional_fields: {  }
+  field_training_provider:
+    type: select2_entity_reference
+    weight: 13
+    region: content
+    settings:
+      width: 100%
+      autocomplete: false
+      match_operator: CONTAINS
+      match_limit: 10
+    third_party_settings:
+      conditional_fields: {  }
+  field_training_request_number:
+    type: string_textfield
+    weight: 12
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings:
+      conditional_fields: {  }
+  title:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_past: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

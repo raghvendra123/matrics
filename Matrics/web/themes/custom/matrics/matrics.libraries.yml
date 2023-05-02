@@ -1,0 +1,42 @@
+global-styling:
+  version: VERSION
+  css:
+    theme:
+      '//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css': { type: external, integrity: sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC, crossorigin: anonymous}
+      '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/start/jquery-ui.css': { type: external, integrity: sha384-TjG6vJTMfPSk5F3SRvnBVXWnYNVLBXkObuewwEPUUWOe/NhObNSwTnyelCzR/w2Z, crossorigin: anonymous}
+      css/main.css: {}
+      css/custom.css: {}
+  js:
+    js/custom.js: {}
+    '//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js': { type: external, integrity: sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM, crossorigin: anonymous}
+    '//maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js': { type: external, integrity: sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd, crossorigin: anonymous}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+
+core:
+  remote: https://github.com/jquery/jquery-ui
+  version: &jquery_ui_version 1.12.1
+  license: &jquery_ui_license
+    name: Public Domain
+    url: https://github.com/jquery/jquery-ui/blob/1.12.1/LICENSE.txt
+    gpl-compatible: true
+  js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.ui
+    
+datepicker:
+  version: 1.13.0
+  license:
+    name: Public Domain
+    url: https://github.com/jquery/jquery-ui/blob/1.13.0/LICENSE.txt
+    gpl-compatible: true
+  js:
+    js/jquery.ui/ui/widgets/datepicker-min.js: { minified: true }
+  css:
+    component:
+      js/jquery.ui/themes/base/datepicker.css: {}
+  dependencies:
+    - matrics/core

@@ -1,0 +1,21 @@
+uuid: 68171d23-6a69-40a9-8ec7-21ad4aa2a467
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_expiry_date
+    - paragraphs.paragraphs_type.course
+  module:
+    - datetime
+id: paragraph.course.field_expiry_date
+field_name: field_expiry_date
+entity_type: paragraph
+bundle: course
+label: 'End Date'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

@@ -1,0 +1,19 @@
+uuid: 5281b8f6-564b-45ee-9aaa-21673ab9259b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_number_of_employee
+    - node.type.asset
+id: node.asset.field_number_of_employee
+field_name: field_number_of_employee
+entity_type: node
+bundle: asset
+label: 'Number of Employee'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

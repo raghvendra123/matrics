@@ -1,0 +1,39 @@
+uuid: b3076a83-65b1-4fb0-9c45-cc4ef3ce1828
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:5b1031f5-2c79-45dc-aebf-d3f238885da9'
+  module:
+    - block_content
+    - system
+    - user
+  theme:
+    - matrics
+id: addemployee
+theme: matrics
+region: content
+weight: -2
+provider: null
+plugin: 'block_content:5b1031f5-2c79-45dc-aebf-d3f238885da9'
+settings:
+  id: 'block_content:5b1031f5-2c79-45dc-aebf-d3f238885da9'
+  label: 'Add Employee'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /employee-overview
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      administrator: administrator
+      mnager: mnager

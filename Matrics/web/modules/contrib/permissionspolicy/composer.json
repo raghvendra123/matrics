@@ -1,0 +1,18 @@
+{
+    "name": "drupal/permissionspolicy",
+    "type": "drupal-module",
+    "description": "Provide Permissions Policy header",
+    "keywords": ["Drupal"],
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.drupal.org/project/permissionspolicy",
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/permissionspolicy",
+        "source": "https://git.drupalcode.org/project/permissionspolicy"
+    },
+    "require": {
+        "php": "^7.3 || ^8.0",
+        "gapple/structured-fields": "^2.0",
+        "drupal/core": "^9 || ^10"
+    }
+}

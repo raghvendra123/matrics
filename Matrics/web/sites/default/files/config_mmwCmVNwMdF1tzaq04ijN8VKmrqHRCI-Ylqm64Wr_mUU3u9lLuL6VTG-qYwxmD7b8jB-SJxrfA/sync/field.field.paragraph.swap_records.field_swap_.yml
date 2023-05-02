@@ -1,0 +1,21 @@
+uuid: f11ba915-c6eb-42df-8223-4ebac21733b9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_swap_
+    - paragraphs.paragraphs_type.swap_records
+  module:
+    - datetime
+id: paragraph.swap_records.field_swap_
+field_name: field_swap_
+entity_type: paragraph
+bundle: swap_records
+label: 'Swap date'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

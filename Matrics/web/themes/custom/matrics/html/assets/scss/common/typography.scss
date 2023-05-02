@@ -1,0 +1,118 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: normal;
+    margin: 0 0 1rem;
+    padding: 0;
+}
+
+h1,
+.h1 {
+    font-size: 7rem;
+    line-height: 1;
+    @media only screen and (max-width: 1599px) {
+        font-size: 6rem;
+    }
+    @media only screen and (max-width: 1299px) {
+        font-size: 5rem;
+    }
+    @media only screen and (max-width: 1199px) {
+        font-size: 4.5rem;
+    }
+    @media only screen and (max-width: 991px) {
+        font-size: 4rem;
+    }
+    @media only screen and (max-width: 767px) {
+        font-size: 3rem;
+    }
+}
+
+h2,
+.h2,
+.title {
+    font-size: 3.5rem;
+    line-height: 1.2;
+    margin: 0 0 1.5rem;
+    text-transform: uppercase;
+    color: $black;
+    @media only screen and (max-width: 1299px) {
+        font-size: 3rem;
+    }
+    @media only screen and (max-width: 1199px) {
+        font-size: 2.8rem;
+    }
+    @media only screen and (max-width: 767px) {
+        font-size: 2.25rem;
+    }
+}
+
+h3,
+.h3 {
+    line-height: 1.1;
+    margin: 0 0 1rem;
+    font-size: 1.615rem;
+}
+
+h4,
+.h4 {
+    font-size: 1.5rem;
+    line-height: 1.615rem;
+    margin: 0 0 1rem;
+    @media only screen and (max-width: 1299px) {
+        font-size: 1.4rem;
+    }
+    @media only screen and (max-width: 991px) {
+        font-size: 1.35rem;
+    }
+    @media only screen and (max-width: 767px) {
+        font-size: 1.1rem;
+    }
+}
+
+h5,
+.h5 {
+    font-size: 1.125rem;
+    line-height: 1.2;
+}
+
+h6,
+.h6 {
+    font-size: 1rem;
+}
+
+p {
+    line-height: 1.4;
+    margin: 0 0 1.8rem;
+}
+
+.big-text {
+    p {
+        font-size: 2rem;
+        line-height: 2.625rem;
+        max-width: 52rem;
+        margin: 0 0 1rem 0;
+        letter-spacing: 0;
+    }
+}
+
+.large-text {
+    p {
+        font-size: 1.231rem;
+    }
+}
+
+.title {
+    span {
+        display: block;
+        margin: 0 0 0 9rem;
+        @media (max-width: 1199px) {
+            margin: 0 0 0 7rem;
+        }
+    }
+}
+
+
+/**991 start**/

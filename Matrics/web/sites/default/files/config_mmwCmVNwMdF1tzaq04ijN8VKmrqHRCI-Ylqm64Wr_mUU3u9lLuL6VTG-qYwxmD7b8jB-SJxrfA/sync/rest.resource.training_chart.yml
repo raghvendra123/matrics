@@ -1,0 +1,18 @@
+uuid: d99da8f3-050c-4865-9744-e8831cb21311
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: training_chart
+plugin_id: training_chart
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - cookie

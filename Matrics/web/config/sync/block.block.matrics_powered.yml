@@ -1,0 +1,22 @@
+uuid: faaae8d8-227a-4a11-85fe-6c06161cf901
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - matrics
+_core:
+  default_config_hash: I6Esh8cDlPdl2POZg4MOSRUrQNYA1UNCJCxL2yqT_wc
+id: matrics_powered
+theme: matrics
+region: footer_fifth
+weight: 10
+provider: null
+plugin: system_powered_by_block
+settings:
+  id: system_powered_by_block
+  label: 'Powered by Drupal'
+  label_display: '0'
+  provider: system
+visibility: {  }

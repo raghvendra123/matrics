@@ -1,0 +1,22 @@
+uuid: d71b5277-7157-4839-988f-633260c999c8
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - matrics
+_core:
+  default_config_hash: KC12e0aosUnBBs5bd374JVcQjJaFNOSIHzu0dUGf22o
+id: matrics_messages
+theme: matrics
+region: content
+weight: -8
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  label_display: '0'
+  provider: system
+visibility: {  }

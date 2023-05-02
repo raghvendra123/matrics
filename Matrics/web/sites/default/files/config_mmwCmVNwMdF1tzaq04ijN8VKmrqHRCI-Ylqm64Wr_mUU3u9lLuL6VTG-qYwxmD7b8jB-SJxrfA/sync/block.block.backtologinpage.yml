@@ -1,0 +1,38 @@
+uuid: 0e33fbca-bc0c-40db-b76e-32b9910ec557
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:e69dbbe5-de55-4e6f-b9a2-826da6be75c7'
+  module:
+    - block_content
+    - system
+    - user
+  theme:
+    - matrics
+id: backtologinpage
+theme: matrics
+region: content
+weight: -9
+provider: null
+plugin: 'block_content:e69dbbe5-de55-4e6f-b9a2-826da6be75c7'
+settings:
+  id: 'block_content:e69dbbe5-de55-4e6f-b9a2-826da6be75c7'
+  label: 'Back to login page'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /contact/contact_us
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      anonymous: anonymous

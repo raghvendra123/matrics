@@ -1,0 +1,29 @@
+uuid: 5427e101-6d9e-439f-9cb8-3111a9eede42
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_asset
+    - node.type.asset
+    - node.type.reports
+id: node.reports.field_asset
+field_name: field_asset
+entity_type: node
+bundle: reports
+label: Asset
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      asset: asset
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

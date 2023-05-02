@@ -1,0 +1,122 @@
+uuid: d3e3daba-bb3d-490a-8515-8a0c3f3aa74a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.financial.field_asset
+    - field.field.node.financial.field_course
+    - field.field.node.financial.field_course_status
+    - field.field.node.financial.field_customer
+    - field.field.node.financial.field_data1
+    - field.field.node.financial.field_employee_name
+    - field.field.node.financial.field_expir
+    - field.field.node.financial.field_file
+    - field.field.node.financial.field_start_date
+    - field.field.node.financial.field_tms
+    - field.field.node.financial.field_training_provider
+    - node.type.financial
+  module:
+    - datetime
+    - file
+    - options
+    - user
+id: node.financial.default
+targetEntityType: node
+bundle: financial
+mode: default
+content:
+  field_asset:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 109
+    region: content
+  field_course:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_course_status:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 111
+    region: content
+  field_customer:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 113
+    region: content
+  field_data1:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 104
+    region: content
+  field_employee_name:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 110
+    region: content
+  field_expir:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 106
+    region: content
+  field_file:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 112
+    region: content
+  field_start_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 105
+    region: content
+  field_tms:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 108
+    region: content
+  field_training_provider:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

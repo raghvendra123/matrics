@@ -1,0 +1,13 @@
+name: telephone_validation_normalize
+type: module
+description: Sub modules of entity_view_mode_normalize use for telephone field with e164 validation.
+package: Web services
+core_version_requirement: ^8 || ^9
+dependencies:
+  - drupal:entity_view_mode_normalize
+  - drupal:telephone_validation
+
+# Information added by Drupal.org packaging script on 2021-09-14
+version: '1.0.1'
+project: 'entity_view_mode_normalize'
+datestamp: 1631587327

@@ -1,0 +1,6 @@
+services:
+  matrics_xss_prevention.event_subscriber:
+    class: Drupal\matrics_xss_prevention\EventSubscriber\MatricsXssPreventionEventSubscriber
+    arguments: ['@logger.factory', '@config.factory']
+    tags:
+      - { name: event_subscriber }

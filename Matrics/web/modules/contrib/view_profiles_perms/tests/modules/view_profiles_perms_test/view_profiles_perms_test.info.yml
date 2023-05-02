@@ -1,0 +1,13 @@
+name: View Profiles Perms Test
+type: module
+description: For testing View Profile Perms
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: System
+dependencies:
+  - view_profiles_perms
+
+# Information added by Drupal.org packaging script on 2020-06-12
+version: '2.0.0'
+project: 'view_profiles_perms'
+datestamp: 1591959298

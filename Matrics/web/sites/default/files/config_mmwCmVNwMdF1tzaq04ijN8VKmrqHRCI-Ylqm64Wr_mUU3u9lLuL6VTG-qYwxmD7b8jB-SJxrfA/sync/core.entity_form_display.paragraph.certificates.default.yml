@@ -1,0 +1,68 @@
+uuid: 43c1bce0-4856-4db6-94bd-b67a40a3e934
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.certificates.field_certificate_type
+    - field.field.paragraph.certificates.field_certificates
+    - field.field.paragraph.certificates.field_course_name
+    - field.field.paragraph.certificates.field_enable
+    - field.field.paragraph.certificates.field_expiry_date
+    - field.field.paragraph.certificates.field_provider_name
+    - field.field.paragraph.certificates.field_start_date
+    - paragraphs.paragraphs_type.certificates
+  module:
+    - datetime
+    - file
+id: paragraph.certificates.default
+targetEntityType: paragraph
+bundle: certificates
+mode: default
+content:
+  field_certificate_type:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_certificates:
+    type: file_generic
+    weight: 2
+    region: content
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+  field_course_name:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_enable:
+    type: boolean_checkbox
+    weight: 6
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_expiry_date:
+    type: datetime_default
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_provider_name:
+    type: options_select
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_start_date:
+    type: datetime_default
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

@@ -1,0 +1,88 @@
+matrics_course_booking.course:
+  path: '/individual-course-list'
+  defaults:
+    _controller: 'Drupal\matrics_course_booking\Controller\IndividualCourse::list'
+    _title: 'Individual Course list'
+  requirements:
+    _permission: 'access content' 
+
+matrics_course_booking.course_list:
+  path: '/course-list'
+  defaults:
+    _title: 'Course list'
+    _form: 'Drupal\matrics_course_booking\Form\CourseList'
+  requirements:
+    _role: 'administrator+mnager'
+
+matrics_course_booking.autocomplete:
+  path: '/autocomplete/course'
+  defaults:
+    _controller: 'Drupal\matrics_course_booking\Controller\JsonApiArticlesController::handleAutocomplete'
+    _title: 'Course list'
+  requirements:
+    _permission: 'access content' 
+    
+matrics_course_booking.provider:
+  path: '/autocomplete/provider'
+  defaults:
+    _controller: 'Drupal\matrics_course_booking\Controller\JsonApiArticlesController::ProviderAutocomplete'
+    _title: 'provider list'
+  requirements:
+    _permission: 'access content' 
+    
+matrics_course_booking.notification_read:
+  path: '/notification_read'
+  defaults:
+    _controller: 'Drupal\matrics_course_booking\Controller\NotificationReadController::read'
+    _title: 'Notification Read'
+  requirements:
+    _permission: 'access content' 
+
+matrics_course_booking.document_list:
+  path: '/downloadalldocument/{id}'
+  defaults:
+    _controller: 'Drupal\matrics_course_booking\Controller\DownloadAllFiles::downloadAllFiles'
+    _title: 'Documents List'
+  requirements:
+    _permission: 'access content'
+
+matrics_course_booking.add_certificate:
+  path: '/add_certificate'
+  defaults:
+    _title: 'Add Certificate'
+    _form: 'Drupal\matrics_course_booking\Form\AddCertificateForm'
+  requirements:
+    _permission: 'certificate_form_permission'
+  options:
+    _admin_route: TRUE
+matrics_course_booking.bulk_certificate:
+  path: '/bulk_certificate'
+  defaults:
+    _title: 'Bulk Certificate'
+    _form: 'Drupal\matrics_course_booking\Form\BulkCertificateForm'
+  requirements:
+    _permission: 'certificate_form_permission'
+  options:
+    _admin_route: TRUE
+matrics_course_booking.reminder_cron:
+  path: '/reminder_cron'
+  defaults:
+    _title: 'Reminder Cron'
+    _controller: 'Drupal\matrics_course_booking\Controller\ReminderCron::reminder'
+  requirements:
+    _permission: 'access content'
+matrics_course_booking.swich_account:
+  path: '/swich_account/{tid}'
+  defaults:
+    _title: 'Reminder Cron'
+    _controller: 'Drupal\matrics_course_booking\Controller\SwitchAccount::switchacc'
+  requirements:
+    _permission: 'access content'
+    
+matrics_course_booking.swich_customer:
+  path: '/switch-customer'
+  defaults:
+    _title: 'Switch Customer'
+    _controller: 'Drupal\matrics_course_booking\Controller\SwitchAccount::swich_customer'
+  requirements:
+    _role: 'administrator+mnager'

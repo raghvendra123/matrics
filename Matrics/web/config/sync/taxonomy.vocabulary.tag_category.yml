@@ -1,0 +1,8 @@
+uuid: 0559ade1-0a94-4a63-863c-425b859130dd
+langcode: en
+status: true
+dependencies: {  }
+name: 'Faq Category'
+vid: tag_category
+description: ''
+weight: 0

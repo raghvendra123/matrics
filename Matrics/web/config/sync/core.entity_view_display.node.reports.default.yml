@@ -1,0 +1,155 @@
+uuid: a6748cb9-c076-4c20-9702-7cafb0b5dac0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.reports.field_asset
+    - field.field.node.reports.field_certificate
+    - field.field.node.reports.field_course
+    - field.field.node.reports.field_customer
+    - field.field.node.reports.field_data_type
+    - field.field.node.reports.field_employee_name
+    - field.field.node.reports.field_expir
+    - field.field.node.reports.field_file
+    - field.field.node.reports.field_job_title
+    - field.field.node.reports.field_past
+    - field.field.node.reports.field_start_date
+    - field.field.node.reports.field_training_gap
+    - field.field.node.reports.field_training_gapcount
+    - field.field.node.reports.field_training_provider
+    - field.field.node.reports.field_training_request_number
+    - node.type.reports
+  module:
+    - datetime
+    - file
+    - options
+    - user
+id: node.reports.default
+targetEntityType: node
+bundle: reports
+mode: default
+content:
+  field_asset:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 106
+    region: content
+  field_certificate:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 107
+    region: content
+  field_course:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 113
+    region: content
+  field_customer:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 118
+    region: content
+  field_data_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  field_employee_name:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 117
+    region: content
+  field_expir:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 104
+    region: content
+  field_file:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 112
+    region: content
+  field_job_title:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 111
+    region: content
+  field_past:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 105
+    region: content
+  field_start_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 103
+    region: content
+  field_training_gap:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 109
+    region: content
+  field_training_gapcount:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 110
+    region: content
+  field_training_provider:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 116
+    region: content
+  field_training_request_number:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 115
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

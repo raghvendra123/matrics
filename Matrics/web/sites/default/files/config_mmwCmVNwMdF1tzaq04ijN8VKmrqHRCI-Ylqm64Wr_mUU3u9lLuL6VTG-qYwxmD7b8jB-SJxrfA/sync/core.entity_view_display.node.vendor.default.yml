@@ -1,0 +1,84 @@
+uuid: 615a68e6-fc7d-4ff5-991d-3f33e270ca0c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.vendor.field_address
+    - field.field.node.vendor.field_agreement
+    - field.field.node.vendor.field_email
+    - field.field.node.vendor.field_first_name
+    - field.field.node.vendor.field_last_name
+    - field.field.node.vendor.field_mobile
+    - field.field.node.vendor.field_poc
+    - field.field.node.vendor.field_vendorstatus
+    - node.type.vendor
+  module:
+    - file
+    - options
+    - user
+id: node.vendor.default
+targetEntityType: node
+bundle: vendor
+mode: default
+content:
+  field_agreement:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_email:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_first_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_last_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_mobile:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_poc:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_vendorstatus:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_address: true

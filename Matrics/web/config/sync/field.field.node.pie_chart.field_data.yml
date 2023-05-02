@@ -1,0 +1,19 @@
+uuid: b8ba0095-5e1a-4ca8-b3d3-f27d7b48468d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_data
+    - node.type.pie_chart
+id: node.pie_chart.field_data
+field_name: field_data
+entity_type: node
+bundle: pie_chart
+label: Data
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

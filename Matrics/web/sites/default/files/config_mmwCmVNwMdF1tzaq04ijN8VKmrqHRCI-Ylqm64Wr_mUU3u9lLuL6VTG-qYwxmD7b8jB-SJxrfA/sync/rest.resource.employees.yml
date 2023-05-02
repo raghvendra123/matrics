@@ -1,0 +1,18 @@
+uuid: aa3969d0-6847-4b5a-b856-9a3e5d78bea6
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: employees
+plugin_id: employees
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - cookie

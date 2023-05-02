@@ -1,0 +1,20 @@
+/**Vendor **/
+
+
+/*@import "vendor/bootstrap4/bootstrap";/*/
+
+
+/*common*/
+
+@import "common/base";
+@import "common/header";
+@import "common/footer";
+
+/**components**/
+
+@import "components/styleguide.scss";
+@import "components/login";
+@import "components/dashboard";
+@import "components/employee-overview";
+@import "components/innerpages";
+@import "common/responsive";

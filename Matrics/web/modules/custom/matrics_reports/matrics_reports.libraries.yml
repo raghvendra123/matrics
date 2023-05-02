@@ -1,0 +1,22 @@
+matrics-range-slider:
+  version: 1.x
+  header: true
+  css:
+    theme:
+      css/range_slider.css: {}
+  js:
+    js/custom-slider.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+    - core/drupalSettings
+#    - core/once
+
+userform-js:
+  version: 1.x
+  js:
+    js/custom-userform.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery

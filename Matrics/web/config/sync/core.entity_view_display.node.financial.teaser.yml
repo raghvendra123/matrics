@@ -1,0 +1,42 @@
+uuid: 24bfe0a6-e0a5-4b5d-9ee0-257a539efda9
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.financial.field_asset
+    - field.field.node.financial.field_course
+    - field.field.node.financial.field_course_status
+    - field.field.node.financial.field_customer
+    - field.field.node.financial.field_data1
+    - field.field.node.financial.field_employee_name
+    - field.field.node.financial.field_expir
+    - field.field.node.financial.field_file
+    - field.field.node.financial.field_start_date
+    - field.field.node.financial.field_tms
+    - field.field.node.financial.field_training_provider
+    - node.type.financial
+  module:
+    - user
+id: node.financial.teaser
+targetEntityType: node
+bundle: financial
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_asset: true
+  field_course: true
+  field_course_status: true
+  field_customer: true
+  field_data1: true
+  field_employee_name: true
+  field_expir: true
+  field_file: true
+  field_start_date: true
+  field_tms: true
+  field_training_provider: true

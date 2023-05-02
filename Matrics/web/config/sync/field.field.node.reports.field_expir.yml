@@ -1,0 +1,21 @@
+uuid: 1cdd1829-9e37-4282-8a5e-9a896c63a7f9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_expir
+    - node.type.reports
+  module:
+    - datetime
+id: node.reports.field_expir
+field_name: field_expir
+entity_type: node
+bundle: reports
+label: 'Expiry date'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

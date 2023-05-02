@@ -1,0 +1,86 @@
+uuid: 82b41ab3-001c-45c8-add6-ede7eebd0331
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.certificates.field_certificate_type
+    - field.field.paragraph.certificates.field_certificates
+    - field.field.paragraph.certificates.field_course_name
+    - field.field.paragraph.certificates.field_enable
+    - field.field.paragraph.certificates.field_expiry_date
+    - field.field.paragraph.certificates.field_provider_name
+    - field.field.paragraph.certificates.field_start_date
+    - paragraphs.paragraphs_type.certificates
+  module:
+    - datetime
+    - file_download_link
+id: paragraph.certificates.default
+targetEntityType: paragraph
+bundle: certificates
+mode: default
+content:
+  field_certificate_type:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_certificates:
+    type: file_download_link
+    label: hidden
+    settings:
+      link_text: Download
+      link_title: ''
+      new_tab: false
+      force_download: true
+      custom_classes: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_course_name:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_enable:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_expiry_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: html_date
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_provider_name:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_start_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden: {  }

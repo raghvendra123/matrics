@@ -1,0 +1,40 @@
+uuid: 8e8495cc-4a8b-4a90-9578-832818337c07
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_provider_details
+    - node.type.courses
+    - paragraphs.paragraphs_type.provider_details
+  module:
+    - entity_reference_revisions
+id: node.courses.field_provider_details
+field_name: field_provider_details
+entity_type: node
+bundle: courses
+label: 'Provider Details'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      provider_details: provider_details
+    negate: 0
+    target_bundles_drag_drop:
+      certificates:
+        weight: 5
+        enabled: false
+      course:
+        weight: 6
+        enabled: false
+      provider_details:
+        weight: 7
+        enabled: true
+      swap_records:
+        weight: 8
+        enabled: false
+field_type: entity_reference_revisions

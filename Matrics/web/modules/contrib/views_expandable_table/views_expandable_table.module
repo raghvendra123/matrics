@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Views Expandable Table module code.
+ */
+
+use Drupal\Component\Utility\Crypt;
+use Drupal\Core\Template\Attribute;
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_views_view_expandabletable(&$variables) {
+  template_preprocess_views_view_table($variables);
+
+  // Rearrange the table output.
+  foreach ($variables['rows'] as $key => $row) {
+    $id = Crypt::randomBytesBase64(12);
+    $row['attributes']->addClass('views-expandable-table-trigger');
+    $row['attributes']->setAttribute('data-views-expandable-table-trigger', $id);
+
+    $expandable_col = array_pop($row['columns']);
+
+    $row['expandable_row']['column'] = $expandable_col;
+    $row['expandable_row']['attributes'] = new Attribute();
+    $row['expandable_row']['attributes']->addClass('views-expandable-table-target');
+    $row['expandable_row']['attributes']->setAttribute('data-views-expandable-table-target', $id);
+
+    $row['expandable_row']['column_attributes'] = new Attribute();
+    $row['expandable_row']['column_attributes']->setAttribute('colspan', count($row['columns']));
+    $variables['rows'][$key] = $row;
+  }
+
+  array_pop($variables['header']);
+  $variables['attributes']['class'][] = 'views-expandable-table';
+}

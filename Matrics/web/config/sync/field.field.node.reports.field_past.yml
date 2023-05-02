@@ -1,0 +1,21 @@
+uuid: d1e5a029-b2da-4449-a916-7747be22a0a1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_past
+    - node.type.reports
+  module:
+    - options
+id: node.reports.field_past
+field_name: field_past
+entity_type: node
+bundle: reports
+label: Past
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

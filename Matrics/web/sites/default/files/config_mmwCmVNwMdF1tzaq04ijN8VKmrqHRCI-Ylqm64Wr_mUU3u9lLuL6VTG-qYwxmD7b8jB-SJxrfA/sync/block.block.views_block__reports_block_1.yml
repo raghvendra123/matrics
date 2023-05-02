@@ -1,0 +1,29 @@
+uuid: 5f0a466f-cf62-4b80-88ed-131d475b3697
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.reports
+  module:
+    - system
+    - views
+  theme:
+    - matrics
+id: views_block__reports_block_1
+theme: matrics
+region: content
+weight: 4
+provider: null
+plugin: 'views_block:reports-block_1'
+settings:
+  id: 'views_block:reports-block_1'
+  label: 'Report Listing'
+  label_display: visible
+  provider: views
+  views_label: 'Report Listing'
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /reporting

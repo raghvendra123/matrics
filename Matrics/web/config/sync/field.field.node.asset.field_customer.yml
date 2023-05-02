@@ -1,0 +1,29 @@
+uuid: 5344016f-dbff-46d1-bead-2a6f5bf428f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_customer
+    - node.type.asset
+    - taxonomy.vocabulary.customer
+id: node.asset.field_customer
+field_name: field_customer
+entity_type: node
+bundle: asset
+label: Customer
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      customer: customer
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

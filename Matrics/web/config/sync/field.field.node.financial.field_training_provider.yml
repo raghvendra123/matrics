@@ -1,0 +1,29 @@
+uuid: 847f2ac8-0311-4822-b81f-01cfa1e27738
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_training_provider
+    - node.type.financial
+    - node.type.vendor
+id: node.financial.field_training_provider
+field_name: field_training_provider
+entity_type: node
+bundle: financial
+label: 'Training provider'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      vendor: vendor
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

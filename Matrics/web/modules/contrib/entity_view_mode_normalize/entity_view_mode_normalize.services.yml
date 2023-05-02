@@ -1,0 +1,35 @@
+services:
+  entity_view_mode_normalize_normalizer.typed_data:
+    class: Drupal\entity_view_mode_normalize\Normalizer\SimpleTypedDataNormalizer
+    tags:
+      - { name: normalizer, priority: 10 }
+  entity_view_mode_normalize_normalizer.entity:
+    class: Drupal\entity_view_mode_normalize\Normalizer\SimpleEntityNormalizer
+    arguments: ['@entity_type.manager', '@entity_type.repository', '@entity_field.manager']
+    tags:
+      - { name: normalizer, priority: 10 }
+  entity_view_mode_normalize_normalizer.entity_reference_revision_field_item_list:
+    class: Drupal\entity_view_mode_normalize\Normalizer\EntityReferenceRevisionsFieldItemListNormalizer
+    arguments: ['@entity_type.manager', '@entity_type.repository', '@entity_field.manager']
+    tags:
+      - { name: normalizer, priority: 11 }
+  entity_view_mode_normalize_normalizer.entity_reference_field_item_list:
+    class: Drupal\entity_view_mode_normalize\Normalizer\EntityReferenceFieldItemListNormalizer
+    arguments: ['@entity_type.manager', '@entity_type.repository', '@entity_field.manager']
+    tags:
+      - { name: normalizer, priority: 11 }
+  entity_view_mode_normalize_normalizer.file_field_item_list:
+    class: Drupal\entity_view_mode_normalize\Normalizer\FileFieldItemListNormalizer
+    arguments: ['@entity_type.manager', '@entity_type.repository', '@entity_field.manager']
+    tags:
+      - { name: normalizer, priority: 12 }
+  entity_view_mode_normalize_normalizer.file:
+    class: Drupal\entity_view_mode_normalize\Normalizer\FileEntityNormalizer
+    arguments: ['@entity_type.manager', '@entity_type.repository', '@entity_field.manager']
+    tags:
+      - { name: normalizer, priority: 12 }
+  entity_view_mode_normalize_normalizer.field_select_list:
+    class: Drupal\entity_view_mode_normalize\Normalizer\SelectListFieldItemListNormalizer
+    arguments: [ '@country_manager' ]
+    tags:
+      - { name: normalizer, priority: 13 }

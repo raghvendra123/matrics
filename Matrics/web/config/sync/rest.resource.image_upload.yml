@@ -1,0 +1,19 @@
+uuid: d277fbae-92a4-4e3e-b832-af4bcbd001f4
+langcode: en
+status: false
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: image_upload
+plugin_id: image_upload
+granularity: resource
+configuration:
+  methods:
+    - POST
+    - PATCH
+  formats:
+    - json
+  authentication:
+    - cookie

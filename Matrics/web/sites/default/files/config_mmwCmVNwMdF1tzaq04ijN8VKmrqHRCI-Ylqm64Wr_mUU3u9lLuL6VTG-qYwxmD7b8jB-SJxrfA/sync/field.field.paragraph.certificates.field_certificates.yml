@@ -1,0 +1,27 @@
+uuid: a28f2899-b2f6-435c-b010-1c6660039109
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_certificates
+    - paragraphs.paragraphs_type.certificates
+  module:
+    - file
+id: paragraph.certificates.field_certificates
+field_name: field_certificates
+entity_type: paragraph
+bundle: certificates
+label: Certificates
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[current-user:uid]'
+  file_extensions: 'txt pdf doc docx bmp jpg xlsx'
+  max_filesize: ''
+  description_field: false
+field_type: file

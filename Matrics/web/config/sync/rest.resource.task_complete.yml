@@ -1,0 +1,18 @@
+uuid: f8e1bd23-aa96-4e1f-8afb-7996bd01564d
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: task_complete
+plugin_id: task_complete
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - cookie

@@ -1,0 +1,21 @@
+uuid: 870419f2-d4d5-4c40-bf0c-a0b8aa20f31e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_course_result
+    - paragraphs.paragraphs_type.course
+  module:
+    - options
+id: paragraph.course.field_course_result
+field_name: field_course_result
+entity_type: paragraph
+bundle: course
+label: 'Course Result'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

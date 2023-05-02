@@ -1,0 +1,113 @@
+matrics_dashboard.dashboard:
+  path: '/dashboard'
+  defaults:
+    _controller: 'Drupal\matrics_dashboard\Controller\MatricsDashboard::dashboard'
+    _title: 'Matrics Dashboard'
+  requirements:
+    _role: 'anonymous+administrator+mnager'
+
+matrics_dashboard.task:
+  path: '/task/complete/{id}'
+  defaults:
+    _controller: 'Drupal\matrics_dashboard\Controller\MatricsDashboard::task_complete'
+    _title: 'Task Complete'
+  requirements:
+    _permission: 'access content'
+
+matrics_dashboard.overview:
+  path: '/employe-overview'
+  defaults:
+    _controller: 'Drupal\matrics_dashboard\Controller\EmployeeOverview::overview'
+  requirements:
+    _permission: 'access content'    
+
+matrics_dashboard.ajaxblock:
+  path: '/ajaxblock'
+  defaults:
+    _controller: 'Drupal\matrics_dashboard\Controller\MatricsDashboard::ajaxblock'
+    _title: 'Ajax Block'
+  requirements:
+    _permission: 'access content'
+    
+matrics_dashboard.settings:
+  path: '/admin/config/matrics/site'
+  defaults:
+    _form: '\Drupal\matrics_dashboard\Form\SiteConfigurationForm'
+    _title: 'Site settings'
+  requirements:
+    _permission: 'site_setting form_permission'
+  options:
+    _admin_route: TRUE
+
+matrics_dashboard.usersupdate:
+  path: '/usersupdate'
+  defaults:
+    _controller: 'Drupal\matrics_dashboard\Controller\UsersUpdate::usersupdate'
+    _title: 'Users Update'
+  requirements:
+    _permission: 'access content'
+
+matrics_dashboard.courseupdate:
+  path: '/courseupdate/{pid}'
+  defaults:
+    _form: '\Drupal\matrics_dashboard\Form\CourseUpdateForm'
+    _title: 'Course update'
+  requirements:
+    _permission: 'site_setting form_permission'
+  options:
+    _admin_route: TRUE
+    
+matrics_dashboard.coursecancel:
+  path: '/coursecancel/{pid}'
+  defaults:
+    _form: '\Drupal\matrics_dashboard\Form\CourseCancelForm'
+    _title: 'Course Cancel'
+  requirements:
+    _permission: 'site_setting courese_cancel'
+  options:
+    _admin_route: TRUE
+
+matrics_dashboard.dashboard_filter:
+  path: '/dashboard_filter'
+  defaults:
+    _form: '\Drupal\matrics_dashboard\Form\DashboardFilterForm'
+    _title: 'Dashboard Filter'
+  requirements:
+    _permission: 'access content'
+matrics_dashboard.tiles:
+  path: '/manage/tiles'
+  defaults:
+    _form: '\Drupal\matrics_dashboard\Form\ManageTiles'
+    _title: 'Manage Dashboard'
+  requirements:
+    _permission: 'access content'
+matrics_dashboard.tiles_configuration:
+  path: '/tiles-configuration/{id}'
+  defaults:
+    _form: '\Drupal\matrics_dashboard\Form\TilesConfiguration'
+    _title: 'Manage Dashboard'
+  requirements:
+    _permission: 'access content'
+matrics_dashboard.dashboard_tile:
+  path: '/dashboard-tile/{id}'
+  defaults:
+    _controller: 'Drupal\matrics_dashboard\Controller\DashboardTiles::employee'
+    _title_callback: 'Drupal\matrics_dashboard\Controller\DashboardTiles::getTitle'
+  requirements:
+    _permission: 'access content'
+
+matrics_dashboard.dashboard_personalize_title:
+  path: '/dashboard/title'
+  defaults:
+    _form: '\Drupal\matrics_dashboard\Form\DashboardPersonalizedTitle'
+    _title: 'Manage Dashboard Title'
+  requirements:
+    _permission: 'access content'
+
+matrics_dashboard.customer_select:
+  path: '/customer-select'
+  defaults:
+    _form: '\Drupal\matrics_dashboard\Form\CustomerSelectForm'
+    _title: 'Customer select form'
+  requirements:
+    _permission: 'access content'

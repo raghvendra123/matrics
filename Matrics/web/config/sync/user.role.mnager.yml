@@ -1,0 +1,162 @@
+uuid: 45b2e0a9-2c9e-4a16-b544-6d2916e8fcbd
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.article
+    - node.type.asset
+    - node.type.certificate
+    - node.type.courses
+    - node.type.financial
+    - node.type.job_title
+    - node.type.page
+    - node.type.pie_chart
+    - node.type.reports
+    - taxonomy.vocabulary.tags
+  module:
+    - comment
+    - contextual
+    - edit_profiles_perms
+    - field_permissions
+    - field_ui
+    - file
+    - matrics_course_booking
+    - matrics_dashboard
+    - matrics_data_upload
+    - matrics_reports
+    - matrics_schedule
+    - node
+    - nodeaccess
+    - paragraphs_type_permissions
+    - path
+    - role_delegation
+    - system
+    - taxonomy
+id: mnager
+label: 'TMS Manager'
+weight: 4
+is_admin: null
+permissions:
+  - 'Import form'
+  - 'Scheduling form'
+  - 'access administration pages'
+  - 'access content overview'
+  - 'access contextual links'
+  - 'access files overview'
+  - 'access user profiles'
+  - 'administer content types'
+  - 'administer node display'
+  - 'administer node fields'
+  - 'administer node form display'
+  - 'administer nodeaccess'
+  - 'administer nodes'
+  - 'administer url aliases'
+  - 'administer users'
+  - 'asset compliance'
+  - 'asset list'
+  - 'assign individual_employee role'
+  - 'bypass node access'
+  - certificate_form_permission
+  - 'create article content'
+  - 'create asset content'
+  - 'create certificate content'
+  - 'create courses content'
+  - 'create field_certificate_type'
+  - 'create field_course_details'
+  - 'create field_customer'
+  - 'create field_expiry_date'
+  - 'create field_task_status'
+  - 'create financial content'
+  - 'create job_title content'
+  - 'create page content'
+  - 'create paragraph content certificates'
+  - 'create paragraph content course'
+  - 'create paragraph content provider_details'
+  - 'create paragraph content swap_records'
+  - 'create pie_chart content'
+  - 'create reports content'
+  - 'create terms in tags'
+  - 'create url aliases'
+  - 'delete any article content'
+  - 'delete any asset content'
+  - 'delete any certificate content'
+  - 'delete any courses content'
+  - 'delete any financial content'
+  - 'delete any job_title content'
+  - 'delete any page content'
+  - 'delete any pie_chart content'
+  - 'delete any reports content'
+  - 'delete article revisions'
+  - 'delete asset revisions'
+  - 'delete own article content'
+  - 'delete own asset content'
+  - 'delete own certificate content'
+  - 'delete own courses content'
+  - 'delete own financial content'
+  - 'delete own job_title content'
+  - 'delete own page content'
+  - 'delete own pie_chart content'
+  - 'delete own reports content'
+  - 'delete page revisions'
+  - 'delete paragraph content certificates'
+  - 'delete paragraph content course'
+  - 'delete paragraph content provider_details'
+  - 'delete paragraph content swap_records'
+  - 'edit admin users profiles'
+  - 'edit administrator users profiles'
+  - 'edit any article content'
+  - 'edit any asset content'
+  - 'edit any certificate content'
+  - 'edit any courses content'
+  - 'edit any financial content'
+  - 'edit any job_title content'
+  - 'edit any page content'
+  - 'edit any pie_chart content'
+  - 'edit any reports content'
+  - 'edit content_editor users profiles'
+  - 'edit course_and_certificate_admin users profiles'
+  - 'edit field_certificate_type'
+  - 'edit field_course_details'
+  - 'edit field_expiry_date'
+  - 'edit field_training_gap_count'
+  - 'edit field_training_gap_score'
+  - 'edit individual_employee users profiles'
+  - 'edit mnager users profiles'
+  - 'edit own article content'
+  - 'edit own asset content'
+  - 'edit own certificate content'
+  - 'edit own comments'
+  - 'edit own courses content'
+  - 'edit own field_certificate_type'
+  - 'edit own field_course_details'
+  - 'edit own field_expiry_date'
+  - 'edit own field_task_status'
+  - 'edit own financial content'
+  - 'edit own job_title content'
+  - 'edit own page content'
+  - 'edit own pie_chart content'
+  - 'edit own reports content'
+  - 'edit super_user users profiles'
+  - 'edit terms in tags'
+  - 'grant node permissions'
+  - 'revert all revisions'
+  - 'send mail by report'
+  - 'share reports'
+  - 'site_setting courese_cancel'
+  - 'site_setting form_permission'
+  - 'update paragraph content certificates'
+  - 'update paragraph content course'
+  - 'update paragraph content provider_details'
+  - 'update paragraph content swap_records'
+  - 'view all revisions'
+  - 'view field_certificate_type'
+  - 'view field_expiry_date'
+  - 'view field_file'
+  - 'view field_training_gap_count'
+  - 'view field_training_gap_score'
+  - 'view own field_certificate_type'
+  - 'view own field_expiry_date'
+  - 'view own field_file'
+  - 'view own field_task_status'
+  - 'view own unpublished content'
+  - 'view paragraph content swap_records'

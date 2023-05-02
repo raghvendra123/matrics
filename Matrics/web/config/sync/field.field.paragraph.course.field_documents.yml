@@ -1,0 +1,27 @@
+uuid: 2f565adc-cafb-42ba-b033-1e0d939f9138
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_documents
+    - paragraphs.paragraphs_type.course
+  module:
+    - file
+id: paragraph.course.field_documents
+field_name: field_documents
+entity_type: paragraph
+bundle: course
+label: Documents
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'pdf doc docx'
+  max_filesize: ''
+  description_field: false
+field_type: file

@@ -1,0 +1,15 @@
+uuid: 8503430a-e0d1-4db7-8f32-14cc12fee60c
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs_type_permissions
+id: course_and_certificate_admin
+label: 'Course and certificate admin'
+weight: 6
+is_admin: null
+permissions:
+  - 'access user profiles'
+  - 'create paragraph content certificates'
+  - 'delete paragraph content certificates'
+  - 'update paragraph content certificates'

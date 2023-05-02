@@ -1,0 +1,21 @@
+uuid: 429bec90-d8b3-4ca8-9588-a4521212b1ab
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_training_gapcount
+    - node.type.reports
+  module:
+    - options
+id: node.reports.field_training_gapcount
+field_name: field_training_gapcount
+entity_type: node
+bundle: reports
+label: 'Training gap count'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

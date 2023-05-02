@@ -1,0 +1,48 @@
+// login-page
+@media only screen and (max-width: 1299px) {
+    .login-section {
+        .container {
+            max-width: 960px;
+        }
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .login-section {
+        .container {
+            max-width: 760px;
+        }
+        .login-left {
+            width: 44%;
+            max-width: 44%;
+        }
+        .login-right {
+            width: 56%;
+            max-width: 56%;
+        }
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .login-section {
+        .container {
+            max-width: 720px;
+        }
+        .login_form {
+            width: 100%;
+            max-width: 100%;
+        }
+        .login-left {
+            width: 100%;
+            max-width: 100%;
+        }
+        .login-right {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+        }
+    }
+    .login_row {
+        flex-direction: column-reverse;
+    }
+}

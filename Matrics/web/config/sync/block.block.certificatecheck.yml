@@ -1,0 +1,25 @@
+uuid: c468dac7-2d73-4ba3-a9f5-573be783a224
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_data_upload
+    - system
+  theme:
+    - matrics
+id: certificatecheck
+theme: matrics
+region: content
+weight: 0
+provider: null
+plugin: certificate_check
+settings:
+  id: certificate_check
+  label: 'Training Matrix'
+  label_display: visible
+  provider: matrics_data_upload
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/user/*'

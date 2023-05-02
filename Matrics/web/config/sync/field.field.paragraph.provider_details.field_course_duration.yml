@@ -1,0 +1,19 @@
+uuid: 2e88ebc5-2e60-429f-8eed-11153da1afcb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_course_duration
+    - paragraphs.paragraphs_type.provider_details
+id: paragraph.provider_details.field_course_duration
+field_name: field_course_duration
+entity_type: paragraph
+bundle: provider_details
+label: 'Course duration'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,19 @@
+--- modules/contact/tests/src/Kernel/MessageEntityTest.php
++++ modules/contact/tests/src/Kernel/MessageEntityTest.php
+@@ -28,8 +31,16 @@
+     'contact_test',
+   ];
+ 
++  /**
++   * The current user.
++   *
++   * @var \Drupal\user\UserInterface
++   */
++  protected $user;
++
+   protected function setUp(): void {
+     parent::setUp();
++    $this->user = $this->drupalSetUpCurrentUser();
+     $this->installConfig(['contact', 'contact_test']);
+   }
+ 

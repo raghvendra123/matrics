@@ -1,0 +1,14 @@
+uuid: 3caa634d-294e-49cf-b5cf-2b6db685b339
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.tms_admins_
+  module:
+    - user
+id: user_add_role_action.tms_admins_
+label: 'Add the TMS admins role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: tms_admins_

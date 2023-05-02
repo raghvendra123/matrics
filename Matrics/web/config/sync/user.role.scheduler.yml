@@ -1,0 +1,15 @@
+uuid: 2fa4b9f2-bf08-4707-a5b2-55dce7efc53c
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_reports
+    - matrics_schedule
+id: scheduler
+label: Scheduler
+weight: 9
+is_admin: null
+permissions:
+  - 'Scheduling form'
+  - 'asset compliance'
+  - 'asset list'

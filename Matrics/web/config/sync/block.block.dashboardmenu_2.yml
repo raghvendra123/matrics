@@ -1,0 +1,33 @@
+uuid: e45dca4e-3939-47c0-b002-7db32182342f
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.dashboard-menu
+  module:
+    - system
+    - user
+  theme:
+    - matrics
+id: dashboardmenu_2
+theme: matrics
+region: sidebar_first
+weight: -9
+provider: null
+plugin: 'system_menu_block:dashboard-menu'
+settings:
+  id: 'system_menu_block:dashboard-menu'
+  label: 'Dashboard Menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      authenticated: authenticated

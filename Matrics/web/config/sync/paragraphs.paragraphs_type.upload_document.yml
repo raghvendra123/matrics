@@ -1,0 +1,10 @@
+uuid: 2cc99e58-6f63-4e1e-bdfa-b553f4c35024
+langcode: en
+status: true
+dependencies: {  }
+id: upload_document
+label: 'Upload Document'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

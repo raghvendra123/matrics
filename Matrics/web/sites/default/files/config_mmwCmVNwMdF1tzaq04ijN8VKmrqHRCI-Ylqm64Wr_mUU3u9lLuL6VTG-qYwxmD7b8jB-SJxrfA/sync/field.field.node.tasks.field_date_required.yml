@@ -1,0 +1,21 @@
+uuid: b22dcba3-9749-4fcf-ac97-a9257fadb248
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_required
+    - node.type.tasks
+  module:
+    - datetime
+id: node.tasks.field_date_required
+field_name: field_date_required
+entity_type: node
+bundle: tasks
+label: 'Date required'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

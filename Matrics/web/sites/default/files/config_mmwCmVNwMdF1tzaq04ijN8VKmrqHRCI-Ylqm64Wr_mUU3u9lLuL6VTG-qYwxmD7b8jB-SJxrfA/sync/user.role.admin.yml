@@ -1,0 +1,25 @@
+uuid: 27adae49-c4eb-4578-ae6b-36cb0d1293c2
+langcode: en
+status: true
+dependencies:
+  module:
+    - edit_profiles_perms
+    - matrics_data_upload
+    - paragraphs_type_permissions
+id: admin
+label: Admin
+weight: 7
+is_admin: null
+permissions:
+  - 'Import form'
+  - 'access user profiles'
+  - 'create paragraph content certificates'
+  - 'delete paragraph content certificates'
+  - 'edit admin users profiles'
+  - 'edit administrator users profiles'
+  - 'edit content_editor users profiles'
+  - 'edit course_and_certificate_admin users profiles'
+  - 'edit individual_employee users profiles'
+  - 'edit mnager users profiles'
+  - 'edit super_user users profiles'
+  - 'update paragraph content certificates'

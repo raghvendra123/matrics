@@ -1,0 +1,1119 @@
+<?php
+
+/**
+ * @file
+ * Functions to support the matrics dashboard module.
+ */
+
+use Drupal\user\Entity\User;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Url;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\query\Sql;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Custom function to get session id of customer.
+ */
+function get_session_customerid() {
+  $session_id = '';
+  if (\Drupal::request()->getSession()->isStarted()) {
+    $session = \Drupal::request()->getSession();
+    $session_id = $session->get('tid');
+  }
+  return $session_id;
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function matrics_dashboard_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  $user_roles = \Drupal::currentUser()->getRoles();
+  if (!in_array('administrator', $user_roles)) {      
+    unset($data['tabs'][0]['entity.webform_submission.user']); 
+  } 
+}   
+
+/**
+ * Implements hook_theme().
+ */
+function matrics_dashboard_theme() {
+  return [
+    'dashboard_manager' => [
+      'variables' => [
+        'items' => NULL,
+        'blocks' => NULL,
+        'chart' => NULL,
+        'tile_status' => NULL,
+        'uroles' => NULL,
+        'dashboard_title' => NULL,
+        'dashboard_title_url' => NULL,
+      ],
+      'template' => 'dashboard-manager',
+    ],
+    'employee_overview' => [
+      'variables' => ['items' => NULL, 'blocks' => NULL],
+      'template' => 'employee-overview',
+    ],
+    'dashboard_login' => [
+      'variables' => ['items' => NULL, 'blocks' => NULL],
+      'template' => 'dashboard-login',
+    ],
+    'report_form' => [
+      'render element' => 'form',
+      'template' => 'report-form',
+    ],
+    'financial_form' => [
+      'render element' => 'form',
+      'template' => 'financial-form',
+    ],
+    'pie_chart' => [
+      'template' => 'pie_chart',
+      'variables' => [
+        'library' => '',
+        'categories' => [],
+        'seriesData' => [],
+        'options' => [],
+        'id' => '',
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function matrics_dashboard_user_login($account) {
+  $user_roles = $account->getRoles();
+  if (in_array('individual_employee', $user_roles)) {
+    $url = "/user";
+    \Drupal::service('request_stack')->getCurrentRequest()->query->set('destination', $url);
+    return;
+  }
+  else {
+    $url = "/switch-customer";
+    \Drupal::service('request_stack')->getCurrentRequest()->query->set('destination', $url);
+    return;
+  }
+
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function matrics_dashboard_views_query_alter(ViewExecutable $view, Sql $query) {
+  if ($view->id() == 'employee_overview') {
+    $user_roles = \Drupal::currentUser()->getRoles();
+    $user = User::load(\Drupal::currentUser()->id());
+    $user_name = $user->get('field_employee_name')->value;
+    // print_r($user_name);die;
+    // Traverse through the 'where' part of the query.
+    if (in_array('individual_employee', $user_roles)) {
+      foreach ($query->where as &$condition_group) {
+        foreach ($condition_group['conditions'] as &$condition) {
+          if (strpos($condition['field'], 'field_employee_name_value') && $condition['value'] == '%%') {
+            $condition['value'] = $user_name;
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function matrics_dashboard_views_pre_view($view) {
+  if ($view->id() == 'employee_overview') {
+    $user_roles = \Drupal::currentUser()->getRoles();
+    if (in_array('individual_employee', $user_roles)) {
+      $view_filters = $view->display_handler->getOption('filters');
+      unset($view_filters['field_asset_target_id_entityreference_filter']);
+      unset($view_filters['title']);
+      unset($view_filters['field_location_country_code']);
+      unset($view_filters['field_employee_name_value']);
+      unset($view_filters['field_training_gap_score_value']);
+      unset($view_filters['field_training_gap_count_value']);
+      $view->display_handler->overrideOption('filters', $view_filters);
+    }
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function matrics_dashboard_cron() {
+  $ids = \Drupal::entityQuery('user')
+    ->accessCheck(TRUE)
+    ->condition('status', 1)
+    ->condition('uid', 1, '!=')
+    ->execute();
+  $users = User::loadMultiple($ids);
+  foreach ($users as $user) {
+    $field_certificates = $user->field_certificates->getValue();
+    $mail = $user->get('mail')->getString();
+    $uid = $user->get('uid')->value;
+    $certificate_name = [];
+    $certificate = [];
+
+    $job_title = !empty($user->field_job_title->getValue()) ? $user->field_job_title->getValue()[0]['target_id'] : '';
+    $job_title_name = get_job_title_name($job_title);
+
+    $query = \Drupal::database()->select('node__field_certificate', 'fc');
+    $query->fields('fc', ['entity_id', 'field_certificate_target_id']);
+    $query->condition('fc.entity_id', $job_title);
+    $result = $query->execute()->fetchAll();
+    $total_certificate = 0;
+    foreach ($result as $value) {
+      $certificate_name[get_job_title_name($value->field_certificate_target_id)] = get_job_title_name($value->field_certificate_target_id);
+      $total_certificate += 1;
+    }
+    if ($user->field_certificates && $user->field_certificates->getValue()) {
+      $certificate = list_certificate($uid);
+      $exp_date = certificate_expiration_date($uid);
+      $row = 0;
+      foreach ($certificate_name as $certi) {
+        if (!empty($certi)) {
+          if (in_array($certi, $certificate)) {
+            $field_expiry_date = isset($exp_date[$certi]) ? strtotime($exp_date[$certi]) : '';
+            $current_date = new DrupalDateTime();
+            $current_date = strtotime($current_date);
+            if ($field_expiry_date && $field_expiry_date > $current_date) {
+              $row += 1;
+            }
+          }
+        }
+      }
+
+      if (!empty($row)) {
+        $training_gap_score = '';
+        $training_gap_score = number_format(($row / ($total_certificate)) * 100);
+        $training_gap_count = number_format($total_certificate - $row);
+        $user = User::load($uid);
+        $user->set('field_training_gap_score', $training_gap_score);
+        $user->set('field_training_gap_count', $training_gap_count);
+        $user->save();
+      }
+      else {
+        $user = User::load($uid);
+        $user->set('field_training_gap_count', $total_certificate);
+        $user->set('field_training_gap_score', "0");
+        $user->save();
+      }
+    }
+    else {
+      $user = User::load($uid);
+      $user->set('field_training_gap_count', $total_certificate);
+      $user->set('field_training_gap_score', "0");
+      $user->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function matrics_dashboard_form_alter(&$form, $form_state, $form_id) {
+  $form['actions']['preview']['#access'] = FALSE;
+  if ($form_id == 'node_tasks_form') {
+    $uid = \Drupal::currentUser()->id();
+    $form['field_assigned_to']['widget'][0]['target_id']['#default_value'] = User::load($uid);
+  }
+  if ($form_id == 'node_reports_form' || $form_id == 'node_reports_edit_form') {
+    $form['#theme'] = 'report_form';
+  }
+  if ($form_id == 'node_financial_form' || $form_id == 'node_financial_edit_form') {
+    $form['#theme'] = 'financial_form';
+  }
+  if ($form_id == 'user_login_form') {
+    $form['name']['#attributes']['autocomplete'] = 'off';
+  }
+  $current_url = Url::fromRoute('<current>');
+  $path = $current_url->toString();
+
+  if (($form['#id'] == 'views-exposed-form-vendor-page-1' && $path == '/supplier-portal') || ($form['#id'] == 'views-exposed-form-certificate-page-1' && $path == '/certification') || ($form['#id'] == 'views-exposed-form-all-courses-page-1' && $path == '/all-courses')) {
+    $customer_id = get_session_customerid();
+    if (!empty($customer_id)) {
+      $form['field_customer_target_id']['#value'] = $customer_id;
+    }
+  }
+
+  if ($form_id == 'views_exposed_form' && (($form['#id'] == 'views-exposed-form-employee-overview-page-1' && $path == '/employee-overview') || ($form['#id'] == 'views-exposed-form-courses-list-block-3' && $path == '/dashboard') || (($form['#id'] == 'views-exposed-form-courses-list-block-1' || $form['#id'] == 'views-exposed-form-courses-list-block-2') && $path == '/training-management')) || ($form['#id'] == 'views-exposed-form-reports-block-1' && $path == '/reporting') || ($form['#id'] == 'views-exposed-form-reports-block-2' && $path == '/financials')) {
+    $customer_id = get_session_customerid();
+    if (!empty($customer_id)) {
+      $form['field_customer_target_id_1']['#value'] = $customer_id;
+    }
+  }
+}
+
+/**
+ * {@inheritdoc}
+ */
+function matrics_dashboard_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $view_ids = ['employee_overview', 'certificate'];
+  $view = $form_state->getStorage('view');
+  $customer_id = get_session_customerid();
+  if ($form_id == 'views_exposed_form' && in_array($view['view']->id(), $view_ids) && !empty($customer_id)) {
+    $assets = get_assets('All');
+    $form['field_asset_target_id_entityreference_filter']["#options"] = $assets;
+    if ($view['view']->id() == 'certificate') {
+      $certificates = get_certificates('All');
+      $form['field_certificate_type_target_id_verf']["#options"] = $certificates;
+      if (!empty($customer_id)) {
+        $employee = get_employee_by_certificate('All');
+        $form['uid_entityreference_filter']["#options"] = $employee;
+      }
+    }
+  }
+}
+
+/**
+ * {@inheritdoc}
+ */
+function get_employee_count($asset = NULL, $job_title = NULL, $region = NULL) {
+  // Employee count.
+  $customerid = get_session_customerid();
+  $db = \Drupal::database();
+  $query = $db->select('users_field_data', 'u');
+  $query->fields('u', ["uid"]);
+  $query->join('user__roles', 'r', 'r.entity_id = u.uid');
+  $query->condition('r.roles_target_id', 'individual_employee', "=");
+  if (!empty($customerid)) {
+    $query->join('user__field_customer', 'cu', 'u.uid = cu.entity_id');
+    $query->fields('cu', ['field_customer_target_id']);
+    $query->condition('cu.field_customer_target_id', $customerid);
+  }
+  if ($job_title != NULL) {
+    $query->join('user__field_job_title', 'j', 'j.entity_id = u.uid');
+    $query->fields('j', ["field_job_title_target_id"]);
+    $query->condition('j.field_job_title_target_id', $job_title, "IN");
+  }
+  if ($asset != NULL) {
+    $query->join('user__field_asset', 'a', 'a.entity_id = u.uid');
+    $query->fields('a', ["field_asset_target_id"]);
+    $query->condition('a.field_asset_target_id', $asset, "IN");
+  }
+
+  if ($region != NULL) {
+    $query->join('user__field_location', 'l', 'l.entity_id = u.uid');
+    $query->fields('l', ["field_location_country_code"]);
+    $query->condition('l.field_location_country_code', $region, "IN");
+  }
+  $result = $query->countQuery()->execute()->fetchField();
+  return $result;
+}
+
+/**
+ * {@inheritdoc}
+ */
+function get_booking_count($type, $cancelled_by = NULL, $asset = NULL, $job_title = NULL, $region = NULL, $start_date = NULL, $end_date = NULL) {
+  $customerid = get_session_customerid();
+  $db = \Drupal::database();
+  $query = $db->select('users_field_data', 'u');
+  $query->fields('u', ["uid"]);
+  $query->join('user__roles', 'r', 'r.entity_id = u.uid');
+  $query->condition('r.roles_target_id', ['individual_employee'], "IN");
+  if (!empty($customerid)) {
+    $query->join('user__field_customer', 'cu', 'u.uid = cu.entity_id');
+    $query->fields('cu', ['field_customer_target_id']);
+    $query->condition('cu.field_customer_target_id', $customerid);
+  }
+  $query->join('user__field_certificates', 'ce', 'ce.entity_id = u.uid');
+  $query->join('paragraph__field_certificate_type', 'ct', 'ct.entity_id = ce.field_certificates_target_id');
+  $query->fields('ct', ['field_certificate_type_target_id']);
+  $query->join('paragraph__field_enable', 'e', 'e.entity_id = ce.field_certificates_target_id');
+  $query->condition('e.field_enable_value', 1);
+  $query->join('user__field_course_details', 'c', 'c.entity_id = u.uid');
+  $query->join('paragraph__field_certificate_type', 'ctn', 'ctn.entity_id = c.field_course_details_target_id');
+  $query->fields('ctn', ['field_certificate_type_target_id']);
+  // $query->join('node_field_data', 'n', 'n.nid = ctn.field_certificate_type_target_id');
+  if ($type == 'completed') {
+    $query->join('paragraph__field_close_booking', 'cb', 'cb.entity_id = c.field_course_details_target_id');
+    $query->condition('cb.field_close_booking_value', 1);
+  }
+  else {
+    $query->join('paragraph__field_enable', 'cen', 'cen.entity_id = c.field_course_details_target_id');
+    $query->condition('cen.field_enable_value', 1);
+  }
+  $query->join('paragraphs_item_field_data', 'd', 'd.id = c.field_course_details_target_id');
+  $query->join('paragraph__field_status', 's', 's.entity_id = d.id');
+  $query->fields('d', ["id"]);
+  $query->fields('s', ["field_status_value"]);
+  $query->condition('s.field_status_value', $type, "=");
+
+  if ($cancelled_by != NULL) {
+    $query->join('paragraph__field_cancelled_by', 'cb', 'cb.entity_id = d.id');
+    $query->fields('cb', ["field_cancelled_by_value"]);
+    $query->condition('cb.field_cancelled_by_value', $cancelled_by);
+  }
+  if ($job_title != NULL && !preg_match("/all/i", $job_title)) {
+    $query->join('user__field_job_title', 'j', 'j.entity_id = u.uid');
+    $query->fields('j', ["field_job_title_target_id"]);
+    $query->condition('j.field_job_title_target_id', $job_title, "IN");
+  }
+  if ($asset != NULL) {
+    $query->join('user__field_asset', 'a', 'a.entity_id = u.uid');
+    $query->fields('a', ["field_asset_target_id"]);
+    $query->condition('a.field_asset_target_id', $asset, "IN");
+  }
+  if ($region != NULL) {
+    $query->join('user__field_location', 'l', 'l.entity_id = u.uid');
+    $query->fields('l', ["field_location_country_code"]);
+    $query->condition('l.field_location_country_code', $region, "IN");
+  }
+  if ($start_date != NULL && $end_date != NULL) {
+    $query->join('paragraph__field_expiry_date', 'ed', 'ed.entity_id = d.id');
+    $query->fields('ed', ["field_expiry_date_value"]);
+    $query->condition('ed.field_expiry_date_value', $end_date, '<=');
+    $query->join('paragraph__field_start_date', 'sd', 'sd.entity_id = d.id');
+    $query->fields('sd', ["field_start_date_value"]);
+    $query->condition('sd.field_start_date_value', $start_date, '>=');
+  }
+
+  $result = $query->execute()->fetchAll();
+  // $result = $query->countQuery()->execute()->fetchField();.
+  $total = 0;
+  if (!empty($result)) {
+    foreach ($result as $value) {
+      if ($value->field_certificate_type_target_id == $value->ctn_field_certificate_type_target_id) {
+        $total++;
+      }
+    }
+  }
+  return $total;
+}
+
+/**
+ * {@inheritdoc}
+ */
+function get_course_fee_sum($table, $field) {
+  $customerid = get_session_customerid();
+  $db = \Drupal::database();
+  $query = $db->select('users_field_data', 'u');
+  $query->condition('u.uid', '1', '!=');
+  if (!empty($customerid)) {
+    $query->join('user__field_customer', 'cu', 'u.uid = cu.entity_id');
+    $query->fields('cu', ['field_customer_target_id']);
+    $query->condition('cu.field_customer_target_id', $customerid);
+  }
+  $query->join('user__field_course_details', 'crs', 'crs.entity_id = u.uid');
+  $query->join('paragraph__field_course_', 'p_crs', 'p_crs.entity_id = crs.field_course_details_target_id');
+  $query->join('node_field_data', 'n_data', 'n_data.nid = p_crs.field_course__target_id');
+  $query->fields('n_data', ['nid']);
+  $query->join($table, 'n_cm', 'n_cm.entity_id = n_data.nid');
+  $query->fields('n_cm', [$field]);
+
+  $result = $query->distinct()->execute()->fetchAll();
+  $sum = 0;
+  if (!empty($result)) {
+    foreach ($result as $value) {
+      $sum += $value->$field;
+    }
+  }
+  return $sum;
+}
+
+/**
+ * {@inheritdoc}
+ */
+function get_course_result($type, $asset = NULL, $job_title = NULL, $region = NULL, $start_date = NULL, $end_date = NULL) {
+  $customerid = get_session_customerid();
+  $db = \Drupal::database();
+  $query = $db->select('users_field_data', 'u');
+  $query->fields('u', ["uid"]);
+  $query->join('user__roles', 'r', 'r.entity_id = u.uid');
+  $query->condition('r.roles_target_id', ['individual_employee'], "IN");
+  if (!empty($customerid)) {
+    $query->join('user__field_customer', 'cu', 'u.uid = cu.entity_id');
+    $query->fields('cu', ['field_customer_target_id']);
+    $query->condition('cu.field_customer_target_id', $customerid);
+  }
+  $query->join('user__field_certificates', 'ce', 'ce.entity_id = u.uid');
+  $query->join('paragraph__field_certificate_type', 'ct', 'ct.entity_id = ce.field_certificates_target_id');
+  $query->fields('ct', ['field_certificate_type_target_id']);
+  // $query->join('node_field_data', 'n', 'n.nid = ct.field_certificate_type_target_id');
+  $query->join('paragraph__field_enable', 'e', 'e.entity_id = ce.field_certificates_target_id');
+  $query->condition('e.field_enable_value', 1);
+  $query->join('user__field_course_details', 'c', 'c.entity_id = u.uid');
+  $query->join('paragraph__field_certificate_type', 'ctn', 'ctn.entity_id = c.field_course_details_target_id');
+  $query->fields('ctn', ['field_certificate_type_target_id']);
+  $query->join('paragraphs_item_field_data', 'd', 'd.id = c.field_course_details_target_id');
+  $query->join('paragraph__field_status ', 's', 's.entity_id = d.id');
+  $query->fields('d', ["id"]);
+  $query->fields('s', ["field_status_value"]);
+  $query->condition('s.field_status_value', $type, "=");
+  if ($job_title != NULL && !preg_match("/all/i", $job_title)) {
+    $query->join('user__field_job_title', 'j', 'j.entity_id = u.uid');
+    $query->fields('j', ["field_job_title_target_id"]);
+    $query->condition('j.field_job_title_target_id', $job_title, "IN");
+  }
+  if ($asset != NULL) {
+    $query->join('user__field_asset', 'a', 'a.entity_id = u.uid');
+    $query->fields('a', ["field_asset_target_id"]);
+    $query->condition('a.field_asset_target_id', $asset, "IN");
+  }
+  if ($region != NULL) {
+    $query->join('user__field_location', 'l', 'l.entity_id = u.uid');
+    $query->fields('l', ["field_location_country_code"]);
+    $query->condition('l.field_location_country_code', $region, "IN");
+  }
+  if ($start_date != NULL && $end_date != NULL) {
+    $query->join('paragraph__field_expiry_date', 'ed', 'ed.entity_id = d.id');
+    $query->fields('ed', ["field_expiry_date_value"]);
+    $query->condition('ed.field_expiry_date_value', $end_date, '<=');
+    $query->join('paragraph__field_start_date', 'sd', 'sd.entity_id = d.id');
+    $query->fields('sd', ["field_start_date_value"]);
+    $query->condition('sd.field_start_date_value', $start_date, '>=');
+  }
+  $result = $query->execute()->fetchAll();
+  $total = 0;
+  if (!empty($result)) {
+    foreach ($result as $value) {
+      if ($value->field_certificate_type_target_id == $value->ctn_field_certificate_type_target_id) {
+        $total++;
+      }
+    }
+  }
+  return $total;
+}
+
+/**
+ * {@inheritdoc}
+ */
+function get_course_result_days($asset = NULL, $job_title = NULL, $region = NULL, $start_date = NULL, $end_date = NULL) {
+  $customerid = get_session_customerid();
+  $db = \Drupal::database();
+  $query = $db->select('users_field_data', 'u');
+  $query->fields('u', ["uid", "name"]);
+  $query->join('user__roles', 'r', 'r.entity_id = u.uid');
+  $query->condition('r.roles_target_id', ['individual_employee'], "IN");
+  if (!empty($customerid)) {
+    $query->join('user__field_customer', 'cu', 'u.uid = cu.entity_id');
+    $query->fields('cu', ['field_customer_target_id']);
+    $query->condition('cu.field_customer_target_id', $customerid);
+  }
+  $query->join('user__field_course_details', 'c', 'c.entity_id = u.uid');
+  $query->join('paragraphs_item_field_data', 'd', 'd.id = c.field_course_details_target_id');
+  $query->join('paragraph__field_course_result ', 's', 's.entity_id = d.id');
+  $query->join('paragraph__field_course_', 'cou', 'cou.entity_id = d.id');
+  $query->join('node_field_data', 'fd', 'cou.field_course__target_id = fd.nid');
+  $query->join('node__field_course_duration', 'bo', 'cou.field_course__target_id = bo.entity_id');
+  $query->fields('d', ["id"]);
+  $query->fields('cou', ["field_course__target_id"]);
+  $query->fields('fd', ["title"]);
+  $query->fields('bo', ["field_course_duration_value"]);
+  $query->fields('s', ["field_course_result_value"]);
+  $query->condition('s.field_course_result_value', 'passed', "=");
+  if ($job_title != NULL && !preg_match("/all/i", $job_title)) {
+    $query->join('user__field_job_title', 'j', 'j.entity_id = u.uid');
+    $query->fields('j', ["field_job_title_target_id"]);
+    $query->condition('j.field_job_title_target_id', $job_title, "IN");
+  }
+  if ($asset != NULL) {
+    $query->join('user__field_asset', 'a', 'a.entity_id = u.uid');
+    $query->fields('a', ["field_asset_target_id"]);
+    $query->condition('a.field_asset_target_id', $asset, "IN");
+  }
+
+  if ($region != NULL) {
+    $query->join('user__field_location', 'l', 'l.entity_id = u.uid');
+    $query->fields('l', ["field_location_country_code"]);
+    $query->condition('l.field_location_country_code', $region, "IN");
+  }
+
+  if ($start_date != NULL && $end_date != NULL) {
+    $query->join('paragraph__field_expiry_date', 'ed', 'ed.entity_id = d.id');
+    $query->fields('ed', ["field_expiry_date_value"]);
+    $query->condition('ed.field_expiry_date_value', $end_date, '<=');
+    $query->join('paragraph__field_start_date', 'sd', 'sd.entity_id = d.id');
+    $query->fields('sd', ["field_start_date_value"]);
+    $query->condition('sd.field_start_date_value', $start_date, '>=');
+  }
+  $result = $query->execute()->fetchAll();
+  // $result = $query->countQuery()->execute()->fetchField();.
+  $count = 0;
+  foreach ($result as $value) {
+    $count = $count + (int) $value->field_course_duration_value;
+  }
+  return $count;
+}
+
+/**
+ * {@inheritdoc}
+ */
+function get_all_certificate_count($asset = NULL, $job_title = NULL, $region = NULL, $start_date = NULL, $end_date = NULL) {
+  $customerid = get_session_customerid();
+  $db = \Drupal::database();
+  $query = $db->select('users_field_data', 'u');
+  $query->fields('u', ["uid", "name"]);
+  $query->join('user__roles', 'r', 'r.entity_id = u.uid');
+  $query->condition('r.roles_target_id', ['individual_employee'], "IN");
+  if (!empty($customerid)) {
+    $query->join('user__field_customer', 'cu', 'u.uid = cu.entity_id');
+    $query->fields('cu', ['field_customer_target_id']);
+    $query->condition('cu.field_customer_target_id', $customerid);
+  }
+  if ($job_title != NULL && !preg_match("/all/i", $job_title)) {
+    $query->join('user__field_job_title', 'j', 'j.entity_id = u.uid');
+    $query->fields('j', ["field_job_title_target_id"]);
+    $query->condition('j.field_job_title_target_id', $job_title, "IN");
+  }
+  if ($asset != NULL) {
+    $query->join('user__field_asset', 'a', 'a.entity_id = u.uid');
+    $query->fields('a', ["field_asset_target_id"]);
+    $query->condition('a.field_asset_target_id', $asset, "IN");
+  }
+
+  if ($region != NULL) {
+    $query->join('user__field_location', 'l', 'l.entity_id = u.uid');
+    $query->fields('l', ["field_location_country_code"]);
+    $query->condition('l.field_location_country_code', $region, "IN");
+  }
+
+  if ($start_date != NULL && $end_date != NULL) {
+    $query->join('user__field_course_details', 'c', 'c.entity_id = u.uid');
+    $query->join('paragraphs_item_field_data', 'd', 'd.id = c.field_course_details_target_id');
+    $query->join('paragraph__field_expiry_date', 'ed', 'ed.entity_id = d.id');
+    $query->fields('ed', ["field_expiry_date_value"]);
+    $query->condition('ed.field_expiry_date_value', $end_date, '<=');
+    $query->join('paragraph__field_start_date', 'sd', 'sd.entity_id = d.id');
+    $query->fields('sd', ["field_start_date_value"]);
+    $query->condition('sd.field_start_date_value', $start_date, '>=');
+  }
+  $result = $query->execute()->fetchAll();
+
+  $count = '0';
+  foreach ($result as $value) {
+    $count = $count + count(list_certificate($value->uid));
+  }
+  return $count;
+}
+
+/**
+ * {@inheritdoc}
+ */
+function training_gap_count($asset = NULL, $job_title = NULL, $region = NULL, $start_date = NULL, $end_date = NULL) {
+  $customerid = get_session_customerid();
+  $db = \Drupal::database();
+  $query = $db->select('users_field_data', 'u');
+  $query->fields('u', ["uid", "name"]);
+  $query->join('user__roles', 'r', 'r.entity_id = u.uid');
+  $query->condition('r.roles_target_id', ['individual_employee'], "IN");
+  if (!empty($customerid)) {
+    $query->join('user__field_customer', 'cu', 'u.uid = cu.entity_id');
+    $query->fields('cu', ['field_customer_target_id']);
+    $query->condition('cu.field_customer_target_id', $customerid);
+  }
+  if ($job_title != NULL && !preg_match("/all/i", $job_title)) {
+    $query->join('user__field_job_title', 'j', 'j.entity_id = u.uid');
+    $query->fields('j', ["field_job_title_target_id"]);
+    $query->condition('j.field_job_title_target_id', $job_title, "IN");
+  }
+  if ($asset != NULL) {
+    $query->join('user__field_asset', 'a', 'a.entity_id = u.uid');
+    $query->fields('a', ["field_asset_target_id"]);
+    $query->condition('a.field_asset_target_id', $asset, "IN");
+  }
+  if ($region != NULL) {
+    $query->join('user__field_location', 'l', 'l.entity_id = u.uid');
+    $query->fields('l', ["field_location_country_code"]);
+    $query->condition('l.field_location_country_code', $region, "IN");
+  }
+
+  if ($start_date != NULL && $end_date != NULL) {
+    $query->join('user__field_course_details', 'c', 'c.entity_id = u.uid');
+    $query->join('paragraphs_item_field_data', 'd', 'd.id = c.field_course_details_target_id');
+    $query->join('paragraph__field_expiry_date', 'ed', 'ed.entity_id = d.id');
+    $query->fields('ed', ["field_expiry_date_value"]);
+    $query->condition('ed.field_expiry_date_value', $end_date, '<=');
+    $query->join('paragraph__field_start_date', 'sd', 'sd.entity_id = d.id');
+    $query->fields('sd', ["field_start_date_value"]);
+    $query->condition('sd.field_start_date_value', $start_date, '>=');
+  }
+  $result = $query->execute()->fetchAll();
+
+  $count = 0;
+  foreach ($result as $value) {
+    $certificate_list = list_certificate($value->uid);
+    $user_certificate = certificate_expiration_date($value->uid);
+    foreach ($certificate_list as $certi) {
+      $field_expiry_date = isset($user_certificate[$certi]) ? strtotime($user_certificate[$certi]) : 0;
+      $current_date = new DrupalDateTime();
+      $current_date = strtotime($current_date);
+      $diff = abs($field_expiry_date - $current_date);
+      $years = round($diff / 60 / 60 / 24 / 365);
+      $months = round($diff / 60 / 60 / 24 / 30);
+
+      if ($months < 6) {
+        $count = $count + 1;
+      }
+    }
+  }
+  return $count;
+}
+
+/**
+ * {@inheritdoc}
+ */
+function training_gap_score($asset = NULL, $job_title = NULL, $region = NULL, $start_date = NULL, $end_date = NULL) {
+  $customerid = get_session_customerid();
+  $db = \Drupal::database();
+  $query = $db->select('users_field_data', 'u');
+  $query->fields('u', ["uid", "name"]);
+  $query->join('user__roles', 'r', 'r.entity_id = u.uid');
+  $query->condition('r.roles_target_id', ['individual_employee'], "IN");
+  if (!empty($customerid)) {
+    $query->join('user__field_customer', 'cu', 'u.uid = cu.entity_id');
+    $query->fields('cu', ['field_customer_target_id']);
+    $query->condition('cu.field_customer_target_id', $customerid);
+  }
+  if ($job_title != NULL && !preg_match("/all/i", $job_title)) {
+    $query->join('user__field_job_title', 'j', 'j.entity_id = u.uid');
+    $query->fields('j', ["field_job_title_target_id"]);
+    $query->condition('j.field_job_title_target_id', $job_title, "IN");
+  }
+  if ($asset != NULL) {
+    $query->join('user__field_asset', 'a', 'a.entity_id = u.uid');
+    $query->fields('a', ["field_asset_target_id"]);
+    $query->condition('a.field_asset_target_id', $asset, "IN");
+  }
+
+  if ($region != NULL) {
+    $query->join('user__field_location', 'l', 'l.entity_id = u.uid');
+    $query->fields('l', ["field_location_country_code"]);
+    $query->condition('l.field_location_country_code', $region, "IN");
+  }
+
+  if ($start_date != NULL && $end_date != NULL) {
+    $query->join('user__field_course_details', 'c', 'c.entity_id = u.uid');
+    $query->join('paragraphs_item_field_data', 'd', 'd.id = c.field_course_details_target_id');
+    $query->join('paragraph__field_expiry_date', 'ed', 'ed.entity_id = d.id');
+    $query->fields('ed', ["field_expiry_date_value"]);
+    $query->condition('ed.field_expiry_date_value', $end_date, '<=');
+    $query->join('paragraph__field_start_date', 'sd', 'sd.entity_id = d.id');
+    $query->fields('sd', ["field_start_date_value"]);
+    $query->condition('sd.field_start_date_value', $start_date, '>=');
+  }
+  $result = $query->execute()->fetchAll();
+
+  $total_certificate = '0';
+  foreach ($result as $value) {
+    $total_certificate = $total_certificate + count(list_certificate($value->uid));
+  }
+
+  $count = 0;
+  foreach ($result as $value) {
+    $certificate_list = list_certificate($value->uid);
+    $user_certificate = certificate_expiration_date($value->uid);
+
+    foreach ($certificate_list as $certi) {
+      $field_expiry_date = isset($user_certificate[$certi]) ? strtotime($user_certificate[$certi]) : 0;
+      $current_date = new DrupalDateTime();
+      $current_date = strtotime($current_date);
+      $diff = abs($field_expiry_date - $current_date);
+      $years = round($diff / 60 / 60 / 24 / 365);
+      $months = round($diff / 60 / 60 / 24 / 30);
+
+      if ($months < 6) {
+        $count = $count + 1;
+      }
+    }
+  }
+
+  $score = number_format((float) ($count * 100) / $total_certificate, 2, '.', '');
+
+  return (int) $score;
+}
+
+/**
+ * {@inheritdoc}
+ */
+function to_be_actioned($asset = NULL, $job_title1 = NULL, $region = NULL, $start_date = NULL, $end_date = NULL) {
+  $customerid = get_session_customerid();
+  $connection = \Drupal::database();
+  $query = $connection->select('user__field_certificates ', 'c');
+  $query->fields('c', ['entity_id', 'field_certificates_target_id']);
+  $query->join('paragraph__field_expiry_date', 'd', 'd.entity_id = c.field_certificates_target_id');
+  $query->fields('d', ['field_expiry_date_value']);
+  $user_certificate = $query->execute()->fetchAll();
+
+  $connection = \Drupal::database();
+  $query = $connection->select('node_field_data', 'n');
+  $query->fields('n', ['nid', 'title']);
+  $query->condition('n.type', 'asset');
+  if ($asset != NULL) {
+    $query->condition('n.nid', $asset, 'IN');
+  }
+
+  $result = $query->execute()->fetchAll();
+  $six_plus = 0;
+  $six_to_three = 0;
+  $three_to_one = 0;
+  $one_month_or_expired = 0;
+  $count = 0;
+
+  foreach ($result as $key => $value) {
+    $asset_id = $value->nid;
+    $query1 = \Drupal::database()->select('node__field_asset', 'fa')->fields('fa', ['entity_id'])->condition('fa.field_asset_target_id', $asset_id)->condition('fa.bundle', 'job_title');
+    $query1->join('node_field_data', 'n', 'n.nid = fa.entity_id');
+    if ($job_title1 != NULL && !preg_match("/all/i", $job_title1)) {
+      $query1->condition('n.nid', $job_title1, 'IN');
+    }
+    $query1->fields('n', ['title']);
+    $job_title = $query1->execute()->fetchAll();
+
+    foreach ($job_title as $job) {
+      $query2 = \Drupal::database()->select('user__field_job_title', 'jt')->fields('jt', ['entity_id'])->condition('jt.field_job_title_target_id', $job->entity_id);
+      $query2->join('users_field_data', 'u', 'u.uid = jt.entity_id');
+      $query2->fields('u', ['name', 'uid']);
+      $query2->join('user__roles', 'r', 'u.uid = r.entity_id');
+      $query2->condition('r.roles_target_id', 'individual_employee');
+      if (!empty($customerid)) {
+        $query2->join('user__field_customer', 'cu', 'u.uid = cu.entity_id');
+        $query2->fields('cu', ['field_customer_target_id']);
+        $query2->condition('cu.field_customer_target_id', $customerid);
+      }
+      if ($region != NULL) {
+        $query2->join('user__field_location', 'l', 'l.entity_id = u.uid');
+        $query2->fields('l', ["field_location_country_code"]);
+        $query2->condition('l.field_location_country_code', $region, "IN");
+      }
+      $job_user = $query2->execute()->fetchAll();
+      $query3 = \Drupal::database()->select('node__field_certificate', 'fc');
+      $query3->fields('fc', ['entity_id', 'field_certificate_target_id']);
+      $query3->condition('fc.entity_id', $job->entity_id);
+      $query3->join('node_field_data', 'n', 'n.nid = fc.field_certificate_target_id');
+      $query3->fields('n', ['title']);
+      $certi = $query3->execute()->fetchAll();
+      $certificate_name = [];
+      $certificate_name['0'] = '';
+      foreach ($certi as $cer) {
+        $certificate_name[get_job_title_name($cer->field_certificate_target_id)] = get_job_title_name($cer->field_certificate_target_id);
+      }
+      foreach ($job_user as $user) {
+        $row = [];
+        $certificate_list = '';
+        $certificate_list = list_certificate($user->uid);
+        $user_certificate = certificate_expiration_date($user->uid);
+        $row_key = 1;
+        foreach ($certificate_name as $certi) {
+          if (!empty($certi)) {
+            if (in_array($certi, $certificate_list)) {
+              $color = '';
+              $field_expiry_date = isset($user_certificate[$certi]) ? strtotime($user_certificate[$certi]) : 0;
+              $query = $connection->select('user__field_course_details', 'c');
+              $query->fields('c', ['field_course_details_target_id']);
+              $query->condition('c.entity_id', $user->uid);
+              $query->join('paragraph__field_status', 'n', 'n.entity_id = c.field_course_details_target_id');
+              $query->condition('n.field_status_value',
+                ['completed', 'not required'], 'IN');
+              $query->join('paragraph__field_enable', 'e', 'e.entity_id = c.field_course_details_target_id');
+              $query->condition('e.field_enable_value', 1);
+              $query->join('paragraph__field_certificate_type', 'ct', 'ct.entity_id = c.field_course_details_target_id');
+              $query->join('node_field_data', 'nd', 'nd.nid = ct.field_certificate_type_target_id');
+              $query->condition('nd.title', $certi);
+              $user_course = $query->execute()->fetchAll();
+
+              $user_course_booking = [];
+              if (!empty($user_course)) {
+                $query = $connection->select('paragraph__field_close_booking', 'd');
+                $query->fields('d', ['field_close_booking_value']);
+                $query->condition('d.field_close_booking_value', '0');
+                $query->condition('d.entity_id', $user_course[0]->field_course_details_target_id);
+                $user_course_booking = $query->execute()->fetchAll();
+              }
+              else {
+                $user_course_booking = ['no course'];
+              }
+              $start_time = isset($user_certificate[$certi . '2']) ? strtotime($user_certificate[$certi . '2']) : '0';
+            //   $start_timestamp = $start_time->getTimestamp();
+              $expirty_time = isset($user_certificate[$certi]) ? strtotime($user_certificate[$certi]) : '0';
+            //   $expiry_timestamp = $expirty_time->getTimestamp();
+              $count_days = (($start_time - $expirty_time) / (1000 * 3600 * 24)) * 1000;
+              if (!empty($field_expiry_date) && !empty($user_course_booking)) {
+                $course = get_course_status($user->uid, $user_certificate[$certi . '5']);
+                if ($course == 'To be actioned') {
+                  $count = $count + 1;
+                }
+              }
+              $row_key++;
+            }
+          }
+        }
+      }
+    }
+  }
+  return $count;
+}
+
+/**
+ * {@inheritdoc}
+ */
+function get_course_status($uid, $certificate_id) {
+  $customerid = get_session_customerid();
+  $query2 = \Drupal::database()->select('user__field_course_details', 'n')
+    ->fields('n', ['field_course_details_target_id'])
+    ->condition('n.entity_id', $uid);
+  if (!empty($customerid)) {
+    $query2->join('user__field_customer', 'cu', 'n.entity_id = cu.entity_id');
+    $query2->fields('cu', ['field_customer_target_id']);
+    $query2->condition('cu.field_customer_target_id', $customerid);
+  }
+  $query2->join('paragraph__field_certificate_type', 'd', 'd.entity_id = n.field_course_details_target_id');
+  $query2->fields('d', ['field_certificate_type_target_id']);
+  $query2->condition('d.field_certificate_type_target_id', $certificate_id);
+  $query2->join('paragraph__field_status', 't', 'n.field_course_details_target_id = t.entity_id');
+  $query2->fields('t', ['field_status_value']);
+  $query2->join('paragraph__field_enable', 'e', 'e.entity_id = n.field_course_details_target_id');
+  $query2->condition('e.field_enable_value', 1);
+  $status = $query2->execute()->fetchAll();
+  // dump($status); die;.
+  if (!empty($status)) {
+    return $status[0]->field_status_value;
+  }
+  else {
+    return 'To be actioned';
+  }
+}
+
+/**
+ * {@inheritdoc}
+ */
+function course_expired($asset = NULL, $job_title = NULL, $region = NULL, $start_date = NULL, $end_date = NULL) {
+  $customerid = get_session_customerid();
+  $query = \Drupal::database()->select('user__field_course_details', 'n')
+    ->fields('n', ['field_course_details_target_id']);
+  $query->join('user__roles', 'r', 'r.entity_id = n.entity_id');
+  $query->condition('r.roles_target_id', ['individual_employee'], "IN");
+  if (!empty($customerid)) {
+    $query->join('user__field_customer', 'cu', 'n.entity_id = cu.entity_id');
+    $query->fields('cu', ['field_customer_target_id']);
+    $query->condition('cu.field_customer_target_id', $customerid);
+  }
+  $query->join('paragraph__field_expiry_date', 'd', 'd.entity_id = n.field_course_details_target_id');
+  $query->fields('d', ['field_expiry_date_value']);
+  $query->join('paragraphs_item_field_data', 's', 's.id = n.field_course_details_target_id');
+
+  if ($job_title != NULL && !preg_match("/all/i", $job_title)) {
+    $query->join('user__field_job_title', 'j', 'j.entity_id = n.entity_id');
+    $query->fields('j', ["field_job_title_target_id"]);
+    $query->condition('j.field_job_title_target_id', $job_title, "IN");
+  }
+  if ($asset != NULL) {
+    $query->join('user__field_asset', 'a', 'a.entity_id = n.entity_id');
+    $query->fields('a', ["field_asset_target_id"]);
+    $query->condition('a.field_asset_target_id', $asset, "IN");
+  }
+
+  if ($region != NULL) {
+    $query->join('user__field_location', 'l', 'l.entity_id = n.entity_id');
+    $query->fields('l', ["field_location_country_code"]);
+    $query->condition('l.field_location_country_code', $region, "IN");
+  }
+  if ($start_date != NULL && $end_date != NULL) {
+    $query->join('paragraph__field_expiry_date', 'ed', 'ed.entity_id = s.id');
+    $query->fields('ed', ["field_expiry_date_value"]);
+    $query->condition('ed.field_expiry_date_value', $end_date, '<=');
+    $query->join('paragraph__field_start_date', 'sd', 'sd.entity_id = s.id');
+    $query->fields('sd', ["field_start_date_value"]);
+    $query->condition('sd.field_start_date_value', $start_date, '>=');
+  }
+
+  $result = $query->execute()->fetchAll();
+  $count = 0;
+  foreach ($result as $value) {
+    $expiry = strtotime($value->field_expiry_date_value);
+    $current_date = new DrupalDateTime();
+    $current_date = strtotime($current_date);
+    if ($expiry < $current_date) {
+      $count++;
+    }
+  }
+  return $count;
+}
+
+/**
+ * {@inheritdoc}
+ */
+function cancellation_fees_courses($asset = NULL, $job_title = NULL, $region = NULL, $start_date = NULL, $end_date = NULL) {
+  $query = \Drupal::database()->select('users_field_data', 'u')
+    ->fields('u', ['name', 'uid']);
+  $customerid = get_session_customerid();
+  if (!empty($customerid)) {
+    $query->join('user__field_customer', 'cu', 'u.uid = cu.entity_id');
+    $query->fields('cu', ['field_customer_target_id']);
+    $query->condition('cu.field_customer_target_id', $customerid);
+  }
+  $query->join('user__field_certificates', 'ce', 'ce.entity_id = u.uid');
+  $query->join('paragraph__field_certificate_type', 'ct', 'ct.entity_id = ce.field_certificates_target_id');
+  $query->fields('ct', ['field_certificate_type_target_id']);
+  // $query->join('node_field_data', 'n', 'n.nid = ct.field_certificate_type_target_id');
+  $query->join('paragraph__field_enable', 'e', 'e.entity_id = ce.field_certificates_target_id');
+  $query->condition('e.field_enable_value', 1);
+  $query->join('user__field_course_details', 'c', 'c.entity_id = u.uid');
+  $query->join('paragraph__field_certificate_type', 'ctn', 'ctn.entity_id = c.field_course_details_target_id');
+  $query->fields('ctn', ['field_certificate_type_target_id']);
+  $query->join('paragraphs_item_field_data', 'd', 'd.id = c.field_course_details_target_id');
+  $query->join('paragraph__field_course_', 'se', 'se.entity_id = c.field_course_details_target_id');
+  $query->fields('se', ['field_course__target_id']);
+  // $query2->condition('f.title', 'Course 2');.
+  $query->join('paragraph__field_status', 'ps', 'ps.entity_id = c.field_course_details_target_id');
+  $query->fields('ps', ['field_status_value']);
+  $query->condition('ps.field_status_value', 'cancelled');
+  $query->join('paragraph__field_cancelled_fee', 'f', 'f.entity_id = c.field_course_details_target_id');
+  $query->fields('f', ['field_cancelled_fee_value']);
+  if ($job_title != NULL && !preg_match("/all/i", $job_title)) {
+    $query->join('user__field_job_title', 'j', 'j.entity_id = u.uid');
+    $query->fields('j', ["field_job_title_target_id"]);
+    $query->condition('j.field_job_title_target_id', $job_title, "IN");
+  }
+  if ($asset != NULL) {
+    $query->join('user__field_asset', 'a', 'a.entity_id = u.uid');
+    $query->fields('a', ["field_asset_target_id"]);
+    $query->condition('a.field_asset_target_id', $asset, "IN");
+  }
+
+  if ($region != NULL) {
+    $query->join('user__field_location', 'l', 'l.entity_id = u.uid');
+    $query->fields('l', ["field_location_country_code"]);
+    $query->condition('l.field_location_country_code', $region, "IN");
+  }
+
+  if ($start_date != NULL && $end_date != NULL) {
+    $query->join('paragraph__field_expiry_date', 'ed', 'ed.entity_id = d.id');
+    $query->fields('ed', ["field_expiry_date_value"]);
+    $query->condition('ed.field_expiry_date_value', $end_date, '<=');
+    $query->join('paragraph__field_start_date', 'sd', 'sd.entity_id = d.id');
+    $query->fields('sd', ["field_start_date_value"]);
+    $query->condition('sd.field_start_date_value', $start_date, '>=');
+  }
+  $status = $query->execute()->fetchAll();
+  $total = 0;
+  if (!empty($status)) {
+    foreach ($status as $value) {
+      if ($value->field_certificate_type_target_id == $value->ctn_field_certificate_type_target_id) {
+        $total += $value->field_cancelled_fee_value;
+      }
+    }
+  }
+  return $total;
+}
+
+/**
+ * {@inheritdoc}
+ */
+function training_count_certifcate_pending($asset = NULL, $job_title1 = NULL, $region = NULL, $start_date = NULL, $end_date = NULL) {
+  $customerid = get_session_customerid();
+  $output = [];
+  $connection = \Drupal::database();
+  $query = $connection->select('user__field_certificates ', 'c');
+  $query->fields('c', ['entity_id', 'field_certificates_target_id']);
+  $query->join('paragraph__field_expiry_date', 'd', 'd.entity_id = c.field_certificates_target_id');
+  $query->fields('d', ['field_expiry_date_value']);
+  $user_certificate = $query->execute()->fetchAll();
+
+  $query = $connection->select('node_field_data', 'n');
+  $query->fields('n', ['nid', 'title']);
+  $query->condition('n.type', 'asset');
+  if ($asset != NULL) {
+    $query->condition('n.nid', $asset, 'IN');
+  }
+  $result = $query->execute()->fetchAll();
+  $six_plus = 0;
+  $six_to_three = 0;
+  $three_to_one = 0;
+  $one_month_or_expired = 0;
+
+  foreach ($result as $key => $value) {
+    $asset_id = $value->nid;
+    $query1 = \Drupal::database()->select('node__field_asset', 'fa')->fields('fa', ['entity_id'])->condition('fa.field_asset_target_id', $asset_id)->condition('fa.bundle', 'job_title');
+    $query1->join('node_field_data', 'n', 'n.nid = fa.entity_id');
+    $query1->fields('n', ['title']);
+    if ($job_title1 != NULL && !preg_match("/all/i", $job_title1)) {
+      $query1->condition('n.nid', $job_title1, 'IN');
+    }
+    $job_title = $query1->execute()->fetchAll();
+    if (!empty($job_title)) {
+      foreach ($job_title as $job) {
+        $query2 = \Drupal::database()->select('user__field_job_title', 'jt')->fields('jt', ['entity_id'])->condition('jt.field_job_title_target_id', $job->entity_id);
+        $query2->join('users_field_data', 'u', 'u.uid = jt.entity_id');
+        $query2->fields('u', ['name', 'uid']);
+        $query2->join('user__roles', 'r', 'u.uid = r.entity_id');
+        $query2->condition('r.roles_target_id', 'individual_employee');
+        if (!empty($customerid)) {
+          $query2->join('user__field_customer', 'cu', 'u.uid = cu.entity_id');
+          $query2->fields('cu', ['field_customer_target_id']);
+          $query2->condition('cu.field_customer_target_id', $customerid);
+        }
+        if ($region != NULL) {
+          $query2->join('user__field_location', 'l', 'l.entity_id = u.uid');
+          $query2->fields('l', ["field_location_country_code"]);
+          $query2->condition('l.field_location_country_code', $region, "IN");
+        }
+        $job_user = $query2->execute()->fetchAll();
+        $query3 = \Drupal::database()->select('node__field_certificate', 'fc');
+        $query3->fields('fc', ['entity_id', 'field_certificate_target_id']);
+        $query3->condition('fc.entity_id', $job->entity_id);
+        $query3->join('node_field_data', 'n', 'n.nid = fc.field_certificate_target_id');
+        $query3->fields('n', ['title']);
+        $certi = $query3->execute()->fetchAll();
+        $certificate_name = [];
+        $certificate_name['0'] = '';
+        foreach ($certi as $cer) {
+          $certificate_name[get_job_title_name($cer->field_certificate_target_id)] = get_job_title_name($cer->field_certificate_target_id);
+        }
+        foreach ($job_user as $user) {
+          $row = [];
+          $certificate_list = '';
+          $certificate_list = list_certificate($user->uid);
+          $user_certificate = certificate_expiration_date($user->uid);
+          $row_key = 1;
+          foreach ($certificate_name as $certi) {
+            if (!empty($certi)) {
+              if (in_array($certi, $certificate_list)) {
+                $color = '';
+                $field_expiry_date = isset($user_certificate[$certi]) ? strtotime($user_certificate[$certi]) : 0;
+                $query = $connection->select('user__field_course_details', 'c');
+                $query->fields('c', ['field_course_details_target_id']);
+                $query->condition('c.entity_id', $user->uid);
+                $query->join('paragraph__field_status', 'n', 'n.entity_id = c.field_course_details_target_id');
+                $query->condition('n.field_status_value',
+                  ['completed', 'not required'], 'IN');
+                $query->join('paragraph__field_enable', 'e', 'e.entity_id = c.field_course_details_target_id');
+                $query->condition('e.field_enable_value', 1);
+                $query->join('paragraph__field_certificate_type', 'ct', 'ct.entity_id = c.field_course_details_target_id');
+                $query->join('node_field_data', 'nd', 'nd.nid = ct.field_certificate_type_target_id');
+                $query->condition('nd.title', $certi);
+                $user_course = $query->execute()->fetchAll();
+
+                $user_course_booking = [];
+                if (!empty($user_course)) {
+                  $query = $connection->select('paragraph__field_close_booking', 'd');
+                  $query->fields('d', ['field_close_booking_value']);
+                  $query->condition('d.field_close_booking_value', '0');
+                  $query->condition('d.entity_id', $user_course[0]->field_course_details_target_id);
+                  $user_course_booking = $query->execute()->fetchAll();
+                }
+                else {
+                  $user_course_booking = ['no course'];
+                }
+                $start_time = isset($user_certificate[$certi]) ? strtotime($user_certificate[$certi]) : 0;
+                // $start_timestamp = !empty($start_time) ? $start_time->getTimestamp() : 0;
+                $expirty_time = isset($user_certificate[$certi . '2']) ? strtotime($user_certificate[$certi . '2']) : 0;
+                // $expiry_timestamp = !empty($expirty_time) ? $expirty_time->getTimestamp() : 0;
+                $count_days = (($start_time - $expirty_time) / (1000 * 3600 * 24)) * 1000;
+                if (!empty($field_expiry_date) && !empty($user_course_booking)) {
+                  $row[$row_key]['cid'] = $user_certificate[$certi . '3'];
+                  $output[$user->uid . '' . $user_certificate[$certi . '3']] = $row;
+                }
+                $row_key++;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return count($output);
+
+}

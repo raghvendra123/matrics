@@ -1,0 +1,14 @@
+uuid: 461acba1-eb85-4d71-bc25-5c49bf114a39
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.scheduler
+  module:
+    - user
+id: user_remove_role_action.scheduler
+label: 'Remove the Scheduler role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: scheduler

@@ -1,0 +1,23 @@
+uuid: a4de6a99-876d-4c27-86ce-e3cfda51bdfc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_enable
+    - paragraphs.paragraphs_type.course
+id: paragraph.course.field_enable
+field_name: field_enable
+entity_type: paragraph
+bundle: course
+label: Enable
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

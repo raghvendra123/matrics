@@ -1,0 +1,309 @@
+<?php
+
+/**
+ * @file
+ * Functions to support the matrics reports module.
+ */
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Ajax\AppendCommand;
+use Drupal\Core\Locale\CountryManager;
+
+/**
+ * Implements hook_mail().
+ */
+function matrics_course_booking_mail($key, &$message, $params) {
+  $options = [
+    'langcode' => $message['langcode'],
+  ];
+  switch ($key) {
+    case 'course_Suggestion_email':
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed; delsp=yes';
+      $message['from'] = 'ryan.patidar@agile451.com';
+      $message['subject'] = 'Course Suggestion by Matrix';
+      $message['body'][] = Html::escape($params['message']);
+      break;
+
+    case 'reminder_email':
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed; delsp=yes';
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('Your mail subject Here: @title', ['@title' => $params['title']], $options);
+      $message['body'][] = Html::escape($params['message']);
+      break;
+
+    case 'user_mail_custom':
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed; delsp=yes';
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('Your mail subject Here: @title', ['@title' => $params['subject']], $options);
+      $message['body'][] = Html::escape($params['message']);
+      break;
+  }
+
+}
+
+/**
+ * Custom function.
+ */
+function get_providers_by_course($certificate = NULL, $course = NULL, $certificate_id = NULL, $customerid = NULL) {
+  $providers[''] = '- None -';
+  if ((!empty($certificate) || !empty($certificate_id)) && !empty($course)) {
+    $query = \Drupal::database()->select('node_field_data', 'n');
+    $query->condition('n.type', 'courses');
+    $query->join('node__field_certificates', 'cr', 'cr.entity_id = n.nid');
+    $query->fields('cr', ['field_certificates_target_id']);
+    $query->join('node_field_data', 'node', 'node.nid = cr.field_certificates_target_id');
+    if (!empty($certificate_id)) {
+      $query->condition('node.nid', $certificate_id);
+    }
+    else {
+      $query->condition('node.title', $certificate);
+    }
+    $query->condition('n.nid', $course);
+    $query->join('node__field_provider_details', 'p', 'n.nid = p.entity_id');
+    $query->fields('p', ['field_provider_details_target_id']);
+    $query->join('paragraph__field_provider_name', 'pn', 'pn.entity_id = p.field_provider_details_target_id');
+    $query->join('node_field_data', 'd', 'd.nid = pn.field_provider_name_target_id');
+    $query->fields('d', ['nid', 'title']);
+    if (!empty($customerid)) {
+      $query->join('node__field_customer', 'cus', 'n.nid = cus.entity_id');
+      $query->condition('cus.field_customer_target_id', $customerid);
+    }
+    $result1 = $query->execute()->fetchAll();
+    foreach ($result1 as $value) {
+      $providers[$value->nid] = $value->title;
+    }
+  }
+  return $providers;
+}
+
+/**
+ * Custom function.
+ */
+function get_course_price_by_provider($certificate = NULL, $course = NULL, $provider = NULL, $customerid = NULL) {
+  $course_price = 0;
+  if ((!empty($certificate) || !empty($certificate_id)) && !empty($course) && !empty($provider)) {
+    $query = \Drupal::database()->select('node_field_data', 'n');
+    $query->condition('n.type', 'courses');
+    $query->join('node__field_certificates', 'cr', 'cr.entity_id = n.nid');
+    $query->fields('cr', ['field_certificates_target_id']);
+    $query->join('node_field_data', 'node', 'node.nid = cr.field_certificates_target_id');
+    if (!empty($certificate_id)) {
+      $query->condition('node.nid', $certificate_id);
+    }
+    else {
+      $query->condition('node.title', $certificate);
+    }
+    $query->condition('n.nid', $course);
+    $query->join('node__field_provider_details', 'p', 'n.nid = p.entity_id');
+    $query->fields('p', ['field_provider_details_target_id']);
+    $query->join('paragraph__field_provider_name', 'pn', 'pn.entity_id = p.field_provider_details_target_id');
+    $query->condition('pn.field_provider_name_target_id', $provider);
+    $query->join('paragraph__field_cost', 'c', 'c.entity_id = p.field_provider_details_target_id');
+    $query->fields('c', ['field_cost_value']);
+    // if (!empty($customerid)) {
+    //   $query->join('node__field_customer', 'cus', 'n.nid = cus.entity_id');
+    //   $query->condition('cus.field_customer_target_id', $customerid);
+    // }
+    $result1 = $query->execute()->fetchAll();
+    if(!empty($result1)) {
+      $course_price = $result1[0]->field_cost_value;
+    }
+  }
+  return $course_price;
+}
+
+/**
+ * Custom function.
+ */
+function get_courses_by_certificate($certificate = NULL, $certificate_id = NULL, $customerid = NULL) {
+  $courses[''] = '- None -';
+  if (!empty($certificate) || !empty($certificate_id)) {
+    $connection = \Drupal::database();
+    $query = $connection->select('node_field_data', 'n');
+    $query->fields('n', ['nid', 'title']);
+    $query->condition('n.type', 'courses');
+    $query->join('node__field_certificates', 'cr', 'cr.entity_id = n.nid');
+    $query->fields('cr', ['field_certificates_target_id']);
+    $query->join('node_field_data', 'node', 'node.nid = cr.field_certificates_target_id');
+    if (!empty($certificate_id)) {
+      $query->condition('node.nid', $certificate_id);
+    }
+    else {
+      $query->condition('node.title', $certificate);
+    }
+    if (!empty($customerid)) {
+      $query->join('node__field_customer', 'cus', 'n.nid = cus.entity_id');
+      $query->condition('cus.field_customer_target_id', $customerid);
+    }
+    $result = $query->execute()->fetchAll();
+    foreach ($result as $value) {
+      $courses[$value->nid] = $value->title;
+    }
+  }
+  return $courses;
+}
+
+/**
+ * Custom function.
+ */
+function get_country_city($certificate = NULL) {
+  $country[''] = '- None -';
+  $city[''] = '- None -';
+  if (!empty($certificate)) {
+    $query = \Drupal::database()->select('node_field_data', 'n');
+    // $query->fields('n', ['nid', 'title']);
+    $query->condition('n.type', 'courses');
+    $query->join('node__field_certificates', 'cr', 'cr.entity_id = n.nid');
+    $query->fields('cr', ['field_certificates_target_id']);
+    $query->join('node_field_data', 'node', 'node.nid = cr.field_certificates_target_id');
+    // $query->fields('node', ['nid', 'title']);
+    $query->condition('node.title', $certificate);
+    $query->join('node__field_provider_details', 'npd', 'npd.entity_id = n.nid');
+    $query->fields('npd', ['field_provider_details_target_id']);
+    $query->join('paragraph__field_provider_name', 'npn', 'npn.entity_id = npd.field_provider_details_target_id');
+    $query->fields('npn', ['field_provider_name_target_id']);
+    $query->join('node__field_address', 'nadd', 'nadd.entity_id = npn.field_provider_name_target_id');
+    $query->fields('nadd', [
+      'field_address_country_code',
+      'field_address_locality',
+    ]);
+    $result1 = $query->execute()->fetchAll();
+    // dump($result);exit;
+    $countries = CountryManager::getStandardList();
+    foreach ($result1 as $values) {
+      foreach ($countries as $key => $value) {
+        if (((string) $key) == $values->field_address_country_code) {
+          $country[(string) $key] = (string) $value;
+        }
+      }
+      if (!in_array($values->field_address_locality, $city)) {
+        $city[$values->field_address_locality] = $values->field_address_locality;
+      }
+    }
+  }
+  $output['country'] = $country;
+  $output['city'] = $city;
+  return $output;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function matrics_course_booking_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (strpos($form_id, 'views_form_manage_courses_page_1_') !== FALSE) {
+    $form['message'] = [
+      '#type' => 'markup',
+      '#markup' => '<div id="result-message"></div>',
+    ];
+    $form['actions']['submit']['#disbaled'] = TRUE;
+    $form['actions']['submit']['#value'] = t('Save documents');
+    $form['actions']['submit']['#attributes']['class'][] = 'documents-upload';
+    $form['actions']['submit']['#ajax']['callback'] = 'custom_ajax_submit';
+  }
+}
+
+/**
+* Implements hook_views_pre_render.
+*/
+// function matrics_course_booking_views_pre_render(ViewExecutable $view) {
+//   if ($view->id()== 'user_blocks') {
+//       if($view->current_display == 'block_2') {
+//          foreach($view->result as $keys => $value){
+//                 dump($value);
+//                 foreach($value->_relationship_entities as $key => $value1) {
+//                  if ($key == 'field_course_details') {
+//                      if ($value1->get('field_status')->getValue()[0]['value']!='completed') {
+//                          $value1->set('field_start_date', 'Feedback');
+//                          $value->_relationship_entities[$key]->field_start_date = 'Feedback';
+//                          $value->_relationship_entities[$key]->set('field_start_date', 'Feedback');
+//                      }
+//                      dump($value->_relationship_entities);
+//                  }
+                 
+//                 //  $view->result[$keys] = $value->_relationship_entities;
+//             //  dump($value1->get('field_status')->getValue());
+//              }
+//             // $value->_entity->set('title', 'teststt');
+//         }
+//       }
+//   }
+// }
+
+// function matrics_course_booking_preprocess_views_view_field(&$variables) {
+    
+//   if ($variables['view']->id() == 'user_blocks') {
+//       dump($variables['field']->field);
+//     if ($variables['field']->field == 'field_start_date') {
+//         dump($variables['row']->_relationship_entities);
+//         $variables['row']->_relationship_entities->field_course_details->getValue()[0]['value'];
+//       foreach($variables['row']->_relationship_entities as $key => $value1) {
+//                  if ($key == 'field_course_details') {
+//                      if ($value1->get('field_status')->getValue()[0]['value']!='completed') {
+//                          $value1->set('field_start_date', 'Feedback');
+//                      }
+//                      dump($value->_relationship_entities);
+//                  }
+//       }
+//     //   $title_value = $paragraph->title->getValue()[0]['value']; // <-- this will generate errors
+//     }
+//   }
+// }
+
+/**
+ * Inheritance.
+ */
+function custom_ajax_submit($form, $form_state) {
+  $response = new AjaxResponse();
+  $fids = [];
+  $new_count = '';
+  if ($form_state->hasAnyErrors()) {
+    $messages = [
+      '#theme'        => 'status_messages',
+      '#message_list' => \Drupal::messenger()->all(),
+    ];
+    $response->addCommand(new ReplaceCommand('#result-message', ''));
+    $response->addCommand(new AppendCommand('#result-message', $messages));
+    $response->addCommand(new HtmlCommand('#result-message', $messages));
+  }
+  else {
+    if ($form_state->getUserInput() && isset($form_state->getUserInput()['form_field_field_documents'])) {
+      $field_documents = $form_state->getUserInput()['form_field_field_documents'][0]['field_documents'];
+      if ($field_documents) {
+        foreach ($field_documents as $document) {
+          if ($document['fids']) {
+            $fids[] = $document['fids'];
+          }
+        }
+      }
+      if (!empty($fids)) {
+        $new_count = count($fids);
+      }
+    }
+    $previous_count = '';
+    if ($form_state->getStorage('files') && isset($form_state->getStorage('files')['field_storage']['#parents']['form_field_field_documents'][0]['#fields']['field_documents']['items_count'])) {
+      $previous_count = $form_state->getStorage('files')['field_storage']['#parents']['form_field_field_documents'][0]['#fields']['field_documents']['items_count'];
+    }
+
+    \Drupal::messenger()->deleteAll();
+    if ($new_count > $previous_count) {
+      $messages = \Drupal::messenger()->addMessage(t('New documents uploaded successfully'), 'status', TRUE);
+    }
+    elseif ($new_count < $previous_count) {
+      $messages = \Drupal::messenger()->addMessage(t('document deleted successfully'), 'status', TRUE);
+    }
+    else {
+      $messages = \Drupal::messenger()->addMessage(t('No documents uploaded, Please upload documents'), 'status', TRUE);
+    }
+    $messages = [
+      '#theme' => 'status_messages',
+      '#message_list' => \Drupal::messenger()->all(),
+    ];
+    $response->addCommand(new AppendCommand('#result-message', $messages));
+  }
+
+  return $response;
+}

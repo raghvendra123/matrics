@@ -1,0 +1,9 @@
+entity_view_mode_normalize.config_form:
+  path: '/admin/config/services/rest/simple-entity-serialize'
+  defaults:
+    _form: '\Drupal\entity_view_mode_normalize\Form\SimpleEntitySerializeConfigForm'
+    _title: 'Simple Entity Serialize Config'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE

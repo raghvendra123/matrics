@@ -1,0 +1,19 @@
+uuid: e2cff706-fa66-4007-a40f-8bcc3c710945
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: dashboard
+plugin_id: dashboard
+granularity: resource
+configuration:
+  methods:
+    - GET
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

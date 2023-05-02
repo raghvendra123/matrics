@@ -1,0 +1,34 @@
+uuid: 270f3996-c8cb-46c2-b4a6-3c2057d07f7e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.job_title.body
+    - field.field.node.job_title.field_asset
+    - field.field.node.job_title.field_certificate
+    - node.type.job_title
+  module:
+    - text
+    - user
+id: node.job_title.teaser
+targetEntityType: node
+bundle: job_title
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_asset: true
+  field_certificate: true

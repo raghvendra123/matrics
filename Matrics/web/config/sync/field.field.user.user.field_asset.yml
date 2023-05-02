@@ -1,0 +1,30 @@
+uuid: 30926ce8-42e4-4a29-80d6-c819362a7b2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_asset
+    - node.type.asset
+  module:
+    - user
+id: user.user.field_asset
+field_name: field_asset
+entity_type: user
+bundle: user
+label: Asset
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      asset: asset
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

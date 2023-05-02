@@ -1,0 +1,547 @@
+input[data-drupal-selector="edit-preview"] {
+    float: left;
+    margin-right: 5px;
+}
+
+/*.report_listing {*/
+/*    position: absolute;*/
+/*    z-index: 999;*/
+/*    top: 400px;*/
+/*    width: 66.6%;*/
+/*}*/
+.report_page {
+    position: relative;
+}
+form#views-exposed-form-all-courses-page-1 .form-item-field-customer-target-id{
+    display: none;
+}
+form#views-exposed-form-all-courses-page-1 {
+    margin-top: 30px;
+}
+.pagination.course_pagination li {
+    display: block !important;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.dashboard-page .form-item-field-training-gapcount-other, .dashboard-page .form-item-field-training-gap-other{
+    width: 100% !important;
+}
+a#edit-cancel{
+    color: #ffffff;
+    padding: 5px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    line-height: 1.5;
+    border: 1px solid transparent;
+    width: auto;
+    margin-top: 0;
+    display: inline-block;
+    text-decoration: none;
+    background: #009DDC;
+}
+form.customer-select-form {
+    padding: 0 20px;
+}
+form.customer-select-form select option {
+    color: #333;
+}
+form.customer-select-form select {
+    background: transparent !important;
+    border: 1px solid #fff !important;
+    color: #fff !important;
+    padding: 10px !important;
+    height: 40px;
+}
+/*25-07-2022*/
+#sidebar-wrapper .sidebar_top .navbar-brand{
+    height: auto;
+}
+.path-frontpage .ui-dialog .tabledrag-test-form .dashboardform-inner table tbody td .form-type-checkbox{
+    margin: 5px 0 0;
+}
+.path-training-manage .ui-dialog .ui-dialog-titlebar-close,
+.ui-dialog .ui-dialog-titlebar-close{
+    right: 15px;
+    background-image: url(/themes/custom/matrics/img/cancel_icon.png) !important;
+    z-index: 9999;
+    background-size: contain !important;
+}
+.ui-dialog .ui-dialog-titlebar-close .ui-icon::before,
+.path-training-manage .ui-dialog .ui-dialog-titlebar-close .ui-icon::before{
+    height: 100%;
+    width: 100%;
+    line-height: 100%;
+    left: -1px;
+    top: 1px;
+}
+.path-training-manage .ui-dialog .table-responsive table.field-multiple-table tr td:first-child{
+    display: none;
+}
+.path-training-manage .ui-dialog .table-responsive table .paragraphs-subform .paragraphs-content{
+    margin-bottom: 15px;
+}
+.path-training-manage .ui-dialog .table-responsive table .paragraphs-subform .paragraphs-content .js-form-item label,
+.path-training-manage .ui-dialog .table-responsive td .label{
+    font-size: 14px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 5px;
+}
+.path-training-manage .ui-dialog .table-responsive table .paragraphs-subform .paragraphs-content .js-form-item input,
+.path-training-manage .ui-dialog .table-responsive table .paragraphs-subform .paragraphs-content .js-form-item select{
+    display: block;
+    width: 100%;
+    padding: 10px 10px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #000000;
+    background-color: #ffffff;
+    height: 50px;
+    border: 1px solid #707070;
+}
+.path-training-manage .ui-dialog .table-responsive table .paragraphs-subform .paragraphs-content .container-inline .js-form-item.js-form-type-date{
+    display: block;
+    width: 100%;
+}
+.path-training-manage .ui-dialog .table-responsive table .paragraphs-subform .paragraphs-content .field--type-address summary{
+    margin-bottom: 10px;
+    margin-top: 25px;
+}
+.path-training-manage .ui-dialog .table-responsive table .paragraphs-subform .paragraphs-content .form-type-managed-file .form-submit{
+    margin-top: 10px;
+}
+.path-frontpage .ui-dialog .tabledrag-test-form .form-type-checkbox label{
+    margin-left: auto;
+    margin-right: auto;
+}
+.path-frontpage .ui-dialog .tabledrag-test-form .dashboardform-inner table thead th:nth-child(3),
+.path-frontpage .ui-dialog .tabledrag-test-form .dashboardform-inner table thead th:nth-child(4){
+    text-align: center;
+}
+
+.path-supplier-portal .dashboard-rightbar .region-content .page-topForm {
+    padding: 32px 30px 0;
+    margin: 0px 0px 0;
+}
+.path-supplier-portal .dashboard-rightbar .region-content .view-filters .page-topForm label {
+    width: 60px;
+    min-width: 40px;
+}
+
+.report_data {
+    vertical-align: top;
+    background: #d4f3ff;
+    padding: 20px;
+    border-radius: 10px;
+}
+.page-node-type-reports div#block-matrics-local-tasks {
+    display: none;
+}
+.node-reports-edit-form .reports_left > h2, .node-reports-edit-form .reports_left .views-element-container, .node-reports-edit-form .report_listing, .node-financial-edit-form .report_listing {
+    display: none;
+}
+
+.course-list-table .col-md-3 {
+    float: left;
+}
+.course-list-table .col-md-3 .form-item {
+    padding-right: 20px;
+}
+.course-list-table input#edit-submit {
+    clear: both;
+    float: left;
+}
+
+.profile .field.field--name-field-last-name::before {
+    background-image: url(../img/employment-man.png);
+}
+
+.ui-dialog-title {
+    opacity: 0;
+}
+#block-suggestedcoursed {
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    background: #ffffff;
+}
+#block-suggestedcoursed .content > h2 {
+    padding: 10px 15px;
+    font-size: 19px;
+    margin: 0;
+    cursor: pointer;
+    border-bottom: 1px solid #ebebeb;
+}
+#block-suggestedcoursed .content > h2::before {
+    content: "+";
+    margin: 0 10px 0 0;
+    width: 15px;
+    display: inline-block;
+    vertical-align: middle;
+}
+#block-suggestedcoursed .content > h2:hover {
+    color: #009DDC;
+}
+#block-suggestedcoursed .content >.suggested {
+    display: none;
+    margin-top: 10px;
+}
+#block-suggestedcoursed  .content.open-suggest > h2::before{
+    content: "-";
+}
+#block-suggestedcoursed  .content.open-suggest  > .suggested {
+    display: block;
+}
+.no_record{
+    padding: 10px 15px;
+}
+#drupal-modal input[data-drupal-selector="edit-save1"] {
+    right: 15px;
+    position: absolute;
+}
+
+span.suggested_count {
+    position: absolute;
+    left: 20px;
+    top: 0;
+    background: #fff;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    color: #000;
+    text-align: center;
+}
+
+.form-select.bef-links, #edit-field-type-value--2 {
+    border: none;
+    background-image: none;
+    border-bottom: 1px solid #cdcdcd;
+    border-radius: 0;
+}
+.form-select.bef-links ul, #edit-field-type-value--2 ul {
+    padding: 0;
+}
+.form-select.bef-links li, #edit-field-type-value--2 li {
+    display: inline-block;
+    margin-right: 20px;
+}
+.form-select.bef-links li a, #edit-field-type-value--2 li a {
+    color: #333;
+}
+.form-select.bef-links li a.bef-link--selected, #edit-field-type-value--2 li a.bef-link--selected {
+    color: #009DDC;
+}
+a.button.js-form-submit.form-submit.book-button {
+    color: #fff;
+    text-decoration: none;
+    height: 50px;
+    padding: 8px 20px;
+}
+.ui-dialog .view-manage-courses.view-display-id-block_3 .views-field {
+    display: block;
+}
+body.authenticated .view-user-blocks.view-display-id-block_2 .views-field-view {
+    display: none;
+}
+body.authenticated.mnager .view-user-blocks.view-display-id-block_2 .views-field-view, body.authenticated.administrator .view-user-blocks.view-display-id-block_2 .views-field-view {
+    display: table-cell;
+    text-align: center;
+}
+
+a.use-ajax.button.btn.add-certificate-btn {
+    display: none;
+}
+
+.authenticated.mnager a.use-ajax.button.btn.add-certificate-btn, .authenticated.administrator a.use-ajax.button.btn.add-certificate-btn {
+    display: initial;
+}
+
+.cross-img {
+    width: 25px;
+}
+
+.faq_data {
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    background: #ffffff;
+    margin: 0 0 30px;
+}
+.faq_data h2 {
+    padding: 10px 15px;
+    font-size: 19px;
+    margin: 0;
+    cursor: pointer;
+    border-bottom: 1px solid #ebebeb;
+}
+.faq_data h2:before {
+    content: "+";
+        margin: 0 10px 0 0;
+    width: 15px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.open-faq.faq_data h2:before {
+    content: "-";
+}
+.faq_ans {
+    display: none;
+    padding: 20px 20px 1px 20px;
+}
+.open-faq .faq_ans {
+    display: block;
+}
+.upload-file-icon {
+    display: inline-block !important;
+}
+img.cross-img {
+    position: relative;
+    top: 15px;
+    border: 1px solid #cdcdcd;
+}
+
+.views-field-field-start-date .addtocal{
+    background: #003768;
+    color: #ffffff;
+    padding: 5px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    line-height: 1.5;
+    border: 1px solid transparent;
+    transition: all 0.3s ease 0s;
+    min-width: 190px;
+}
+.views-field-field-start-date  .addtocal-container .addtocal-menu {
+    background: #003768;
+    min-width: 172px;
+  
+}
+.views-field-field-start-date .addtocal-container .addtocal-link a {
+    color: #ffffff;
+}
+
+.views-field-field-start-date .addtocal-container .addtocal-link a:hover, .addtocal-container .addtocal-link a:focus {
+    background: #000000;
+}
+.block-views-blockuser-blocks-block-2 > .content .view-user-blocks table {
+    min-height: 150px;
+}
+
+tr.status-Passed td.views-field.views-field-field-start-date .addtocal-container, tr.status-Passed td.views-field.views-field-views-conditional-field-1, 
+tr.status-failed td.views-field.views-field-field-start-date .addtocal-container, tr.status-failed td.views-field.views-field-views-conditional-field {
+    display: none;
+}
+
+.status-Cancelled td.views-field.views-field-field-start-date .addtocal-container {
+    display: none;
+}
+
+.views-field-field-file .views-field-view-user a::before {
+    background: url(../img/eye.png) no-repeat center center;
+}
+/*.view-reports .views-field-field-file a {*/
+/*    display: inline-block;*/
+/*}*/
+
+.logged-in p.session {
+    max-width: 100%;
+}
+.profile .field__label {
+    font-weight: bold;
+}
+.profile .field__item {
+    color: #000000;
+}
+
+.star-ratings {
+	 unicode-bidi: bidi-override;
+	 color: #ccc;
+	 font-size: 30px;
+	 position: relative;
+	 margin: 0;
+	 padding: 0;
+}
+ .star-ratings .fill-ratings {
+	 color: #3da8dc;
+	 padding: 0;
+	 position: absolute;
+	 z-index: 1;
+	 display: block;
+	 top: 0;
+	 left: 0;
+	 overflow: hidden;
+}
+ .star-ratings .fill-ratings span {
+	 display: inline-block;
+}
+ .star-ratings .empty-ratings {
+	 padding: 0;
+	 display: block;
+	 z-index: 0;
+}
+/**27-01-2023**/
+.dashboard-page .card-icon {
+    overflow: hidden;
+}
+.dark_mode .login-wrapper {
+    background-color: #dfdfdf;
+}
+.dark_mode  .login_form .form-group label,.dark_mode   .login_form .js-form-item label {
+    background-color: #dfdfdf;
+}
+.dark_mode .login_form  .custom-form input, .dark_mode .login_form  .custom-form select, .dark_mode .login_form  .custom-form textarea {
+    background-color: #f1f1f1;
+}
+body.dark_mode {
+     background-color: #bdbcbc;
+}
+.dark_mode .page-topForm {
+     background-color: #bdbcbc;
+}
+.dark_mode .dashboard-page .card {
+    background-color:#dfdfdf;
+
+}
+.dark_mode  .dashboard-content .card-content h3 {
+    color: #000000;
+}
+.dark_mode .select2-container--default .select2-selection--multiple {
+    background-color: #dfdfdf;
+}
+.dark_mode .custom-form input, .dark_mode .custom-form select, .dark_mode .custom-form textarea {
+    color: #000000;
+    background-color: #dfdfdf;
+}
+.dark_mode .dashboard-page .card-icon {
+
+    background-color: transparent;
+}
+.dark_mode ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #000000 !important ;
+  opacity: 1; /* Firefox */
+}
+
+.dark_mode  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #000000 !important ;
+}
+
+.dark_mode  ::-ms-input-placeholder { /* Microsoft Edge */
+  color: #000000 !important ;
+}
+
+.dark_mode .chart_toggle {
+     background-color: #dfdfdf;
+
+}
+.dark_mode .table-design {
+     background-color: #dfdfdf; color: #000000;
+}
+.dark_mode .dashboardform-inner .table thead th{background-color: #dfdfdf;
+}
+.dark_mode .form-control, .dark_mode .form-text, .dark_mode .form-select, .dark_mode .form-email, .dark_mode .form-textarea {
+    background-color: #bdbcbc;
+}
+.dark_mode .chart_toggle h2 {
+    border-bottom: none;
+}
+.dark_mode  .table-design tbody tr:nth-child(odd), .dark_mode .table-design tbody tr:nth-child(odd) td , .dark_mode .dashboardform-inner tbody tr:nth-child(odd) {
+        background-color: #d3d3d3;
+}
+.dark_mode  .dashboardform-inner .table tbody td {
+    color: #000000;
+}
+.dark_mode  .pagination span {
+      background-color: #bdbcbc;
+}
+.dark_mode .custom-ul-list li a {
+     background-color: #dfdfdf;
+}
+.dark_mode  .reports_left .check-box .form-group label {
+     background-color: #dfdfdf;
+ 
+}
+.dark_mode  .dashboard-rightbar .region-content .view-filters .page-topForm label {
+    background-color: #bdbcbc ;
+    color: #000000;
+   
+}
+.dark_mode  .faq_data {
+    background-color: #dfdfdf;
+    overflow: hidden;
+}
+.dark_mode .faq_data h2 {
+    margin: 0 0 -1px;
+}
+.dark_mode .js .paragraphs-collapsed-description:after {
+    background-color: transparent;
+}
+.dark_mode  .dashboard-rightbar .region-content .view-filters .page-topForm select, .dark_mode  .dashboard-rightbar .region-content .view-filters .page-topForm input {
+    background-color: #dfdfdf;
+}
+.dark_mode  #slider-distance > div > [thumb] {
+    background-color: #dfdfdf;
+}
+
+.bulk-certificate-form .form-item input.error, .bulk-certificate-form .form-item textarea.error, .bulk-certificate-form .form-item select.error {
+    border: 2px solid red;
+}
+.bulk-certificate-form .error.form-managed-file input {
+    border: 2px solid red;
+}
+.access-denied {
+    width: 100%;
+    background: #06233D;
+    color: #fff;
+    margin: auto;
+    padding-top: 150px;
+    height: 100vh;
+}
+.login-page-url {
+    color: #fff;
+}
+.login-page-url .tabs.primary li a {
+    color: #fff;
+}
+.login-body.register-page { display: block; }
+/*14-feb*/
+.bulk-certificate-form label { font-size: 14px; }
+.bulk-certificate-form select { font-size: 12px;  min-width: 150px;}
+.bulk-certificate-form input { font-size: 12px;  min-width: 150px;}
+
+.user-register-form .form-type-checkbox.form-item-notify input, .user-form .form-type-checkbox.form-item-notify input, .user-register-form .form-type-checkbox.form-item-field-notification-status-value input, .user-form .form-type-checkbox.form-item-field-notification-status-value input {
+    display: inline-block;
+    height: 22px;
+    width: 22px;
+    margin-right: 4px;
+}
+.user-form .form-type-checkbox.form-item-field-notification-status-value { 
+    margin-top: 20px;
+}
+.report_page .views-field-view-user a, .report_page .views-field-field-file a, .report_page .views-field-edit-node a, .report_page .send-mail a, .report_page .share-file a, .report_page .views-field-delete-node a {
+    margin: auto;
+}
+.path-report-view a.btn.btn-primary {
+    color: #fff;
+}
+.user-edit .paragraphs-dropbutton-wrapper button {
+    display: none;
+}
+.reports_left .table-design {
+    overflow: auto;
+    margin-bottom:0;
+}
+@media only screen and (max-width: 991px) {
+       .form-select.bef-links{
+           min-height: 40px;
+           height: 100%;
+       }
+}
+@media only screen and (max-width: 767px) {
+        .course-list-table .col-md-3 {
+            float: none;
+}
+.course-list-table .js-form-item{
+ margin: 0;   
+}
+}
+table.tiltHeader th{
+  word-break: break-word;
+}

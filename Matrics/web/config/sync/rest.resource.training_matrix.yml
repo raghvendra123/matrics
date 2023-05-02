@@ -1,0 +1,18 @@
+uuid: 677b3bbe-5f90-455d-9499-ea51c3e4bda1
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: training_matrix
+plugin_id: training_matrix
+granularity: resource
+configuration:
+  methods:
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

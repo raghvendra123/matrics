@@ -1,0 +1,468 @@
+{% set roles = user.getroles(TRUE) %}
+<div class="filter-mobile-head"><h2>Filter</h2></div>
+<div class="page-topForm page-topForm-mobile" style="width:100%">
+    {{ blocks }}
+</div>
+<!-- Dashboard Content Start -->
+<div class="dashboard-content" id="box-content" style="clear:both;">
+  <div class="page-header ">
+    <div class="page-header__inner">
+      <h1>{{ dashboard_title }} {{ dashboard_title_url }}</h1>
+      {% if roles[0] == 'administrator' or  roles[0] == 'mnager' or  roles[0] == 'tms_admins_' %} 
+        <a href="/manage/tiles" class="use-ajax manage_dashboard" data-dialog-options="{&quot;width&quot;:800}" data-dialog-type="modal">   Manage Dashboard   </a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="row card-parent customCard-width" style="display: flex; display: -webkit-flex;">
+    <!-- Card  Start -->
+    {% if tile_status[0].status == 1 %}
+        {#<div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[0].tile_order}}">#}
+        {#    <a href="/dashboard-tile/booking_in_progress" class="card use-ajax" data-dialog-options="{&quot;width&quot;:800}" data-dialog-type="modal">#}
+        {#        <div class="card--inner">#}
+        {#            <div class="card-content">#}
+        {#                <h3>Bookings in progress</h3>#}
+        {#                <p>{{ items['inprogress_count'] }}</p>#}
+                        
+        {#            </div>#}
+        {#            <div class="card-icon">#}
+        {#                <img src="/themes/custom/matrics/img/booking.png" alt="">#}
+        {#            </div>#}
+        {#        </div>#}
+        {#    </a>#}
+        {#</div>#}
+        <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[0].tile_order}}">
+          <a href="/dashboard-tile/course_booked" class="card use-ajax" data-dialog-options="{&quot;width&quot;:800}" data-dialog-type="modal">
+            <div class="card--inner">
+              <div class="card-content">
+                <h3>Booked Course</h3>
+                <p>{{ items['course_booked'] }}</p>
+              </div>
+              <div class="card-icon">
+                <img src="/themes/custom/matrics/img/booking.png" alt="">
+              </div>
+            </div>
+          </a>
+        </div>
+    {% endif %}
+    <!-- Card  End -->
+    <!-- Card  Start -->
+    {% if tile_status[1].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[1].tile_order}}">
+        <a href="/dashboard-tile/booking_completed" class="card use-ajax" data-dialog-options="{&quot;width&quot;:800}" data-dialog-type="modal">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Booking completed</h3>
+              <p>{{ items['complete_count'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/booking_confirm.png" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    <!-- Card  Start -->
+    {% if tile_status[2].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[2].tile_order}}">
+        <a href="/dashboard-tile/booking_cancelled_by_customer" class="card use-ajax" data-dialog-options="{&quot;width&quot;:800}" data-dialog-type="modal">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Bookings cancelled by customer</h3>
+              <p>{{ items['cacelled_count_customer'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/cancel_icon.png" alt="">
+              {#<img src="/themes/custom/matrics/img/complete_icon.png" alt="">#}
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    <!-- Card  Start -->
+    {% if tile_status[3].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[3].tile_order}}">
+        <a href="/dashboard-tile/booking_cancelled_by_provider" class="card use-ajax" data-dialog-options="{&quot;width&quot;:800}" data-dialog-type="modal">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Booking cancelled by training provider</h3>
+              <p>{{ items['cacelled_count_provider'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/cancel_icon.png" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    <!-- Card  Start -->
+    {% if tile_status[4].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[4].tile_order}}">
+        <a href="/dashboard-tile/total_spend_TMS" class="card use-ajax" data-dialog-options="{&quot;width&quot;:800}" data-dialog-type="modal">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Total spend – TMS charges </h3>
+              <p>£{{ items['cmt_fee_courses'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/pound-currency.jpg" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    <!-- Card  Start -->
+    {% if tile_status[5].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[5].tile_order}}">
+        <a href="/dashboard-tile/total_spend_Customer" class="card use-ajax" data-dialog-options="{&quot;width&quot;:800}" data-dialog-type="modal">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Total spend – training courses</h3>
+              <p>£{{ items['customer_fee_courses'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/pound-currency.jpg" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    <!-- Card  Start -->
+    {% if tile_status[6].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[6].tile_order}}">
+        <a href="javascript:void(0);" class="card">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Total spend – cancellation fees</h3>
+              <p>£{{ items['cancellation_fees_courses'] }}
+              </p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/pound-currency.jpg" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    <!-- Card  Start -->
+    {% if tile_status[7].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[7].tile_order}}">
+        <a href="/dashboard-tile/course_duration" class="card use-ajax" data-dialog-options="{&quot;width&quot;:800}" data-dialog-type="modal">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Number of training days</h3>
+              <p>{{ items['course_duration'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/icon1.png" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    <!-- Card  Start -->
+    {% if tile_status[8].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[8].tile_order}}">
+        <a href="/training-management" class="card">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Training providers used</h3>
+              {{ drupal_view('courses_list', 'block_3') }}
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/profile-setting.png" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    <!-- Card  Start -->
+    {% if tile_status[9].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[9].tile_order}}">
+        <a href="/supplier-portal" class="card">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Approved training providers</h3>
+              <p>{{ items['approved_training_provider'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/profile-setting.png" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    <!-- Card  Start -->
+     
+    {% if tile_status[10].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[10].tile_order}}">
+        <a href="/dashboard-tile/course_passed" class="card use-ajax" data-dialog-options="{&quot;width&quot;:800}" data-dialog-type="modal">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Courses passed</h3>
+              <p>{{ items['course_passed'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/icon1.png" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    <!-- Card  Start -->
+    {% if tile_status[11].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[11].tile_order}}">
+        <a href="/dashboard-tile/course_failed" class="card use-ajax" data-dialog-options="{&quot;width&quot;:800}" data-dialog-type="modal">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Courses failed</h3>
+              <p>{{ items['course_failed'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/icon1.png" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    <!-- Card  Start -->
+    {% if tile_status[12].status == 1 %}
+        {#<div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[12].tile_order}}">#}
+        {#  <a href="javascript:void(0);" class="card">#}
+        {#    <div class="card--inner">#}
+        {#      <div class="card-content">#}
+        {#        <h3>Courses resit</h3>#}
+        {#        <p>{{ items['course_resit'] }}</p>#}
+        {#      </div>#}
+        {#      <div class="card-icon">#}
+        {#        <img src="/themes/custom/matrics/img/icon1.png" alt="">#}
+        {#      </div>#}
+        {#    </div>#}
+        {#  </a>#}
+        {#</div>#}
+    {% endif %}
+    <!-- Card  End -->
+    
+    
+    
+    <!-- Card  Start -->
+    {% if tile_status[13].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[13].tile_order}}">
+        <a href="/dashboard-tile/employee" class="card use-ajax" data-dialog-options="{&quot;width&quot;:800}" data-dialog-type="modal">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Employees registered</h3>
+              <p>{{ items['employees_registered'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/profile-setting.png" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    
+    <!-- Card  Start -->
+    {% if tile_status[14].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[14].tile_order}}">
+        <a href="/certification" class="card">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Certificates issued</h3>
+              <p>{{ items['certificate_issued'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/icon1.png" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    <!-- Card  Start -->
+    {% if tile_status[15].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[15].tile_order}}">
+        <a href="/training-management" class="card">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Certificates pending</h3>
+              <p>{{ items['certificate_pending'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/icon1.png" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    <!-- Card  Start -->
+    {% if tile_status[16].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[16].tile_order}}">
+        <a href="/training-management" class="card">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Training gap score</h3>
+              <p>{{ items['training_gap_score'] }}%</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/icon1.png" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    <!-- Card  Start -->
+    {% if tile_status[17].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[17].tile_order}}">
+        <a href="/training-management" class="card">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Training gap count</h3>
+              <p>{{ items['training_gap_count'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/icon1.png" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    <!-- Card  Start -->
+    {% if tile_status[18].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[18].tile_order}}">
+        <a href="/training-management" class="card">
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>To Be Actioned</h3>
+              <p>{{ items['to_be_actioned'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/icon1.png" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+    
+    <!-- Card  Start -->
+    {% if tile_status[19].status == 1 %}
+      <div class="col-xl-2 col-sm-12 card-child" style="order:{{tile_status[19].tile_order}}">
+        <a href="/dashboard-tile/course_expired"  class="card use-ajax" data-dialog-options="{&quot;width&quot;:800}" data-dialog-type="modal" >
+          <div class="card--inner">
+            <div class="card-content">
+              <h3>Course Expired</h3>
+              <p>{{ items['course_expired'] }}</p>
+            </div>
+            <div class="card-icon">
+              <img src="/themes/custom/matrics/img/icon1.png" alt="">
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endif %}
+    <!-- Card  End -->
+  </div>
+  <div class="row card-parent customCard-width">
+    {% if chart['booking'] %}
+      <div class="col-xl-6 col-sm-12 card-child-margin">
+        {{ chart['booking'] }}
+        {#{{ drupal_view('data', 'block_1') }}#}
+      </div>
+    {% endif %}
+    
+    {% if chart['booking_cancel'] %}
+      <div class="col-xl-6 col-sm-12 card-child-margin">
+        {{ chart['booking_cancel'] }}
+      </div>
+    {% endif %}
+    
+    {% if chart['total_spend'] %}
+      <div class="col-xl-6 col-sm-12 card-child-margin">
+        {{ chart['total_spend'] }}
+      </div>
+    {% endif %}
+    
+    {% if chart['training_days'] %}
+      <div class="col-xl-6 col-sm-12 card-child-margin">
+        {{ chart['training_days'] }}
+      </div>
+    {% endif %}
+    
+    {% if chart['training_providers'] %}
+      <div class="col-xl-6 col-sm-12 card-child-margin">
+        {{ chart['training_providers'] }}
+      </div>
+    {% endif %}
+    
+    {% if chart['courses'] %}
+      <div class="col-xl-6 col-sm-12 card-child-margin">
+        {{ chart['courses'] }}
+      </div>
+    {% endif %}
+    
+    {% if chart['employees'] %}
+      <div class="col-xl-6 col-sm-12 card-child-margin">
+        {{ chart['employees'] }}
+      </div>
+    {% endif %}
+    
+    {% if chart['certificate'] %}
+      <div class="col-xl-6 col-sm-12 card-child-margin">
+        {{ chart['certificate'] }}
+      </div>
+    {% endif %}
+    
+    {% if chart['training_gap_score'] %}
+      <div class="col-xl-6 col-sm-12 card-child-margin">
+        {{ chart['training_gap_score'] }}
+      </div>
+    {% endif %}
+    
+    {% if chart['training_gap_count'] %}
+      <div class="col-xl-6 col-sm-12 card-child-margin">
+        {{ chart['training_gap_count'] }}
+      </div>
+    {% endif %}
+    {% if chart['to_be_actioned'] %}
+      <div class="col-xl-6 col-sm-12 card-child-margin">
+        {{ chart['to_be_actioned'] }}
+      </div>
+    {% endif %}
+    
+    {% if chart['course_expired'] %}
+      <div class="col-xl-6 col-sm-12 card-child-margin">
+        {{ chart['course_expired'] }}
+      </div>
+    {% endif %}
+  </div>                
+</div>
+<!-- Dashboard Content End -->

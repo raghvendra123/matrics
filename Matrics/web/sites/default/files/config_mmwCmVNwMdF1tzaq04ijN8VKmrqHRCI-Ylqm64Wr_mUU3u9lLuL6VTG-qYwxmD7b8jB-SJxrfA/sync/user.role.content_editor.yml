@@ -1,0 +1,59 @@
+uuid: b7800b13-b93a-47af-adb8-fd70fe87a4ee
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.article
+    - node.type.page
+    - node.type.tasks
+    - taxonomy.vocabulary.tags
+  module:
+    - comment
+    - contextual
+    - file
+    - matrics_data_upload
+    - node
+    - paragraphs_type_permissions
+    - path
+    - system
+    - taxonomy
+    - toolbar
+    - tour
+_core:
+  default_config_hash: Wur9kcEOwY1Jal81NssKnz3RhVJxAvBwyWQBGcA_1Go
+id: content_editor
+label: 'Content editor'
+weight: 2
+is_admin: false
+permissions:
+  - 'Import form'
+  - 'access administration pages'
+  - 'access content overview'
+  - 'access contextual links'
+  - 'access files overview'
+  - 'access toolbar'
+  - 'access tour'
+  - 'access user profiles'
+  - 'administer url aliases'
+  - 'create article content'
+  - 'create page content'
+  - 'create paragraph content certificates'
+  - 'create terms in tags'
+  - 'create url aliases'
+  - 'delete any tasks content'
+  - 'delete article revisions'
+  - 'delete own article content'
+  - 'delete own page content'
+  - 'delete own tasks content'
+  - 'delete page revisions'
+  - 'edit any tasks content'
+  - 'edit own article content'
+  - 'edit own comments'
+  - 'edit own page content'
+  - 'edit own tasks content'
+  - 'edit terms in tags'
+  - 'revert all revisions'
+  - 'update paragraph content certificates'
+  - 'view all revisions'
+  - 'view own unpublished content'
+  - 'view the administration theme'

@@ -1,0 +1,80 @@
+matrics_reports.report:
+  path: '/reports_old'
+  defaults:
+    _title: 'Reports'
+    _form: '\Drupal\matrics_reports\Form\ReportsForm'
+  requirements:
+    _permission: 'reports form'
+matrics_reports.mail_send:
+  path: '/mail/trigger'
+  defaults:
+    _title: 'Send Mail'
+    _form: '\Drupal\matrics_reports\Form\MailSendForm'
+  requirements:
+    _permission: 'send mail by report'
+matrics_reports.share_users:
+  path: '/share/{node}/report'
+  defaults:
+    _title: 'Share Reports'
+    _form: '\Drupal\matrics_reports\Form\ShareReport'
+  requirements:
+    _permission: 'share reports'
+    node: \d+
+matrics_reports.asset_list:
+  path: '/asset-listing'
+  defaults:
+    _controller: 'Drupal\matrics_reports\Controller\AssetList::listing'
+  requirements:
+    _permission: 'asset list' 
+matrics_reports.asset_compliance:
+  path: '/asset-compliance/{asset}'
+  defaults:
+    _controller: 'Drupal\matrics_reports\Controller\AssetCompliance::assetompliance'
+  requirements:
+    _permission: 'asset compliance'
+    asset: \d+
+
+matrics_reports.job_filter_compliance:
+  path: '/job-compliance/{job}'
+  defaults:
+    _controller: 'Drupal\matrics_reports\Controller\JobCompliance::jobcompliance'
+  requirements:
+    _permission: 'job compliance'
+    job: \d+
+
+matrics_reports.asset_list_filter:
+  path: '/asset-listing-filter'
+  defaults:
+    _form: 'Drupal\matrics_reports\Form\AssetFilterForm'
+  requirements:
+    _permission: 'asset list'
+
+matrics_reports.asset_compliance_list_filter:
+  path: '/asset-compliance-filter/{asset}'
+  defaults:
+    _form: 'Drupal\matrics_reports\Form\ComplianceFilterForm'
+  requirements:
+    _permission: 'asset list'
+    asset: \d+
+
+matrics_reports.report_file_view:
+  path: '/report-view/{fid}'
+  defaults:
+    _controller: 'Drupal\matrics_reports\Controller\ReportFileView::view'
+  requirements:
+    _permission: 'access content'
+    fid: \d+
+    
+matrics_reports.get_asset_by_customer:
+  path: '/get_asset_by_customer'
+  defaults:
+    _controller: 'Drupal\matrics_reports\Controller\AssetList::get_asset_by_customer'
+  requirements:
+    _permission: 'access content'
+    
+matrics_reports.get_jobtitle_by_asset:
+  path: '/get_jobtitle_by_asset'
+  defaults:
+    _controller: 'Drupal\matrics_reports\Controller\AssetList::get_jobtitle_by_asset'
+  requirements:
+    _permission: 'access content'

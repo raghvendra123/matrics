@@ -1,0 +1,12 @@
+name: Edit Profiles Perms Test
+type: module
+description: For testing Edit Profiles Perms
+core_version_requirement: ^8.7.7 || ^9
+package: System
+dependencies:
+  - edit_profiles_perms
+
+# Information added by Drupal.org packaging script on 2020-05-17
+version: '1.0.0'
+project: 'edit_profiles_perms'
+datestamp: 1589713370

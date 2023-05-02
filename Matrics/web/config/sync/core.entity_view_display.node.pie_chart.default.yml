@@ -1,0 +1,37 @@
+uuid: b554cd94-7159-48d5-b0cc-9c72e40f7c5e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.pie_chart.field_customer
+    - field.field.node.pie_chart.field_data
+    - node.type.pie_chart
+  module:
+    - user
+id: node.pie_chart.default
+targetEntityType: node
+bundle: pie_chart
+mode: default
+content:
+  field_customer:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  field_data:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

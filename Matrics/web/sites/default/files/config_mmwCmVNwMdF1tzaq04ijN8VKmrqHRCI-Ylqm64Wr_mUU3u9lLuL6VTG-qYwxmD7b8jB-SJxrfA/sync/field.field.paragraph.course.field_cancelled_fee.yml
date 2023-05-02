@@ -1,0 +1,19 @@
+uuid: 4db6106a-1abb-4a80-b682-cccc00c2ad05
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_cancelled_fee
+    - paragraphs.paragraphs_type.course
+id: paragraph.course.field_cancelled_fee
+field_name: field_cancelled_fee
+entity_type: paragraph
+bundle: course
+label: 'cancelled fee'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

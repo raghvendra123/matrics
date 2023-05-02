@@ -1,0 +1,32 @@
+uuid: 30fe77c2-c7f6-4957-8ecf-962be61dc2c4
+langcode: en
+status: true
+dependencies:
+  module:
+    - edit_profiles_perms
+    - matrics_reports
+    - matrics_schedule
+    - paragraphs_type_permissions
+id: scheduling_admin
+label: 'Scheduling Admin'
+weight: 10
+is_admin: null
+permissions:
+  - 'Scheduling form'
+  - 'asset compliance'
+  - 'asset list'
+  - 'create paragraph content certificates'
+  - 'create paragraph content swap_records'
+  - 'delete paragraph content certificates'
+  - 'delete paragraph content swap_records'
+  - 'edit content_editor users profiles'
+  - 'edit course_and_certificate_admin users profiles'
+  - 'edit individual_employee users profiles'
+  - 'edit mnager users profiles'
+  - 'edit scheduler users profiles'
+  - 'edit scheduling_admin users profiles'
+  - 'edit super_user users profiles'
+  - 'edit tms_admins_ users profiles'
+  - 'update paragraph content certificates'
+  - 'update paragraph content swap_records'
+  - 'view paragraph content swap_records'

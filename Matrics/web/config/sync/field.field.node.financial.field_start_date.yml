@@ -1,0 +1,21 @@
+uuid: bd62702e-cd77-4325-9493-26757802609c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_start_date
+    - node.type.financial
+  module:
+    - datetime
+id: node.financial.field_start_date
+field_name: field_start_date
+entity_type: node
+bundle: financial
+label: 'Start Date'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

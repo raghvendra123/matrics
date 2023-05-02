@@ -1,0 +1,31 @@
+uuid: b5eab4d5-5dad-45b3-b8a0-fbfd8e26dc77
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - node
+    - options
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: node.field_vendorstatus
+field_name: field_vendorstatus
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: Approved
+      label: Approved
+    -
+      value: 'Not Approved'
+      label: 'Not Approved'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,42 @@
+uuid: 149e1a37-5df2-4f80-b732-8ce2c2f30e43
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.tasks.body
+    - field.field.node.tasks.field_assigned_to
+    - field.field.node.tasks.field_customer
+    - field.field.node.tasks.field_date
+    - field.field.node.tasks.field_date_required
+    - field.field.node.tasks.field_task_status
+    - field.field.node.tasks.field_type
+    - node.type.tasks
+  module:
+    - text
+    - user
+id: node.tasks.teaser
+targetEntityType: node
+bundle: tasks
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_assigned_to: true
+  field_customer: true
+  field_date: true
+  field_date_required: true
+  field_task_status: true
+  field_type: true

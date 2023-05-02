@@ -1,0 +1,41 @@
+uuid: a6f8e4f5-2f1f-43d4-b241-8b0154d08208
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_location
+    - paragraphs.paragraphs_type.course
+  module:
+    - address
+id: paragraph.course.field_location
+field_name: field_location
+entity_type: paragraph
+bundle: course
+label: Location
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  available_countries: {  }
+  langcode_override: ''
+  field_overrides:
+    givenName:
+      override: hidden
+    additionalName:
+      override: hidden
+    familyName:
+      override: hidden
+    organization:
+      override: hidden
+    addressLine1:
+      override: hidden
+    addressLine2:
+      override: hidden
+    sortingCode:
+      override: hidden
+    administrativeArea:
+      override: hidden
+  fields: {  }
+field_type: address

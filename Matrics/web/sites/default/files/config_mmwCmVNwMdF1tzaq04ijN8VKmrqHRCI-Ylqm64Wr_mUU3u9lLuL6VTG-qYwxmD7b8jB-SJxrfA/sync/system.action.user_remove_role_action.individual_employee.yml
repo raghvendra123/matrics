@@ -1,0 +1,14 @@
+uuid: 3b39fb14-8c10-454c-b64f-3b5b18e1b349
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.individual_employee
+  module:
+    - user
+id: user_remove_role_action.individual_employee
+label: 'Remove the Individual employee role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: individual_employee

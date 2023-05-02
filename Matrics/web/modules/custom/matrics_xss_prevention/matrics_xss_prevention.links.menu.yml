@@ -1,0 +1,5 @@
+matrics_xss_prevention.settings_form:
+  title: 'Matrics XSS Prevention'
+  route_name: matrics_xss_prevention.matrcis_xss_prevention_config_form
+  parent: system.admin_config_system
+  description: 'Matrics XSS Prevention settings.'

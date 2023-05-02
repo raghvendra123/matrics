@@ -1,0 +1,18 @@
+uuid: d551fe98-254a-4f34-96e1-7f5076aa7e65
+langcode: en
+status: true
+dependencies:
+  module:
+    - matrics_api
+    - serialization
+    - user
+id: notification_status
+plugin_id: notification_status
+granularity: resource
+configuration:
+  methods:
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

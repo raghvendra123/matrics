@@ -1,0 +1,19 @@
+uuid: d123870b-9f20-427b-8040-fd2701890132
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_no_bookings
+    - node.type.courses
+id: node.courses.field_no_bookings
+field_name: field_no_bookings
+entity_type: node
+bundle: courses
+label: 'No. bookings'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

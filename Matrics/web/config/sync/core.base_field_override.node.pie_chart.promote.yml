@@ -1,0 +1,22 @@
+uuid: a694d50a-b4f7-4bcb-bc63-3aa9fa74e9a3
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.pie_chart
+id: node.pie_chart.promote
+field_name: promote
+entity_type: node
+bundle: pie_chart
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
